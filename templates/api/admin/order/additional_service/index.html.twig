@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AdditionalService index{% endblock %}
+
+{% block body %}
+    <h1>AdditionalService index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Enabled</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for additional_service in additional_services %}
+            <tr>
+                <td>{{ additional_service.id }}</td>
+                <td>{{ additional_service.code }}</td>
+                <td>{{ additional_service.title }}</td>
+                <td>{{ additional_service.enabled ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_api_admin_order_additional_service_show', {'id': additional_service.id}) }}">show</a>
+                    <a href="{{ path('app_api_admin_order_additional_service_edit', {'id': additional_service.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_api_admin_order_additional_service_new') }}">Create new</a>
+{% endblock %}

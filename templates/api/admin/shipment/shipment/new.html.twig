@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Shipment{% endblock %}
+
+{% block body %}
+    <h1>Create new Shipment</h1>
+
+    {{ include('api/admin/shipment/shipment/_form.html.twig') }}
+
+    <a href="{{ path('app_api_admin_shipment_shipment_index') }}">back to list</a>
+{% endblock %}
