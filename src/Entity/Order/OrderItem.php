@@ -7,45 +7,58 @@ use App\Repository\Order\OrderItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: OrderItemRepository::class)]
 class OrderItem
 {
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['order_item:read_with_additional_service', 'order_item:write'])]
     #[ORM\ManyToMany(targetEntity: AdditionalService::class)]
     private Collection $additionalService;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $channelProductId = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $channelVariantId = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\ManyToOne]
     private ?Product $product = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $quantity = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $quantityShipped = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $quantityCancelled = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $unitPrice = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sku = null;
 
+    #[Groups(['order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $total = null;
 
+    #[Groups(['order_item:read_with_order', 'order_item:write'])]
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $_order = null;

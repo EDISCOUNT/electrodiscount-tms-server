@@ -4,24 +4,30 @@ namespace App\Entity\Catalog;
 
 use App\Repository\Catalog\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
+    #[Groups(['product:list', 'product:read', 'product:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['product:list', 'product:read', 'product:write'])]
     #[ORM\Column(length: 32)]
     private ?string $code = null;
 
+    #[Groups(['product:list', 'product:read', 'product:write'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $gtin = null;
 
-    #[ORM\Column(length: 128, nullable: true)]
+    #[Groups(['product:list', 'product:read', 'product:write'])]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[Groups(['product:list', 'product:read', 'product:write'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ProductPrice $price = null;
 

@@ -3,7 +3,11 @@
 namespace App\Sourcing;
 
 use App\Entity\Channel\Channel;
+use App\Entity\Order\Order;
+use App\Entity\Shipment\Shipment;
+use App\Repository\Shipment\ShipmentRepository;
 use App\Sourcing\Channel\ChannelSourceManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Pagerfanta;
 
 class ShipmentSourceManager
@@ -20,6 +24,8 @@ class ShipmentSourceManager
     private array $shipmentSourceManagers = [];
 
     public function __construct(
+        private ShipmentRepository $shipmentRepository,
+        private EntityManagerInterface $entityManager,
         iterable $sources = [],
     ) {
         $this->sources = [];
@@ -42,6 +48,17 @@ class ShipmentSourceManager
         return $repository->paginate($page, $limit, $criteria, $orderBy);
     }
 
+
+    public function importShipmentForOrder(Order $order): Shipment
+    {
+        $source = $this->getSourceManager($order->getChannel());
+        $shipment = $source->buildShipment($order);
+
+        $this->entityManager->persist($shipment);
+        $this->entityManager->flush();
+        return $shipment;
+    }
+
     public function getSources(): array
     {
         return $this->sources;
@@ -55,10 +72,14 @@ class ShipmentSourceManager
         }
         return $sources;
     }
-    
 
-    public function getSourceManager(string $shipmentSource): ChannelSourceManager
+
+    public function getSourceManager(string| Channel $channel): ChannelSourceManager
     {
+        if ($channel instanceof Channel) {
+            $channel = $channel->getType();
+        }
+        $shipmentSource = $channel;
         if (!isset($this->shipmentSourceManagers[$shipmentSource])) {
             throw new \InvalidArgumentException(sprintf('Shipment source "%s" is not supported.', $shipmentSource));
         }

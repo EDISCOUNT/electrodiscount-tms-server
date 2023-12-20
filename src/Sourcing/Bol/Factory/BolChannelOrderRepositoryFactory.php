@@ -9,6 +9,11 @@ use App\Sourcing\Factory\ChannelEntityRepositoryFactoryInterface;
 use App\Sourcing\Repository\RepositoryInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Entity\Order\Order;
+use App\Repository\Catalog\ProductRepository;
+use App\Repository\Order\AdditionalServiceRepository;
+use App\Service\Util\CodeGeneratorInterface;
+use Doctrine\Common\Cache\Cache;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class BolChannelOrderRepositoryFactory implements ChannelEntityRepositoryFactoryInterface
 {
@@ -16,6 +21,10 @@ class BolChannelOrderRepositoryFactory implements ChannelEntityRepositoryFactory
     public function __construct(
         private AccessTokenProviderInterface $provider,
         private HttpClientInterface $client,
+        private CacheInterface $cache,
+        private AdditionalServiceRepository $additionalServiceRepository,
+        private ProductRepository $productRepository,
+        private CodeGeneratorInterface $codeGenerator
     ) {
     }
     /**
@@ -29,6 +38,11 @@ class BolChannelOrderRepositoryFactory implements ChannelEntityRepositoryFactory
             channel: $channel,
             tokenProvider: $this->provider,
             httpClient: $this->client,
+            cache: $this->cache,
+            additionalServiceRepository: $this->additionalServiceRepository,
+            productRepository: $this->productRepository,
+            codeGenerator: $this->codeGenerator,
+
         );
     }
 }
