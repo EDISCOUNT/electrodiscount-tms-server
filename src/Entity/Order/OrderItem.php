@@ -3,6 +3,7 @@
 namespace App\Entity\Order;
 
 use App\Entity\Catalog\Product;
+use App\Entity\Shipment\ShipmentFulfilment;
 use App\Repository\Order\OrderItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +13,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: OrderItemRepository::class)]
 class OrderItem
 {
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,39 +23,39 @@ class OrderItem
     #[ORM\ManyToMany(targetEntity: AdditionalService::class)]
     private Collection $additionalService;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $channelProductId = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $channelVariantId = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\ManyToOne]
     private ?Product $product = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $quantity = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $quantityShipped = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $quantityCancelled = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $unitPrice = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $sku = null;
 
-    #[Groups(['order_item:read', 'order_item:write'])]
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $total = null;
 
@@ -62,6 +63,14 @@ class OrderItem
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $_order = null;
+
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $channelOrderItemId = null;
+
+    #[Groups(['order_item:with_fulfilment', 'order_item:write'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?ShipmentFulfilment $fulfilment = null;
 
     public function __construct()
     {
@@ -213,6 +222,30 @@ class OrderItem
     public function setOrder(?Order $_order): static
     {
         $this->_order = $_order;
+
+        return $this;
+    }
+
+    public function getChannelOrderItemId(): ?string
+    {
+        return $this->channelOrderItemId;
+    }
+
+    public function setChannelOrderItemId(?string $channelOrderItemId): static
+    {
+        $this->channelOrderItemId = $channelOrderItemId;
+
+        return $this;
+    }
+
+    public function getFulfilment(): ?ShipmentFulfilment
+    {
+        return $this->fulfilment;
+    }
+
+    public function setFulfilment(?ShipmentFulfilment $fulfilment): static
+    {
+        $this->fulfilment = $fulfilment;
 
         return $this;
     }

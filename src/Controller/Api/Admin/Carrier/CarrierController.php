@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller\Api\Admin\Channel;
+namespace App\Controller\Api\Admin\Carrier;
 
-use App\Entity\Channel\Channel;
-use App\Form\Channel\ChannelType;
-use App\Repository\Channel\ChannelRepository;
+use App\Entity\Carrier\Carrier;
+use App\Form\Carrier\CarrierType;
+use App\Repository\Carrier\CarrierRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -14,21 +14,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/admin/channel/channels')]
-class ChannelController extends AbstractController
+#[Route('/api/admin/carrier/carriers')]
+class CarrierController extends AbstractController
 {
-
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ChannelRepository $channelRepository,
+        private CarrierRepository $carrierRepository,
     ) {
     }
 
-    #[Route('/', name: 'app_api_admin_channel_channel_index', methods: ['GET'])]
+    #[Route('/', name: 'app_api_admin_carrier_carrier_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
-
-
         $page = $request->query->get('page', 1);
         $limit = $request->query->get('limit', 10);
 
@@ -39,50 +36,49 @@ class ChannelController extends AbstractController
             $limit = 100;
         }
 
-        $qb = $this->channelRepository->createQueryBuilder('channel');
+        $qb = $this->carrierRepository->createQueryBuilder('carrier');
         $adapter = new QueryAdapter($qb);
         $pagination = new Pagerfanta($adapter);
 
         $pagination->setMaxPerPage($limit);
         $pagination->setCurrentPage($page);
 
-
         return $this->json($pagination, context: [
             'groups' => [
-                'channel:list'
+                'carrier:list'
             ]
         ]);
     }
 
-    #[Route('', name: 'app_api_admin_channel_channel_new', methods: ['POST'])]
+    #[Route('', name: 'app_api_admin_carrier_carrier_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $channel = new Channel();
-        $form = $this->createForm(ChannelType::class, $channel, ['csrf_protection' => false]);
+        $carrier = new Carrier();
+        $form = $this->createForm(CarrierType::class, $carrier, ['csrf_protection' => false]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data, false);
 
         if ($form->isValid()) {
-            $entityManager->persist($channel);
+            $entityManager->persist($carrier);
             $entityManager->flush();
 
-            return $this->json($channel, Response::HTTP_CREATED);
+            return $this->json($carrier, Response::HTTP_CREATED);
         }
 
         return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/{id}', name: 'app_api_admin_channel_channel_show', methods: ['GET'])]
-    public function show(Channel $channel): Response
+    #[Route('/{id}', name: 'app_api_admin_carrier_carrier_show', methods: ['GET'])]
+    public function show(Carrier $carrier): Response
     {
-        return $this->json($channel);
+        return $this->json($carrier);
     }
 
-    #[Route('/{id}', name: 'app_api_admin_channel_channel_update', methods: ['PATCH'])]
-    public function update(Request $request, Channel $channel, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'app_api_admin_carrier_carrier_update', methods: ['PATCH'])]
+    public function update(Request $request, Carrier $carrier, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ChannelType::class, $channel, ['csrf_protection' => false]);
+        $form = $this->createForm(CarrierType::class, $carrier, ['csrf_protection' => false]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data, false);
@@ -90,16 +86,16 @@ class ChannelController extends AbstractController
         if ($form->isValid()) {
             $entityManager->flush();
 
-            return $this->json($channel);
+            return $this->json($carrier);
         }
 
         return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/{id}', name: 'app_api_admin_channel_channel_delete', methods: ['DELETE'])]
-    public function delete(Channel $channel, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'app_api_admin_carrier_carrier_delete', methods: ['DELETE'])]
+    public function delete(Carrier $carrier, EntityManagerInterface $entityManager): Response
     {
-        $entityManager->remove($channel);
+        $entityManager->remove($carrier);
         $entityManager->flush();
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
@@ -107,7 +103,6 @@ class ChannelController extends AbstractController
 
     private function getFormErrors(Form $form): array
     {
-
         $errors = [];
         foreach ($form->getErrors(true) as $error) {
             $errors[] = sprintf(

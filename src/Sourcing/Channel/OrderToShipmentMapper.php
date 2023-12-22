@@ -20,12 +20,12 @@ class OrderToShipmentMapper
 
     public function map(Order $order): Shipment
     {
-        $prefix = $order->getChannelOrderId();
-        if ($prefix) {
-            $prefix .= '_';
-        }
+        // $prefix = $order->getChannelOrderId();
+        // if ($prefix) {
+        //     $prefix .= '_';
+        // }
 
-        $code = $this->codeGenerator->generateCode(length: 3, prefix: $prefix);
+        $code = $this->codeGenerator->generateCode(length: 8);
         $channel = $order->getChannel();
         $shipment = new Shipment();
 

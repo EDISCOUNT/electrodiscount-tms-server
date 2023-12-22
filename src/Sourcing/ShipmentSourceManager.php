@@ -49,13 +49,15 @@ class ShipmentSourceManager
     }
 
 
-    public function importShipmentForOrder(Order $order): Shipment
+    public function importShipmentForOrder(Order $order, bool $save = true): Shipment
     {
         $source = $this->getSourceManager($order->getChannel());
-        $shipment = $source->buildShipment($order);
+        $shipment = $source->importShipmentForOrder($order);
 
-        $this->entityManager->persist($shipment);
-        $this->entityManager->flush();
+        if ($save) {
+            $this->entityManager->persist($shipment);
+            $this->entityManager->flush();
+        }
         return $shipment;
     }
 

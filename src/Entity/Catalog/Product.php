@@ -27,9 +27,13 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    #[Groups(['product:list', 'product:read', 'product:write'])]
+    #[Groups(['product:with_price', 'product:read', 'product:write'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ProductPrice $price = null;
+
+    #[Groups(['product:list', 'product:read', 'product:write'])]
+    #[ORM\Column(nullable: true)]
+    private ?bool $enabled = false;
 
     public function getId(): ?int
     {
@@ -80,6 +84,18 @@ class Product
     public function setPrice(?ProductPrice $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(?bool $enabled): static
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

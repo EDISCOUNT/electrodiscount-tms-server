@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sourcing\Bol\Repository;
+namespace App\Sourcing\WooCommerce\Repository;
 
 use App\Entity\Addressing\Address;
 use App\Entity\Catalog\Product;
@@ -16,8 +16,9 @@ use App\Entity\Order\OrderItem;
 use App\Repository\Catalog\ProductRepository;
 use App\Repository\Order\AdditionalServiceRepository;
 use App\Service\Util\CodeGeneratorInterface;
-use App\Sourcing\Bol\Authentication\AccessTokenProviderInterface;
+use App\Sourcing\WooCommerce\Authentication\AccessTokenProviderInterface;
 use App\Sourcing\Exception\EntityNotFoundException;
+use App\Sourcing\WooCommerce\Factory\WooCommerceUrlFactory;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -25,7 +26,7 @@ use Symfony\Contracts\Cache\ItemInterface;
  * @template T
  * @template ID
  */
-class BolChannelHttpOrderRepository implements RepositoryInterface
+class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 {
     public function __construct(
         private AccessTokenProviderInterface $tokenProvider,
@@ -35,6 +36,7 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
         private ProductRepository $productRepository,
         private CodeGeneratorInterface $codeGenerator,
         private Channel $channel,
+        private string $baseURL,
     ) {
     }
 

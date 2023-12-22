@@ -6,6 +6,8 @@ use App\Entity\Shipment\Shipment;
 use App\Form\Shipment\ShipmentType;
 use App\Repository\Shipment\ShipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,18 +20,48 @@ class ShipmentController extends AbstractController
         'shipment:list',
         'shipment:with_items',
         'shipment:with_address',
+        'shipment:with_carrier',
+        'shipment:with_channel',
         'address:list',
+        'carrier:list',
         'shipment_item:read',
         'shipment_item:with_product',
         'product:list'
     ];
 
-    #[Route('', name: 'app_api_admin_shipment_shipment_index', methods: ['GET'])]
-    public function index(ShipmentRepository $shipmentRepository): Response
-    {
-        $shipments = $shipmentRepository->findAll();
 
-        return $this->json($shipments, context: [
+
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private ShipmentRepository $shipmentRepository
+    ) {
+    }
+
+    #[Route('', name: 'app_api_admin_shipment_shipment_index', methods: ['GET'])]
+    public function index(Request  $request): Response
+    {
+
+        $page = $request->query->get('page', 1);
+        $limit = $request->query->get('limit', 10);
+
+        if ($page < 1) {
+            $page = 1;
+        }
+        if ($limit > 100) {
+            $limit = 100;
+        }
+
+        $qb = $this->shipmentRepository->createQueryBuilder('shipment');
+        $adapter = new QueryAdapter($qb);
+        $pagination = new Pagerfanta($adapter);
+
+        $pagination->setMaxPerPage($limit);
+        $pagination->setCurrentPage($page);
+
+
+
+
+        return $this->json($pagination, context: [
             'groups' => [
                 'shipment:list',
                 ...self::SERIALIZER_GROUPS

@@ -32,7 +32,7 @@ class ChannelSourceManager
     }
 
 
-    public function buildShipment(Order $order): Shipment{
+    public function importShipmentForOrder(Order $order): Shipment{
         $shipment = $this->orderToShipmentMapper->map($order);
         return $shipment;
     }

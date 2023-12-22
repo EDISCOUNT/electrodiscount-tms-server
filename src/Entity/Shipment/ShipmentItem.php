@@ -47,6 +47,9 @@ class ShipmentItem
     #[ORM\JoinColumn(nullable: false)]
     private ?Shipment $shipment = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?ShipmentFulfilment $fulfilment = null;
+
 
     public function getId(): ?int
     {
@@ -133,6 +136,18 @@ class ShipmentItem
     public function setShipment(?Shipment $shipment): static
     {
         $this->shipment = $shipment;
+
+        return $this;
+    }
+
+    public function getFulfilment(): ?ShipmentFulfilment
+    {
+        return $this->fulfilment;
+    }
+
+    public function setFulfilment(?ShipmentFulfilment $fulfilment): static
+    {
+        $this->fulfilment = $fulfilment;
 
         return $this;
     }

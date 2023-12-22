@@ -6,6 +6,8 @@ use App\Entity\Order\AdditionalService;
 use App\Form\Order\AdditionalServiceType;
 use App\Repository\Order\AdditionalServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +16,37 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/admin/order/additional_services')]
 class AdditionalServiceController extends AbstractController
 {
-    #[Route('', name: 'app_api_admin_order_additional_service_index', methods: ['GET'])]
-    public function index(AdditionalServiceRepository $additionalServiceRepository): Response
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private AdditionalServiceRepository $shipmentRepository
+    )
     {
-        $additionalServices = $additionalServiceRepository->findAll();
+    }
 
-        return $this->json($additionalServices);
+    #[Route('', name: 'app_api_admin_order_additional_service_index', methods: ['GET'])]
+    public function index(Request $request): Response
+    {
+        
+        
+        $page = $request->query->get('page', 1);
+        $limit = $request->query->get('limit', 10);
+
+        if ($page < 1) {
+            $page = 1;
+        }
+        if ($limit > 100) {
+            $limit = 100;
+        }
+        
+        $qb = $this->shipmentRepository->createQueryBuilder('shipment');
+        $adapter = new QueryAdapter($qb);
+        $pagination = new Pagerfanta($adapter);
+
+        $pagination->setMaxPerPage($limit);
+        $pagination->setCurrentPage($page);
+
+
+        return $this->json($pagination);
     }
 
     #[Route('', name: 'app_api_admin_order_additional_service_new', methods: ['POST'])]

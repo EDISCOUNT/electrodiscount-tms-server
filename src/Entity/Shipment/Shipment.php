@@ -3,6 +3,7 @@
 namespace App\Entity\Shipment;
 
 use App\Entity\Addressing\Address;
+use App\Entity\Carrier\Carrier;
 use App\Entity\Channel\Channel;
 use App\Entity\Inventory\Storage;
 use App\Repository\Shipment\ShipmentRepository;
@@ -66,6 +67,16 @@ class Shipment
     #[Groups(['shipment:with_channel', 'shipment:read', 'shipment:write'])]
     #[ORM\ManyToOne]
     private ?Channel $channel = null;
+
+    #[Groups(['shipment:with_carrier',  'shipment:write'])]
+    #[ORM\ManyToOne]
+    private ?Carrier $carrier = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?ShipmentFulfilment $fulfilment = null;
+
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $channelShipmentId = null;
 
     public function __construct()
     {
@@ -211,6 +222,42 @@ class Shipment
     public function setChannel(?Channel $channel): static
     {
         $this->channel = $channel;
+
+        return $this;
+    }
+
+    public function getCarrier(): ?Carrier
+    {
+        return $this->carrier;
+    }
+
+    public function setCarrier(?Carrier $carrier): static
+    {
+        $this->carrier = $carrier;
+
+        return $this;
+    }
+
+    public function getFulfilment(): ?ShipmentFulfilment
+    {
+        return $this->fulfilment;
+    }
+
+    public function setFulfilment(?ShipmentFulfilment $fulfilment): static
+    {
+        $this->fulfilment = $fulfilment;
+
+        return $this;
+    }
+
+    public function getChannelShipmentId(): ?string
+    {
+        return $this->channelShipmentId;
+    }
+
+    public function setChannelShipmentId(?string $channelShipmentId): static
+    {
+        $this->channelShipmentId = $channelShipmentId;
 
         return $this;
     }

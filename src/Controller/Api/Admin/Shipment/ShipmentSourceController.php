@@ -3,6 +3,8 @@
 namespace App\Controller\Api\Admin\Shipment;
 
 use App\Sourcing\ShipmentSourceManager;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +18,31 @@ class ShipmentSourceController extends AbstractController
     }
 
     #[Route('/api/admin/shipment/sources', name: 'app_api_admin_shipment_shipment_source')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+
+        $page = $request->query->get('page', 1);
+        $limit = $request->query->get('limit', 10);
+
+        if ($page < 1) {
+            $page = 1;
+        }
+        if ($limit > 100) {
+            $limit = 100;
+        }
+
         $sources = $sources = $this->shipmentSourceManager->getSourcesArray();
+
+        $adapter = new ArrayAdapter($sources);
+        $pagination = new Pagerfanta($adapter);
+
+        $pagination->setMaxPerPage($limit);
+        $pagination->setCurrentPage($page);
+
+
+
         return $this->json([
-            'sources' => $sources
+            $pagination
         ]);
     }
 
@@ -39,7 +61,7 @@ class ShipmentSourceController extends AbstractController
         return $this->json($source);
     }
 
-    
+
     // #[Route('/api/admin/shipment/sources/{id}', name: 'app_api_admin_shipment_shipment_source_show', requirements: ['id' => '[a-zA-Z0-9_-\.]+'], methods: ['GET'])]
     // public function show(string $id): Response
     // {

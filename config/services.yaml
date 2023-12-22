@@ -33,7 +33,7 @@ services:
 
 
     app.shipment.sourcing.source.bol_dot_com:
-        class: App\Sourcing\Channel\ChannelSourceManager
+        class: App\Sourcing\Bol\Channel\BolChannelSourceManager
         tags:
             - { name: app.shipment.sourcing.shipment_source }
         arguments:
@@ -69,3 +69,27 @@ services:
     #         - { name: serializer.normalizer }
     #     arguments:
     #         $normalizer: '@debug.serializer'
+
+
+
+    # app.shipment.sourcing.source.bol_dot_com:
+    #     class: App\Sourcing\Channel\ChannelSourceManager
+    #     tags:
+    #         - { name: app.shipment.sourcing.shipment_source }
+    #     arguments:
+    #         $orderRepositoryFactory: '@app.shipment.sourcing.source.bol_dot_com.order_repository_factory'
+    #         $productRepositoryFactory: '@app.shipment.sourcing.source.bol_dot_com.product_repository_factory'
+    #         $config:
+    #             title: 'Bol.com'
+    #             subtitle: 'Bol.com Marketplace'
+    #             description: 'Bol.com Marketplace'
+    #             code: app.shipment.sourcing.source.bol_dot_com
+    #             id: app.shipment.sourcing.source.bol_dot_com
+    #             iconImage: 'http://localhost:8000/images/icons/bol.webp'
+    #             # logo: 'https://www.bol.com/nl/static/images/logo/bolcom_logo.png'
+
+    #         # $clientId: '%bol.client_id%'
+    #         # $clientSecret: '%bol.client_secret%'
+    #         # $accessToken: '%bol.access_token%'
+    #         # $channelSourceManagers:
+    #         #     - '@app.shipment.sourcing.source.bol_dot_com.channel_source_manager'
