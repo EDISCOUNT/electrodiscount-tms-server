@@ -23,7 +23,7 @@ class ProductController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'app_api_admin_catalog_product_index', methods: ['GET'])]
+    #[Route('', name: 'app_api_admin_catalog_product_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $page = $request->query->get('page', 1);

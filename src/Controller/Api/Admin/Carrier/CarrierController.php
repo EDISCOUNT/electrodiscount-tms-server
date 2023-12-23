@@ -23,7 +23,7 @@ class CarrierController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'app_api_admin_carrier_carrier_index', methods: ['GET'])]
+    #[Route('', name: 'app_api_admin_carrier_carrier_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $page = $request->query->get('page', 1);

@@ -24,7 +24,7 @@ class ChannelController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'app_api_admin_channel_channel_index', methods: ['GET'])]
+    #[Route('', name: 'app_api_admin_channel_channel_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
 
