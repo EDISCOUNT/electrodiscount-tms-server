@@ -43,7 +43,7 @@ services:
                 description: "Bol.com Marketplace"
                 code: app.shipment.sourcing.source.bol_dot_com
                 id: app.shipment.sourcing.source.bol_dot_com
-                iconImage: "http://localhost:8000/images/icons/bol.webp"
+                iconImage: "/images/icons/bol.webp"
                 # logo: 'https://www.bol.com/nl/static/images/logo/bolcom_logo.png'
 
             # $clientId: '%bol.client_id%'
@@ -73,7 +73,7 @@ services:
                 description: "Wordpress eCommerce plugin - WooCommerce Store"
                 code: app.shipment.sourcing.source.woo_commerce
                 id: app.shipment.sourcing.source.woo_commerce
-                iconImage: "http://localhost:8000/images/icons/woo-commerce.png"
+                iconImage: "/images/icons/woo-commerce.png"
                 # logo: 'https://www.bol.com/nl/static/images/logo/bolcom_logo.png'
 
     app.shipment.sourcing.source.woo_commerce.order_repository_factory:
