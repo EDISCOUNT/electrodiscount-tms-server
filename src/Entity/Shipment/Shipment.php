@@ -6,6 +6,7 @@ use App\Entity\Addressing\Address;
 use App\Entity\Carrier\Carrier;
 use App\Entity\Channel\Channel;
 use App\Entity\Inventory\Storage;
+use App\Entity\Order\AdditionalService;
 use App\Repository\Shipment\ShipmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -41,7 +42,7 @@ class Shipment
     private ?Address $destinationAddress = null;
 
     #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
-    #[ORM\Column(length: 64)]
+    #[ORM\Column(length: 64, nullable:true)]
     private ?string $sourceId = null;
 
     #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
@@ -72,15 +73,27 @@ class Shipment
     #[ORM\ManyToOne]
     private ?Carrier $carrier = null;
 
+    #[Groups(['shipment:with_fulfilment',  'shipment:write'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ShipmentFulfilment $fulfilment = null;
 
+    #[Groups(['shipment:list', 'shipment:read',  'shipment:write'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $channelShipmentId = null;
+
+    #[Groups(['shipment:with_additional_services', 'shipment:read', 'shipment:write'])]
+    #[ORM\ManyToMany(targetEntity: AdditionalService::class, cascade:['persist'])]
+    private Collection $additionalServices;
+
+    #[Groups(['shipment:with_events', 'shipment:write'])]
+    #[ORM\ManyToMany(targetEntity: ShipmentEvent::class, cascade:['persist', 'remove'])]
+    private Collection $events;
 
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->additionalServices = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +271,54 @@ class Shipment
     public function setChannelShipmentId(?string $channelShipmentId): static
     {
         $this->channelShipmentId = $channelShipmentId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AdditionalService>
+     */
+    public function getAdditionalServices(): Collection
+    {
+        return $this->additionalServices;
+    }
+
+    public function addAdditionalService(AdditionalService $additionalService): static
+    {
+        if (!$this->additionalServices->contains($additionalService)) {
+            $this->additionalServices->add($additionalService);
+        }
+
+        return $this;
+    }
+
+    public function removeAdditionalService(AdditionalService $additionalService): static
+    {
+        $this->additionalServices->removeElement($additionalService);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ShipmentEvent>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(ShipmentEvent $event): static
+    {
+        if (!$this->events->contains($event)) {
+            $this->events->add($event);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(ShipmentEvent $event): static
+    {
+        $this->events->removeElement($event);
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Entity\Carrier;
 
+use App\Entity\Account\User;
 use App\Repository\Carrier\CarrierRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -26,6 +27,15 @@ class Carrier
     #[Groups(['carrier:list', 'carrier:read', 'carrier:write'])]
     #[ORM\Column]
     private ?bool $enabled = false;
+
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $emailAddress = null;
+
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $phoneNumber = null;
+
+    #[ORM\OneToOne(inversedBy: 'carrier', cascade: ['persist', 'remove'])]
+    private ?User $operatorUser = null;
 
     public function getId(): ?int
     {
@@ -64,6 +74,42 @@ class Carrier
     public function setEnabled(bool $enabled): static
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getEmailAddress(): ?string
+    {
+        return $this->emailAddress;
+    }
+
+    public function setEmailAddress(?string $emailAddress): static
+    {
+        $this->emailAddress = $emailAddress;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?string $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getOperatorUser(): ?User
+    {
+        return $this->operatorUser;
+    }
+
+    public function setOperatorUser(?User $operatorUser): static
+    {
+        $this->operatorUser = $operatorUser;
 
         return $this;
     }

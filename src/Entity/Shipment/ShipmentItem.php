@@ -50,6 +50,10 @@ class ShipmentItem
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ShipmentFulfilment $fulfilment = null;
 
+    #[Groups(['shipment_item:list', 'shipment_item:read', 'shipment_item:write'])]
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $name = null;
+
 
     public function getId(): ?int
     {
@@ -148,6 +152,18 @@ class ShipmentItem
     public function setFulfilment(?ShipmentFulfilment $fulfilment): static
     {
         $this->fulfilment = $fulfilment;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

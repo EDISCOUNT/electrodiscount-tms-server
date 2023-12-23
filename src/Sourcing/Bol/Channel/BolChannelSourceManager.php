@@ -33,12 +33,11 @@ class BolChannelSourceManager extends ChannelSourceManager
         );
     }
 
-    public function importShipmentForOrder(Order $order): Shipment
+    public function commitShipment(Shipment $shipment, Order $order): mixed
     {
-        $shipment = parent::importShipmentForOrder($order);
         $reference = $shipment->getCode();
         $shipmentInfo = $this->createShipmentForOrder($order, $reference);
-        return $shipment;
+        return $shipmentInfo;
     }
 
 

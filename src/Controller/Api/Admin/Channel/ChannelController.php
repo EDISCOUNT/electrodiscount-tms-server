@@ -57,10 +57,16 @@ class ChannelController extends AbstractController
     #[Route('', name: 'app_api_admin_channel_channel_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $channel = new Channel();
-        $form = $this->createForm(ChannelType::class, $channel, ['csrf_protection' => false]);
 
         $data = json_decode($request->getContent(), true);
+        $channelType = $data['type'];
+
+        $channel = new Channel();
+        $form = $this->createForm(ChannelType::class, $channel, [
+            'csrf_protection' => false,
+            'channel_type' => $channelType
+        ]);
+
         $form->submit($data, false);
 
         if ($form->isValid()) {
@@ -82,7 +88,11 @@ class ChannelController extends AbstractController
     #[Route('/{id}', name: 'app_api_admin_channel_channel_update', methods: ['PATCH'])]
     public function update(Request $request, Channel $channel, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ChannelType::class, $channel, ['csrf_protection' => false]);
+        $channelType = $channel->getType();
+        $form = $this->createForm(ChannelType::class, $channel, [
+            'csrf_protection' => false,
+            'channel_type' => $channelType,
+        ]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data, false);

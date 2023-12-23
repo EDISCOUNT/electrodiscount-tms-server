@@ -5,6 +5,8 @@ namespace App\Controller\Api\Admin\Shipment;
 use App\Entity\Shipment\Shipment;
 use App\Form\Shipment\ShipmentType;
 use App\Repository\Shipment\ShipmentRepository;
+use App\Service\Shipment\ShipmentEventLogger;
+use App\Service\Util\CodeGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -33,7 +35,9 @@ class ShipmentController extends AbstractController
 
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ShipmentRepository $shipmentRepository
+        private ShipmentRepository $shipmentRepository,
+        private CodeGeneratorInterface $codeGenerator,
+        private ShipmentEventLogger $logger,
     ) {
     }
 
@@ -78,6 +82,14 @@ class ShipmentController extends AbstractController
         $form->submit($data, false);
 
         if ($form->isValid()) {
+
+            if(!($code = $shipment->getCode())){
+                $code = $this->codeGenerator->generateCode(6);
+                $shipment->setCode($code);
+            }
+
+            $this->logger->logCreated($shipment);
+
             $entityManager->persist($shipment);
             $entityManager->flush();
 
@@ -112,6 +124,8 @@ class ShipmentController extends AbstractController
         $form->submit($data, false);
 
         if ($form->isValid()) {
+            
+            $this->logger->logUpdated($shipment, $data);
             $entityManager->flush();
 
             return $this->json($shipment, context: [

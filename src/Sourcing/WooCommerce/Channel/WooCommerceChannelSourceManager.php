@@ -33,48 +33,48 @@ class WooCommerceChannelSourceManager extends ChannelSourceManager
         );
     }
 
-    public function importShipmentForOrder(Order $order): Shipment
+    public function commitShipment(Shipment $shipment, Order $order): mixed
     {
-        $shipment = parent::importShipmentForOrder($order);
         $reference = $shipment->getCode();
         $shipmentInfo = $this->createShipmentForOrder($order, $reference);
-        return $shipment;
+        return $shipmentInfo;
     }
-
 
     private function createShipmentForOrder(Order $order, ?string $reference = null): array
     {
         try {
 
-            $authToken = $this->getAccessToken($order->getChannel());
+            // $authToken = $this->getAccessToken($order->getChannel());
 
-            $orderItems = [];
-            foreach ($order->getItems() as $orderItem) {
-                $item = [
-                    'orderItemId' => $orderItem->getChannelOrderItemId(),
-                    'quantity' => $orderItem->getQuantity(),
-                ];
-                $orderItems[] = $item;
-            }
+            // $orderItems = [];
+            // foreach ($order->getItems() as $orderItem) {
+            //     $item = [
+            //         'orderItemId' => $orderItem->getChannelOrderItemId(),
+            //         'quantity' => $orderItem->getQuantity(),
+            //     ];
+            //     $orderItems[] = $item;
+            // }
 
 
-            // Make a POST request with $this->httpClient
-            $response = $this->httpClient->request('POST', 'https://api.bol.com/retailer/shipments', [
-                'json' => [
-                    'orderItems' => $orderItems,
-                    'shipmentReference' => $reference,
-                ],
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $authToken,
-                    'Content-Type' => 'application/vnd.retailer.v10+json',
-                    'Accept' => 'application/vnd.retailer.v10+json',
-                ]
-            ]);
+            // // Make a POST request with $this->httpClient
+            // $response = $this->httpClient->request('POST', 'https://api.bol.com/retailer/shipments', [
+            //     'json' => [
+            //         'orderItems' => $orderItems,
+            //         'shipmentReference' => $reference,
+            //     ],
+            //     'headers' => [
+            //         'Authorization' => 'Bearer ' . $authToken,
+            //         'Content-Type' => 'application/vnd.retailer.v10+json',
+            //         'Accept' => 'application/vnd.retailer.v10+json',
+            //     ]
+            // ]);
 
-            // Process the response
-            // $statusCode = $response->getStatusCode();
-            $data = $response->toArray();
-            return $data;
+            // // Process the response
+            // // $statusCode = $response->getStatusCode();
+            // $data = $response->toArray();
+            // return $data;
+
+            return [];
 
             // Your code here
         } catch (\Throwable $err) {

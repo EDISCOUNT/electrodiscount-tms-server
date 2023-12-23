@@ -18,16 +18,16 @@ class ChannelType extends AbstractType
             ->add('description')
             ->add('type')
             ->add('enabled')
-            ->add('metadata', ChannelConfigurationType::class,[
-                
-            ])
-        ;
+            ->add('metadata', ChannelConfigurationType::class, [
+                'channel_type' => $options['channel_type'] ?? ''
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Channel::class,
+            'channel_type' => '',
         ]);
     }
 }

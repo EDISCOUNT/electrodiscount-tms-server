@@ -49,16 +49,31 @@ class ShipmentSourceManager
     }
 
 
-    public function importShipmentForOrder(Order $order, bool $save = true): Shipment
+    public function importShipmentForOrder(Order $order, bool $commit = false, bool $save = false): Shipment
     {
         $source = $this->getSourceManager($order->getChannel());
-        $shipment = $source->importShipmentForOrder($order);
+        $shipment = $source->mapOrderToShipment($order);
 
-        if ($save) {
-            $this->entityManager->persist($shipment);
-            $this->entityManager->flush();
+        if ($commit) {
+            try {
+                $source->commitShipment($shipment, $order);
+                if ($save) {
+                    $this->entityManager->persist($shipment);
+                    $this->entityManager->flush();
+                }
+            } catch (\Throwable $e) {
+                throw $e;
+            }
         }
         return $shipment;
+    }
+
+
+    public function commitShipment(Shipment $shipment, Order $order): mixed
+    {
+        $source = $this->getSourceManager($order->getChannel());
+        $source->commitShipment($shipment, $order);
+        return null;
     }
 
     public function getSources(): array

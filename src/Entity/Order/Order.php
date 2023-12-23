@@ -68,13 +68,16 @@ class Order
     #[ORM\Column(length: 64, nullable: true)]
     private ?string $channelOrderId = null;
 
-    #[Groups(['order:list', 'order:read','order:write'])]
+    #[Groups(['order:with_additional_services', 'order:read','order:write'])]
     #[ORM\ManyToMany(targetEntity: AdditionalService::class)]
     private Collection $additionalServices;
 
     #[Groups(['order:with_channel', 'order:read','order:write'])]
     #[ORM\ManyToOne]
     private ?Channel $channel = null;
+
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $channelOrderNumber = null;
 
     public function __construct()
     {
@@ -281,6 +284,18 @@ class Order
     public function setChannel(?Channel $channel): static
     {
         $this->channel = $channel;
+
+        return $this;
+    }
+
+    public function getChannelOrderNumber(): ?string
+    {
+        return $this->channelOrderNumber;
+    }
+
+    public function setChannelOrderNumber(?string $channelOrderNumber): static
+    {
+        $this->channelOrderNumber = $channelOrderNumber;
 
         return $this;
     }

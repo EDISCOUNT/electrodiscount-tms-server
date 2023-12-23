@@ -72,6 +72,10 @@ class OrderItem
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ShipmentFulfilment $fulfilment = null;
 
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
     public function __construct()
     {
         $this->additionalService = new ArrayCollection();
@@ -246,6 +250,18 @@ class OrderItem
     public function setFulfilment(?ShipmentFulfilment $fulfilment): static
     {
         $this->fulfilment = $fulfilment;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

@@ -11,41 +11,39 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
+        autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/'
+        resource: "../src/"
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-
     App\Sourcing\ShipmentSourceManager:
         arguments:
             $sources: !tagged app.shipment.sourcing.shipment_source
-
 
     app.shipment.sourcing.source.bol_dot_com:
         class: App\Sourcing\Bol\Channel\BolChannelSourceManager
         tags:
             - { name: app.shipment.sourcing.shipment_source }
         arguments:
-            $orderRepositoryFactory: '@app.shipment.sourcing.source.bol_dot_com.order_repository_factory'
-            $productRepositoryFactory: '@app.shipment.sourcing.source.bol_dot_com.product_repository_factory'
+            $orderRepositoryFactory: "@app.shipment.sourcing.source.bol_dot_com.order_repository_factory"
+            $productRepositoryFactory: "@app.shipment.sourcing.source.bol_dot_com.product_repository_factory"
             $config:
-                title: 'Bol.com'
-                subtitle: 'Bol.com Marketplace'
-                description: 'Bol.com Marketplace'
+                title: "Bol.com"
+                subtitle: "Bol.com Marketplace"
+                description: "Bol.com Marketplace"
                 code: app.shipment.sourcing.source.bol_dot_com
                 id: app.shipment.sourcing.source.bol_dot_com
-                iconImage: 'http://localhost:8000/images/icons/bol.webp'
+                iconImage: "http://localhost:8000/images/icons/bol.webp"
                 # logo: 'https://www.bol.com/nl/static/images/logo/bolcom_logo.png'
 
             # $clientId: '%bol.client_id%'
@@ -54,14 +52,36 @@ services:
             # $channelSourceManagers:
             #     - '@app.shipment.sourcing.source.bol_dot_com.channel_source_manager'
 
-
     app.shipment.sourcing.source.bol_dot_com.order_repository_factory:
         class: App\Sourcing\Bol\Factory\BolChannelOrderRepositoryFactory
-    
+
     app.shipment.sourcing.source.bol_dot_com.product_repository_factory:
         class: App\Sourcing\Bol\Factory\BolChannelProductRepositoryFactory
 
-    
+        #
+
+    app.shipment.sourcing.source.woo_commerce:
+        class: App\Sourcing\WooCommerce\Channel\WooCommerceChannelSourceManager
+        tags:
+            - { name: app.shipment.sourcing.shipment_source }
+        arguments:
+            $orderRepositoryFactory: "@app.shipment.sourcing.source.woo_commerce.order_repository_factory"
+            $productRepositoryFactory: "@app.shipment.sourcing.source.woo_commerce.product_repository_factory"
+            $config:
+                title: "WooCommerce"
+                subtitle: "WooCommerce Store"
+                description: "Wordpress eCommerce plugin - WooCommerce Store"
+                code: app.shipment.sourcing.source.woo_commerce
+                id: app.shipment.sourcing.source.woo_commerce
+                iconImage: "http://localhost:8000/images/icons/woo-commerce.png"
+                # logo: 'https://www.bol.com/nl/static/images/logo/bolcom_logo.png'
+
+    app.shipment.sourcing.source.woo_commerce.order_repository_factory:
+        class: App\Sourcing\WooCommerce\Factory\WooCommerceChannelOrderRepositoryFactory
+
+    app.shipment.sourcing.source.woo_commerce.product_repository_factory:
+        class: App\Sourcing\WooCommerce\Factory\WooCommerceChannelProductRepositoryFactory
+
     # Symfony\Component\Serializer\Normalizer\ObjectNormalizer: '@debug.serializer'
 
     # App\Serializer\Normalizer\Channel\ChannelNormalizer:
@@ -69,8 +89,6 @@ services:
     #         - { name: serializer.normalizer }
     #     arguments:
     #         $normalizer: '@debug.serializer'
-
-
 
     # app.shipment.sourcing.source.bol_dot_com:
     #     class: App\Sourcing\Channel\ChannelSourceManager

@@ -41,9 +41,7 @@ class ShipmentSourceController extends AbstractController
 
 
 
-        return $this->json([
-            $pagination
-        ]);
+        return $this->json($pagination);
     }
 
 

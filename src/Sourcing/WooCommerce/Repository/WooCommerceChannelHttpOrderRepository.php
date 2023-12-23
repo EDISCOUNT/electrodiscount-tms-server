@@ -21,6 +21,7 @@ use App\Sourcing\Exception\EntityNotFoundException;
 use App\Sourcing\WooCommerce\Factory\WooCommerceUrlFactory;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Automattic\WooCommerce\Client;
 
 /**
  * @template T
@@ -29,14 +30,12 @@ use Symfony\Contracts\Cache\ItemInterface;
 class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 {
     public function __construct(
-        private AccessTokenProviderInterface $tokenProvider,
         private CacheInterface $cache,
-        private HttpClientInterface $httpClient,
         private AdditionalServiceRepository $additionalServiceRepository,
         private ProductRepository $productRepository,
         private CodeGeneratorInterface $codeGenerator,
         private Channel $channel,
-        private string $baseURL,
+        private Client $client,
     ) {
     }
 
@@ -55,9 +54,9 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         // $collection = $data['orders']; //array_map(fn (array $data) => $this->buildOrder($data), $data['orders']);
 
         $collection = array_map(fn (array $data) => $this->buildOrder(
-            data: $this->doGetOrderItem($data['orderId']),
+            data: $this->doGetOrderItem($data['id']),
             channel: $this->channel,
-        ), $data['orders']);
+        ), $data);
         $page = new Pagerfanta(new ArrayAdapter($collection));
         return $page;
     }
@@ -88,20 +87,22 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     private function mapOrder(Order $order, array $data): void
     {
         $order
-            ->setChannelOrderId($data['orderId']);
+            ->setChannelOrderId($data['id'])
+            // ->setChannelOrderNumber($data['number'])
+        ;
         // 
-        foreach (($data['orderItems'] ?? []) as $itemData) {
+        foreach (($data['line_items'] ?? []) as $itemData) {
             $item = $this->buildOrderItem($itemData);
             $order->addItem($item);
         }
 
-        if (isset($data['shipmentDetails'])) {
-            $address = $this->buildAddress($data['shipmentDetails']);
+        if (isset($data['shipping'])) {
+            $address = $this->buildAddress($data['shipping']);
             $order->setShippingAddress($address);
         }
 
-        if (isset($data['billingDetails'])) {
-            $address = $this->buildAddress($data['billingDetails']);
+        if (isset($data['billing'])) {
+            $address = $this->buildAddress($data['billing']);
             $order->setBillingAddress($address);
         }
 
@@ -124,11 +125,12 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     private function mapOrderItem(OrderItem $orderItem, array $data): void
     {
         $orderItem
-            ->setChannelOrderItemId($data['orderItemId'])
-            ->setUnitPrice($data['unitPrice'] ?? '')
-            ->setQuantity($data['quantity'])
-            ->setQuantityShipped($data['quantityShipped'])
-            ->setQuantityCancelled($data['quantityShipped']);
+            ->setChannelOrderItemId($data['id'])
+            ->setUnitPrice($data['price'] ?? '')
+            ->setQuantity($data['quantity'] ?? 1)
+            // ->setProductTitle($data['name'] ?? '')
+            ->setQuantityShipped($data['quantityShipped'] ?? 0)
+            ->setQuantityCancelled($data['quantityCancelled'] ?? 0);
 
 
         if (isset($data['fulfilment'])) {
@@ -136,7 +138,7 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 
             $method = $fData['method'] ?? null;
 
-            if($method != 'FBR'){
+            if ($method != 'FBR') {
                 throw new \Exception("Fulfilment method is not FBR");
             }
 
@@ -154,6 +156,11 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         }
 
 
+
+        $orderItem
+            ->setChannelProductId($data['product_id'] ?? null)
+            ->setChannelVariantId($data['variation_id'] ?? null)
+            ->setName($data['name'] ?? null);
 
         if (isset($data['product'])) {
             $pData = $data['product'];
@@ -196,21 +203,21 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     {
         $street = $this->buildStreet($data);
         $address
-            ->setFirstName($data['firstName'] ?? null)
-            ->setLastName($data['surname'] ?? null)
-            ->setFirstName($data['firstName'] ?? null)
-            ->setEmailAddress($data['email'])
+            ->setFirstName($data['first_name'] ?? null)
+            ->setLastName($data['last_name'] ?? null)
+            ->setEmailAddress($data['email'] ?? null)
             ->setPhoneNumber($data['deliveryPhoneNumber'] ?? $data['phone'] ?? null)
             ->setStreet($street)
-            ->setPostcode($data['zipCode'] ?? '')
-            ->setCountryCode($data['countryCode'] ?? '')
+            ->setProvinceName($data['state'] ?? '')
+            ->setPostcode($data['postcode'] ?? '')
+            ->setCountryCode($data['country'] ?? '')
             ->setCity($data['city'] ?? '')
             ->setCompany($data['company'] ?? '');
     }
 
     private function buildStreet(array $data)
     {
-        $street = sprintf("%s %s %s", $data['houseNumberExtension'] ?? '',  $data['houseNumber'] ?? '', $data['streetName'] ?? '',);
+        $street = sprintf("%s %s %s", $data['address_2'] ?? '',  $data['address_1'] ?? '', $data['streetName'] ?? '',);
         return trim($street);
     }
 
@@ -240,52 +247,27 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     public function doGetOrderPage(int $page = 1, $limit = 10, $criteria = [], $orderBy = []): array
     {
 
-        $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
-        $url = "https://api.bol.com/retailer/orders?fulfilment-method=FBR&status=OPEN&page={$page}";
-        $key = 'url-' . md5($url);
+        $key = 'woo-orders-' . md5(serialize($criteria) . serialize($orderBy) . $page . $limit);
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($url, $authToken) {
+        return $this->cache->get($key, function (ItemInterface $item) use ($limit, $page) {
             $item->expiresAfter(60 * 5);    // 5 minutes
-            $result = $this->httpClient
-                ->request(
-                    "GET",
-                    $url,
-                    [
-                        // 'timeout' => 150,
-                        'headers' => [
-                            'Authorization' => 'Bearer ' . $authToken,
-                            'Accept' => 'application/vnd.retailer.v10+json',
-                            // 'Accept' => 'application/json',
-                        ],
-                    ]
-                );
-
-            $data = $result->toArray(throw: true);
-            return $data;
+            $result = $this->client->get('orders', [
+                'per_page' => $limit,
+                'page' => $page,
+            ]);
+            return  json_decode(json_encode($result), true);
         });
     }
 
     public function doGetOrderItem(mixed $id): array
     {
-        $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
-        $url = "https://api.bol.com/retailer/orders/{$id}";
-        $key = 'url-' . md5($url);
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($url, $authToken) {
+        $key = 'woo-order-' . $id;
+
+        return $this->cache->get($key, function (ItemInterface $item) use ($id) {
             $item->expiresAfter(60 * 5);    // 5 minutes
-            $result = $this->httpClient
-                ->request(
-                    "GET",
-                    $url,
-                    [
-                        'headers' => [
-                            'Authorization' => 'Bearer ' . $authToken,
-                            'Accept' => 'application/vnd.retailer.v10+json',
-                        ],
-                    ]
-                );
-            $data = $result->toArray(throw: true);
-            return $data;
+            $result = $this->client->get('orders/' . $id);
+            return  json_decode(json_encode($result), true);
         });
     }
 }

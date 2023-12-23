@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: ShipmentFulfilmentRepository::class)]
 class ShipmentFulfilment
 {
-    
+
     #[Groups(['shipment_fulfilment:list', 'shipment_fulfilment:read', 'shipment_fulfilment:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -116,5 +116,22 @@ class ShipmentFulfilment
         $this->timeFrameType = $timeFrameType;
 
         return $this;
+    }
+
+
+
+    public function copy(): ShipmentFulfilment
+    {
+        $fulfilment =  new ShipmentFulfilment();
+
+        $fulfilment
+            ->setMethod($this->getMethod())
+            ->setTimeFrameType($this->getTimeFrameType())
+            ->setExactDeliveryDate($this->getExactDeliveryDate())
+            ->setDistributionParty($this->getDistributionParty())
+            ->setExpiryDate($this->getExpiryDate())
+            ->setLatestDeliveryDate($this->getLatestDeliveryDate());
+
+        return $fulfilment;
     }
 }

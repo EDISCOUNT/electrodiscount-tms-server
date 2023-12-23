@@ -68,6 +68,7 @@ class ChannelNormalizer implements NormalizerInterface, NormalizerAwareInterface
             'code' => $channel->getCode(),
             'name' => $channel->getName(),
             'type' => $channel->getType(),
+            'enabled' => $channel->isEnabled(),
             'metadata' => $channel->getMetadata(),
             'shortDescription' => $channel->getShortDescription(),
             'description' => $channel->getDescription(),

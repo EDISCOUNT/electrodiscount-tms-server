@@ -8,7 +8,7 @@ use App\Entity\Shipment\Shipment;
 use App\Sourcing\Factory\ChannelEntityRepositoryFactoryInterface;
 use App\Sourcing\Repository\RepositoryInterface;
 
-class ChannelSourceManager
+abstract class ChannelSourceManager
 {
 
     public function __construct(
@@ -32,10 +32,12 @@ class ChannelSourceManager
     }
 
 
-    public function importShipmentForOrder(Order $order): Shipment{
+    public function mapOrderToShipment(Order $order): Shipment{
         $shipment = $this->orderToShipmentMapper->map($order);
         return $shipment;
     }
+
+    public abstract function commitShipment(Shipment $shipment, Order $order): mixed;
 
 
 

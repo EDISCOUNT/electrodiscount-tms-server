@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Order\ImportShipmentOrderType;
 use App\Entity\Carrier\Carrier;
 use App\Entity\Shipment\Shipment;
+use App\Service\Shipment\ShipmentEventLogger;
 
 #[Route('/api/admin/channel/channels/{channel}', name: 'app_api_admin_channel_order')]
 class OrderController extends AbstractController
@@ -23,6 +24,7 @@ class OrderController extends AbstractController
     public function __construct(
         private ShipmentSourceManager $shipmentSourceManager,
         private EntityManagerInterface $entityManager,
+        private ShipmentEventLogger $logger,
     ) {
     }
 
@@ -109,7 +111,7 @@ class OrderController extends AbstractController
 
 
         $order = $repository->getById($id);
-        $shipment = $this->shipmentSourceManager->importShipmentForOrder($order, save: false);
+        $shipment = $this->shipmentSourceManager->importShipmentForOrder($order, commit: false);
 
         $form = $this->createForm(ImportShipmentOrderType::class, $shipment, ['csrf_protection' => false]);
 
@@ -118,6 +120,9 @@ class OrderController extends AbstractController
 
 
         if ($form->isValid()) {
+            $this->shipmentSourceManager->commitShipment($shipment, $order);
+
+            $this->logger->logImported($shipment, channel: $channel, order: $order);
             $this->entityManager->persist($shipment);
             $this->entityManager->flush();
 
@@ -173,8 +178,10 @@ class OrderController extends AbstractController
 
             foreach ($orderIds as $orderId) {
                 $order = $repository->getById($orderId);
-                $shipment = $this->shipmentSourceManager->importShipmentForOrder($order, save: false);
+                $shipment = $this->shipmentSourceManager->importShipmentForOrder($order, commit: false);
                 $shipment->setCarrier($carrier);
+                $this->shipmentSourceManager->commitShipment($shipment, $order);
+                $this->logger->logImported($shipment, channel: $channel, order: $order);
                 $this->entityManager->persist($shipment);
             }
 

@@ -16,7 +16,7 @@ class Channel
     private ?int $id = null;
 
     #[Groups(['channel:list', 'channel:read', 'channel:write'])]
-    #[ORM\Column(length: 32)]
+    #[ORM\Column(length: 32, unique: true)]
     private ?string $code = null;
 
     #[Groups(['channel:list', 'channel:read', 'channel:write'])]

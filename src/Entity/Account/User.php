@@ -2,23 +2,28 @@
 
 namespace App\Entity\Account;
 
+use App\Entity\Carrier\Carrier;
 use App\Repository\Account\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[Groups(['user:list','user:read', 'user:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['user:list','user:read', 'user:write'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
+    #[Groups(['user:with_roles', 'user:write'])]
     #[ORM\Column]
     private array $roles = [];
 
@@ -28,11 +33,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Groups(['user:list','user:read', 'user:write'])]
     #[ORM\Column(length: 64, nullable: true)]
     private ?string $firstName = null;
 
+    #[Groups(['user:list','user:read', 'user:write'])]
     #[ORM\Column(length: 64, nullable: true)]
     private ?string $lastName = null;
+
+    #[Groups(['user:with_carrier', 'user:write'])]
+    #[ORM\OneToOne(mappedBy: 'operatorUser', cascade: ['persist', 'remove'])]
+    private ?Carrier $carrier = null;
+
+    #[Groups(['user:list','user:read', 'user:write'])]
+    #[ORM\Column(length: 128, nullable: true)]
+    private ?string $email = null;
 
     public function getId(): ?int
     {
@@ -124,6 +139,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(?string $lastName): static
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getCarrier(): ?Carrier
+    {
+        return $this->carrier;
+    }
+
+    public function setCarrier(?Carrier $carrier): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($carrier === null && $this->carrier !== null) {
+            $this->carrier->setOperatorUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($carrier !== null && $carrier->getOperatorUser() !== $this) {
+            $carrier->setOperatorUser($this);
+        }
+
+        $this->carrier = $carrier;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }

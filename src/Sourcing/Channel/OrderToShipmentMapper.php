@@ -53,9 +53,12 @@ class OrderToShipmentMapper
         $shipmentItem = new ShipmentItem();
 
         $shipmentItem
+            ->setName($orderItem->getName())
             ->setProduct($orderItem->getProduct())
             ->setQuantity($orderItem->getQuantity())
-            ->setInternalOrderItemId($orderItem->getId());
+            ->setInternalOrderItemId($orderItem->getId())
+            ->setFulfilment($orderItem->getFulfilment()?->copy())
+            ;
 
         return $shipmentItem;
     }
