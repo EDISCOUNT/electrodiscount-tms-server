@@ -72,6 +72,9 @@ class Address
     #[ORM\Column(length: 128, nullable: true)]
     private ?string $googlePlaceId = null;
 
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $provinceCode = null;
+
     public function getId(): ?Ulid
     {
         return $this->id;
@@ -246,5 +249,17 @@ class Address
 
         return $formatted;
         // return trim(sprintf('%s, %s, %s, %s', $this->street, $this->city, $this->provinceName, $this->countryCode));
+    }
+
+    public function getProvinceCode(): ?string
+    {
+        return $this->provinceCode;
+    }
+
+    public function setProvinceCode(?string $provinceCode): static
+    {
+        $this->provinceCode = $provinceCode;
+
+        return $this;
     }
 }

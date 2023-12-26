@@ -26,8 +26,8 @@ class CarrierController extends AbstractController
     #[Route('', name: 'app_api_admin_carrier_carrier_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $page = $request->query->get('page', 1);
-        $limit = $request->query->get('limit', 10);
+        $page = (int) $request->query->get('page', 1);
+        $limit = (int) $request->query->get('limit', 10);
 
         if ($page < 1) {
             $page = 1;
@@ -45,7 +45,9 @@ class CarrierController extends AbstractController
 
         return $this->json($pagination, context: [
             'groups' => [
-                'carrier:list'
+                'carrier:list',
+                'carrier:with_operator',
+                'user:list',
             ]
         ]);
     }
@@ -63,7 +65,13 @@ class CarrierController extends AbstractController
             $entityManager->persist($carrier);
             $entityManager->flush();
 
-            return $this->json($carrier, Response::HTTP_CREATED);
+            return $this->json($carrier, Response::HTTP_CREATED, context: [
+                'groups' => [
+                    'carrier:list',
+                    'carrier:with_operator',
+                    'user:list',
+                ]
+            ]);
         }
 
         return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
@@ -72,7 +80,13 @@ class CarrierController extends AbstractController
     #[Route('/{id}', name: 'app_api_admin_carrier_carrier_show', methods: ['GET'])]
     public function show(Carrier $carrier): Response
     {
-        return $this->json($carrier);
+        return $this->json($carrier, context: [
+            'groups' => [
+                'carrier:list',
+                'carrier:with_operator',
+                'user:list',
+            ]
+        ]);
     }
 
     #[Route('/{id}', name: 'app_api_admin_carrier_carrier_update', methods: ['PATCH'])]
@@ -86,7 +100,13 @@ class CarrierController extends AbstractController
         if ($form->isValid()) {
             $entityManager->flush();
 
-            return $this->json($carrier);
+            return $this->json($carrier, context: [
+                'groups' => [
+                    'carrier:list',
+                    'carrier:with_operator',
+                    'user:list',
+                ]
+            ]);
         }
 
         return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);

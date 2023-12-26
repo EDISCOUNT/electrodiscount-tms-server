@@ -29,8 +29,8 @@ class ChannelController extends AbstractController
     {
 
 
-        $page = $request->query->get('page', 1);
-        $limit = $request->query->get('limit', 10);
+        $page = (int)$request->query->get('page', 1);
+        $limit = (int)$request->query->get('limit', 10);
 
         if ($page < 1) {
             $page = 1;

@@ -1,28 +1,28 @@
 <?php
 
-namespace App\Form\Carrier;
+namespace App\Form\Shipment;
 
-use App\Entity\Carrier\Carrier;
+use App\Entity\Shipment\ShipmentDimension;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CarrierType extends AbstractType
+class ShipmentDimensionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('code')
-            ->add('name')
-            ->add('operatorUser')
-            ->add('enabled')
+            ->add('length')
+            ->add('width')
+            ->add('height')
+            ->add('unit')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Carrier::class,
+            'data_class' => ShipmentDimension::class,
         ]);
     }
 }

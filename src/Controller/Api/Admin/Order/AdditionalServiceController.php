@@ -19,17 +19,16 @@ class AdditionalServiceController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private AdditionalServiceRepository $shipmentRepository
-    )
-    {
+    ) {
     }
 
     #[Route('', name: 'app_api_admin_order_additional_service_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        
-        
-        $page = $request->query->get('page', 1);
-        $limit = $request->query->get('limit', 10);
+
+
+        $page = (int)$request->query->get('page', 1);
+        $limit = (int)$request->query->get('limit', 10);
 
         if ($page < 1) {
             $page = 1;
@@ -37,7 +36,7 @@ class AdditionalServiceController extends AbstractController
         if ($limit > 100) {
             $limit = 100;
         }
-        
+
         $qb = $this->shipmentRepository->createQueryBuilder('shipment');
         $adapter = new QueryAdapter($qb);
         $pagination = new Pagerfanta($adapter);
@@ -53,9 +52,9 @@ class AdditionalServiceController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $additionalService = new AdditionalService();
-        $form = $this->createForm(AdditionalServiceType::class, $additionalService,[
+        $form = $this->createForm(AdditionalServiceType::class, $additionalService, [
             'csrf_protection' => false,
-    
+
         ]);
         $form->submit(json_decode($request->getContent(), true));
 

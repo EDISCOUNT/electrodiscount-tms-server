@@ -86,7 +86,8 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
     private function mapOrder(Order $order, array $data): void
     {
         $order
-            ->setChannelOrderId($data['orderId']);
+            ->setChannelOrderId($data['orderId'])
+            ->setChannelOrderCreatedAt(new \DateTimeImmutable($data['orderPlacedDateTime'] ?? ''));
         // 
         foreach (($data['orderItems'] ?? []) as $itemData) {
             $item = $this->buildOrderItem($itemData);
@@ -125,6 +126,7 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
             ->setChannelOrderItemId($data['orderItemId'])
             ->setUnitPrice($data['unitPrice'] ?? '')
             ->setQuantity($data['quantity'])
+            ->setStatus($data['fulfilmentStatus'] ?? null)
             ->setQuantityShipped($data['quantityShipped'])
             ->setQuantityCancelled($data['quantityShipped']);
 
@@ -134,7 +136,7 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
 
             $method = $fData['method'] ?? null;
 
-            if($method != 'FBR'){
+            if ($method != 'FBR') {
                 throw new \Exception("Fulfilment method is not FBR");
             }
 
@@ -238,9 +240,12 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
     public function doGetOrderPage(int $page = 1, $limit = 10, $criteria = [], $orderBy = []): array
     {
 
+        $metadata = $this->channel->getMetadata();
+        $clientId = $metadata['client_id'];
+
         $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
         $url = "https://api.bol.com/retailer/orders?fulfilment-method=FBR&status=OPEN&page={$page}";
-        $key = 'url-' . md5($url);
+        $key = 'url-' . md5($url . '-' . $clientId);
 
         return $this->cache->get($key, function (ItemInterface $item) use ($url, $authToken) {
             $item->expiresAfter(60 * 5);    // 5 minutes
@@ -265,9 +270,12 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
 
     public function doGetOrderItem(mixed $id): array
     {
+        $metadata = $this->channel->getMetadata();
+        $clientId = $metadata['client_id'];
+
         $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
         $url = "https://api.bol.com/retailer/orders/{$id}";
-        $key = 'url-' . md5($url);
+        $key = 'url-' . md5($url . '-' . $clientId);
 
         return $this->cache->get($key, function (ItemInterface $item) use ($url, $authToken) {
             $item->expiresAfter(60 * 5);    // 5 minutes

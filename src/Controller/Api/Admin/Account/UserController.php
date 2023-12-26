@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Controller\Api\Admin\Shipment;
+namespace App\Controller\Api\Admin\Account;
 
-use App\Entity\Shipment\Shipment;
-use App\Form\Shipment\ShipmentType;
-use App\Repository\Shipment\ShipmentRepository;
-use App\Service\Shipment\ShipmentEventLogger;
-use App\Service\Util\CodeGeneratorInterface;
+use App\Entity\Account\User;
+use App\Form\Account\UserType;
+use App\Repository\Account\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -15,33 +13,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/admin/shipment/shipments')]
-class ShipmentController extends AbstractController
+#[Route('/api/admin/account/users')]
+class UserController extends AbstractController
 {
     public const SERIALIZER_GROUPS = [
-        'shipment:list',
-        'shipment:with_items',
-        'shipment:with_address',
-        'shipment:with_carrier',
-        'shipment:with_channel',
+        'user:list',
+        'user:with_address',
+        'user:with_carrier',
         'address:list',
         'carrier:list',
-        'shipment_item:read',
-        'shipment_item:with_product',
         'product:list'
     ];
 
-
-
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ShipmentRepository $shipmentRepository,
-        private CodeGeneratorInterface $codeGenerator,
-        private ShipmentEventLogger $logger,
+        private UserRepository $userRepository,
     ) {
     }
 
-    #[Route('', name: 'app_api_admin_shipment_shipment_index', methods: ['GET'])]
+    #[Route('', name: 'app_api_admin_account_user_index', methods: ['GET'])]
     public function index(Request  $request): Response
     {
 
@@ -55,7 +44,7 @@ class ShipmentController extends AbstractController
             $limit = 100;
         }
 
-        $qb = $this->shipmentRepository->createQueryBuilder('shipment');
+        $qb = $this->userRepository->createQueryBuilder('user');
         $adapter = new QueryAdapter($qb);
         $pagination = new Pagerfanta($adapter);
 
@@ -64,39 +53,28 @@ class ShipmentController extends AbstractController
 
         return $this->json($pagination, context: [
             'groups' => [
-                'shipment:list',
+                'user:list',
                 ...self::SERIALIZER_GROUPS
             ],
         ]);
     }
 
-    #[Route('', name: 'app_api_admin_shipment_shipment_new', methods: ['POST'])]
+    #[Route('', name: 'app_api_admin_account_user_new', methods: ['POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $shipment = new Shipment();
-        $form = $this->createForm(ShipmentType::class, $shipment, ['csrf_protection' => false]);
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
         $data = json_decode($request->getContent(), true);
         $form->submit($data, false);
 
         if ($form->isValid()) {
 
-            if (!($code = $shipment->getCode())) {
-                $code = $this->codeGenerator->generateCode(6);
-                $shipment->setCode($code);
-            }
-
-            $this->logger->logCreated($shipment);
-
-            if ($carrier = $shipment->getCarrier()) {
-                $this->logger->logAssigned($shipment, carrier: $carrier);
-            }
-
-            $entityManager->persist($shipment);
+            $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->json($shipment, Response::HTTP_CREATED, context: [
+            return $this->json($user, Response::HTTP_CREATED, context: [
                 'groups' => [
-                    'shipment:read',
+                    'user:read',
                     ...self::SERIALIZER_GROUPS
                 ],
             ]);
@@ -105,38 +83,37 @@ class ShipmentController extends AbstractController
         return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/{id}', name: 'app_api_admin_shipment_shipment_show', methods: ['GET'])]
-    public function show(Shipment $shipment): Response
+    #[Route('/{id}', name: 'app_api_admin_account_user_show', methods: ['GET'])]
+    public function show(User $user): Response
     {
-        return $this->json($shipment, context: [
+        return $this->json($user, context: [
             'groups' => [
-                'shipment:read',
-                'shipment:with_carrier',
+                'user:read',
+                'user:with_carrier',
                 'carrier:list',
-                'shipment:with_fulfilment',
-                'shipment_fulfilment:list',
+                'user:with_fulfilment',
+                'user_fulfilment:list',
                 'additional_service:list',
                 ...self::SERIALIZER_GROUPS
             ],
         ]);
     }
 
-    #[Route('/{id}', name: 'app_api_admin_shipment_shipment_update', methods: ['PATCH'])]
-    public function update(Request $request, Shipment $shipment, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'app_api_admin_account_user_update', methods: ['PATCH'])]
+    public function update(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ShipmentType::class, $shipment, ['csrf_protection' => false]);
+        $form = $this->createForm(UserType::class, $user, ['csrf_protection' => false]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data, false);
 
         if ($form->isValid()) {
 
-            $this->logger->logUpdated($shipment, $data);
             $entityManager->flush();
 
-            return $this->json($shipment, context: [
+            return $this->json($user, context: [
                 'groups' => [
-                    'shipment:read',
+                    'user:read',
                     ...self::SERIALIZER_GROUPS
                 ],
             ]);
@@ -145,10 +122,10 @@ class ShipmentController extends AbstractController
         return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('/{id}', name: 'app_api_admin_shipment_shipment_delete', methods: ['DELETE'])]
-    public function delete(Shipment $shipment, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'app_api_admin_account_user_delete', methods: ['DELETE'])]
+    public function delete(User $user, EntityManagerInterface $entityManager): Response
     {
-        $entityManager->remove($shipment);
+        $entityManager->remove($user);
         $entityManager->flush();
 
         return $this->json(null, Response::HTTP_NO_CONTENT);

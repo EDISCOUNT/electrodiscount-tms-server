@@ -26,8 +26,9 @@ class ProductController extends AbstractController
     #[Route('', name: 'app_api_admin_catalog_product_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $page = $request->query->get('page', 1);
-        $limit = $request->query->get('limit', 10);
+        $page = (int)$request->query->get('page', 1);
+        $limit = (int)$request->query->get('limit', 10);
+        $search  = $request->query->get('search');
 
         if ($page < 1) {
             $page = 1;
@@ -37,6 +38,10 @@ class ProductController extends AbstractController
         }
 
         $qb = $this->productRepository->createQueryBuilder('product');
+        if($search){
+            $qb->andWhere('product.name LIKE :search')
+                ->setParameter('search', '%'.$search.'%');
+        }
         $adapter = new QueryAdapter($qb);
         $pagination = new Pagerfanta($adapter);
 

@@ -76,6 +76,10 @@ class OrderItem
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[Groups(['order_item:list', 'order_item:read', 'order_item:write'])]
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->additionalService = new ArrayCollection();
@@ -262,6 +266,18 @@ class OrderItem
     public function setName(?string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

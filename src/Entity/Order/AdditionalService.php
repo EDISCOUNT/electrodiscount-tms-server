@@ -4,21 +4,26 @@ namespace App\Entity\Order;
 
 use App\Repository\Order\AdditionalServiceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: AdditionalServiceRepository::class)]
 class AdditionalService
 {
+    #[Groups(['additional_service:list', 'additional_service:read', 'additional_service:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['additional_service:list', 'additional_service:read', 'additional_service:write'])]
     #[ORM\Column(length: 32)]
     private ?string $code = null;
 
+    #[Groups(['additional_service:list', 'additional_service:read', 'additional_service:write'])]
     #[ORM\Column(length: 64)]
     private ?string $title = null;
 
+    #[Groups(['additional_service:list', 'additional_service:read', 'additional_service:write'])]
     #[ORM\Column]
     private ?bool $enabled = null;
 

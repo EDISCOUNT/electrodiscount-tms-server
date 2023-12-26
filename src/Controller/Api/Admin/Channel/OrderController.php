@@ -33,8 +33,8 @@ class OrderController extends AbstractController
     {
 
 
-        $page = $request->query->get('page', 1);
-        $limit = $request->query->get('limit', 10);
+        $page = (int)$request->query->get('page', 1);
+        $limit = (int) $request->query->get('limit', 10);
         $status = $request->query->get('limit', 'ALL');
         $filfilmentMethod = $request->query->get('fulfilment-method', 'ALL');
 
@@ -123,6 +123,11 @@ class OrderController extends AbstractController
             $this->shipmentSourceManager->commitShipment($shipment, $order);
 
             $this->logger->logImported($shipment, channel: $channel, order: $order);
+
+            if ($carrier = $shipment->getCarrier()) {
+                $this->logger->logAssigned($shipment, carrier: $carrier);
+            }
+            
             $this->entityManager->persist($shipment);
             $this->entityManager->flush();
 
@@ -167,9 +172,9 @@ class OrderController extends AbstractController
 
             $data = $form->getData();
             /**
-             * @var Carrier
+             * @var Carrier | null
              */
-            $carrier = $data['carrier'];
+            $carrier = $data['carrier'] ?? null;
             /**
              * @var string[]
              */
@@ -182,6 +187,11 @@ class OrderController extends AbstractController
                 $shipment->setCarrier($carrier);
                 $this->shipmentSourceManager->commitShipment($shipment, $order);
                 $this->logger->logImported($shipment, channel: $channel, order: $order);
+                
+                if ($carrier = $shipment->getCarrier()) {
+                    $this->logger->logAssigned($shipment, carrier: $carrier);
+                }
+
                 $this->entityManager->persist($shipment);
             }
 

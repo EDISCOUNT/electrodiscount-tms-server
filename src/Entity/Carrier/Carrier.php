@@ -28,12 +28,15 @@ class Carrier
     #[ORM\Column]
     private ?bool $enabled = false;
 
+    #[Groups(['carrier:list', 'carrier:read', 'carrier:write'])]
     #[ORM\Column(length: 128, nullable: true)]
     private ?string $emailAddress = null;
 
+    #[Groups(['carrier:list', 'carrier:read', 'carrier:write'])]
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $phoneNumber = null;
 
+    #[Groups(['carrier:with_operator', 'carrier:write'])]
     #[ORM\OneToOne(inversedBy: 'carrier', cascade: ['persist', 'remove'])]
     private ?User $operatorUser = null;
 

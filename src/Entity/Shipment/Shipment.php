@@ -16,11 +16,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: ShipmentRepository::class)]
 class Shipment
 {
-
     public const STATUS_NEW = 'new';
+    public const STATUS_ASSIGNED = 'assigned'; //pending on the carrier side
+    public const STATUS_PROCESSING = 'processing';
     public const STATUS_READY = 'ready';
-    public const STATUS_SHIPPED = 'shipped';
+    public const STATUS_INTRANSIT = 'intransit';
     public const STATUS_DELIVERED = 'delivered';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CANCELLED = 'cancelled';
 
 
     #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
@@ -42,7 +45,7 @@ class Shipment
     private ?Address $destinationAddress = null;
 
     #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
-    #[ORM\Column(length: 64, nullable:true)]
+    #[ORM\Column(length: 64, nullable: true)]
     private ?string $sourceId = null;
 
     #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
@@ -82,12 +85,36 @@ class Shipment
     private ?string $channelShipmentId = null;
 
     #[Groups(['shipment:with_additional_services', 'shipment:read', 'shipment:write'])]
-    #[ORM\ManyToMany(targetEntity: AdditionalService::class, cascade:['persist'])]
+    #[ORM\ManyToMany(targetEntity: AdditionalService::class, cascade: ['persist'])]
     private Collection $additionalServices;
 
     #[Groups(['shipment:with_events', 'shipment:write'])]
-    #[ORM\ManyToMany(targetEntity: ShipmentEvent::class, cascade:['persist', 'remove'])]
+    #[ORM\ManyToMany(targetEntity: ShipmentEvent::class, cascade: ['persist', 'remove'])]
     private Collection $events;
+
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(nullable: true)]
+    private ?int $netWeight = null;
+
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(nullable: true)]
+    private ?int $volumetricWeight = null;
+
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(nullable: true)]
+    private ?int $codAmount = null;
+
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $codCurrency = null;
+
+    #[Groups(['shipment:with_dimension', 'shipment:read', 'shipment:write'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?ShipmentDimension $dimension = null;
+
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $bookedAt = null;
 
     public function __construct()
     {
@@ -319,6 +346,78 @@ class Shipment
     public function removeEvent(ShipmentEvent $event): static
     {
         $this->events->removeElement($event);
+
+        return $this;
+    }
+
+    public function getNetWeight(): ?int
+    {
+        return $this->netWeight;
+    }
+
+    public function setNetWeight(?int $netWeight): static
+    {
+        $this->netWeight = $netWeight;
+
+        return $this;
+    }
+
+    public function getVolumetricWeight(): ?int
+    {
+        return $this->volumetricWeight;
+    }
+
+    public function setVolumetricWeight(?int $volumetricWeight): static
+    {
+        $this->volumetricWeight = $volumetricWeight;
+
+        return $this;
+    }
+
+    public function getCodAmount(): ?int
+    {
+        return $this->codAmount;
+    }
+
+    public function setCodAmount(?int $codAmount): static
+    {
+        $this->codAmount = $codAmount;
+
+        return $this;
+    }
+
+    public function getCodCurrency(): ?string
+    {
+        return $this->codCurrency;
+    }
+
+    public function setCodCurrency(?string $codCurrency): static
+    {
+        $this->codCurrency = $codCurrency;
+
+        return $this;
+    }
+
+    public function getDimension(): ?ShipmentDimension
+    {
+        return $this->dimension;
+    }
+
+    public function setDimension(?ShipmentDimension $dimension): static
+    {
+        $this->dimension = $dimension;
+
+        return $this;
+    }
+
+    public function getBookedAt(): ?\DateTimeImmutable
+    {
+        return $this->bookedAt;
+    }
+
+    public function setBookedAt(?\DateTimeImmutable $bookedAt): static
+    {
+        $this->bookedAt = $bookedAt;
 
         return $this;
     }

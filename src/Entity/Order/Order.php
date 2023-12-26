@@ -76,8 +76,13 @@ class Order
     #[ORM\ManyToOne]
     private ?Channel $channel = null;
 
+    #[Groups(['order:list', 'order:read','order:write'])]
     #[ORM\Column(length: 64, nullable: true)]
     private ?string $channelOrderNumber = null;
+
+    #[Groups(['order:list', 'order:read','order:write'])]
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $channelOrderCreatedAt = null;
 
     public function __construct()
     {
@@ -296,6 +301,18 @@ class Order
     public function setChannelOrderNumber(?string $channelOrderNumber): static
     {
         $this->channelOrderNumber = $channelOrderNumber;
+
+        return $this;
+    }
+
+    public function getChannelOrderCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->channelOrderCreatedAt;
+    }
+
+    public function setChannelOrderCreatedAt(?\DateTimeImmutable $channelOrderCreatedAt): static
+    {
+        $this->channelOrderCreatedAt = $channelOrderCreatedAt;
 
         return $this;
     }

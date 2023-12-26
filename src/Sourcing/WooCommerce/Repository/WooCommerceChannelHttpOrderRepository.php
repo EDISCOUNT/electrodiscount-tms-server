@@ -88,6 +88,8 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     {
         $order
             ->setChannelOrderId($data['id'])
+            ->setStatus($data['status' ?? 'pending'])
+            ->setChannelOrderCreatedAt(new \DateTimeImmutable($data['date_created'] ?? ''))
             // ->setChannelOrderNumber($data['number'])
         ;
         // 
@@ -246,8 +248,10 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 
     public function doGetOrderPage(int $page = 1, $limit = 10, $criteria = [], $orderBy = []): array
     {
+        $metadata = $this->channel->getMetadata();
+        $clientId = $metadata['client_id'];
 
-        $key = 'woo-orders-' . md5(serialize($criteria) . serialize($orderBy) . $page . $limit);
+        $key = 'woo-orders-' . md5(serialize($criteria) . $clientId . serialize($orderBy) . $page . $limit);
 
         return $this->cache->get($key, function (ItemInterface $item) use ($limit, $page) {
             $item->expiresAfter(60 * 5);    // 5 minutes
@@ -262,7 +266,10 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     public function doGetOrderItem(mixed $id): array
     {
 
-        $key = 'woo-order-' . $id;
+        $metadata = $this->channel->getMetadata();
+        $clientId = $metadata['client_id'];
+
+        $key = 'woo-order-' . $clientId  . $id;
 
         return $this->cache->get($key, function (ItemInterface $item) use ($id) {
             $item->expiresAfter(60 * 5);    // 5 minutes
