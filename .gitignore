@@ -29,5 +29,6 @@
 ###< lexik/jwt-authentication-bundle ###
 
 ###> MIGRATIONS
-# /migrations/
+/migrations/
+/.gitignore
 ### < MIGRATIONS
