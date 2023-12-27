@@ -17,6 +17,8 @@ use App\Form\Order\ImportShipmentOrderType;
 use App\Entity\Carrier\Carrier;
 use App\Entity\Shipment\Shipment;
 use App\Service\Shipment\ShipmentEventLogger;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/api/admin/channel/channels/{channel}', name: 'app_api_admin_channel_order')]
 class OrderController extends AbstractController
@@ -25,6 +27,8 @@ class OrderController extends AbstractController
         private ShipmentSourceManager $shipmentSourceManager,
         private EntityManagerInterface $entityManager,
         private ShipmentEventLogger $logger,
+        #[Target('shipment_operation')]
+        private WorkflowInterface $workflow,
     ) {
     }
 
@@ -125,6 +129,7 @@ class OrderController extends AbstractController
             $this->logger->logImported($shipment, channel: $channel, order: $order);
 
             if ($carrier = $shipment->getCarrier()) {
+                $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                 $this->logger->logAssigned($shipment, carrier: $carrier);
             }
             
@@ -189,6 +194,7 @@ class OrderController extends AbstractController
                 $this->logger->logImported($shipment, channel: $channel, order: $order);
                 
                 if ($carrier = $shipment->getCarrier()) {
+                    $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                     $this->logger->logAssigned($shipment, carrier: $carrier);
                 }
 

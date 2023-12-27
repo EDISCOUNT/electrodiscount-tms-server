@@ -29,6 +29,9 @@
             "./migrations/.gitignore"
         ]
     },
+    "knplabs/knp-snappy-bundle": {
+        "version": "v1.10.0"
+    },
     "lexik/jwt-authentication-bundle": {
         "version": "2.20",
         "recipe": {
@@ -51,6 +54,18 @@
         },
         "files": [
             "./config/packages/nelmio_cors.yaml"
+        ]
+    },
+    "oneup/flysystem-bundle": {
+        "version": "4.11",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "4.0",
+            "ref": "3ae1b83985e89138f5443bbc2d9b8c074b497d49"
+        },
+        "files": [
+            "./config/packages/oneup_flysystem.yaml"
         ]
     },
     "phpunit/phpunit": {

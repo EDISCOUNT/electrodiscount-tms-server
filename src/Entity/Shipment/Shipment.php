@@ -116,11 +116,16 @@ class Shipment
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $bookedAt = null;
 
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
         $this->additionalServices = new ArrayCollection();
         $this->events = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -418,6 +423,18 @@ class Shipment
     public function setBookedAt(?\DateTimeImmutable $bookedAt): static
     {
         $this->bookedAt = $bookedAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

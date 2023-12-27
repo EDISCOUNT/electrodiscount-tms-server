@@ -1,2 +1,46 @@
 framework:
-    workflows: null
+    workflows:
+        shipment_operation:
+            # type: "workflow" # or 'state_machine'
+            type: "state_machine" # or 'workflow'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: "method"
+                property: "status"
+            supports:
+                - App\Entity\Shipment\Shipment
+            initial_marking: new
+            places:
+                - new
+                - assigned
+                - processing
+                - ready
+                - intransit
+                - delivered
+                - completed
+                - cancelled
+            transitions:
+                assigned:
+                    from: new
+                    to: assigned
+                processing:
+                    from: assigned
+                    to: processing
+                ready:
+                    from: processing
+                    to: ready
+
+                intransit:
+                    from: ready
+                    to: intransit
+                delivered:
+                    from: intransit
+                    to: delivered
+                completed:
+                    from: delivered
+                    to: completed
+
+                cancelled:
+                    from: [new, assigned]
+                    to: cancelled

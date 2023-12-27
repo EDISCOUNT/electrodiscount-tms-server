@@ -1,0 +1,4 @@
+# config/packages/url_signer.yaml
+coop_tilleuls_url_signer:
+    signature_key: '%env(string:SIGNATURE_KEY)%'
+    signer: 'md5' # 'sha256' by default

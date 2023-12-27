@@ -1,0 +1,26 @@
+{% macro addressMinLabel(address) %}
+	{{address.city?? address.provinceName?? address.countryCode}}
+{% endmacro %}
+
+
+{% macro addressDetails(address) %}
+	<span>Name:</span>
+	{% if address.fullName %}
+		<strong>{{address.fullName}}</strong>
+	{% else %}
+		[NAME UNAVAILABEL]
+	{% endif %}
+	{% if address.emailAddress or address.phoneNumber %}
+		<br/>
+        Contact:
+		{% if address.phoneNumber %}
+			<span class="mx-1">{{ address.phoneNumber}}</span>
+		{% endif %}
+		{% if address.emailAddress %}
+			<span class="mx-1">{{ address.emailAddress}}</span>
+		{% endif %}
+	{% endif %}
+	<br/>
+	Address:
+	<span>{{ address.getFormattedRepresentaion()}}</span>
+{% endmacro %}

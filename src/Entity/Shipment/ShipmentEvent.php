@@ -4,36 +4,46 @@ namespace App\Entity\Shipment;
 
 use App\Repository\Shipment\ShipmentEventRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ShipmentEventRepository::class)]
 class ShipmentEvent
 {
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column(length: 128)]
     private ?string $code = null;
 
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column(length: 32)]
     private ?string $type = null;
 
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column(length: 128)]
     private ?string $title = null;
 
+    #[Groups(['shipment_event:list','shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $subtitle = null;
 
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $description = null;
 
+    #[Groups(['shipment_event:with_metadata', 'shipment_event:write'])]
     #[ORM\Column(nullable: true)]
     private ?array $metadata = null;
 
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $eventOccuredAt = null;
 
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -41,7 +51,7 @@ class ShipmentEvent
     {
         $this->eventOccuredAt = $this->createdAt = new \DateTimeImmutable();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

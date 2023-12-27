@@ -104,6 +104,12 @@ class Address
         return $this;
     }
 
+
+    public function getFullName(): string{
+        $fullname = sprintf('%s %s', $this->getFirstName(), $this->getLastName());
+        return trim($fullname);
+    }
+
     public function getStreet(): ?string
     {
         return $this->street;

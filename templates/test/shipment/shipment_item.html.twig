@@ -1,0 +1,75 @@
+{% macro showShipmentItems(shipment) %}
+	{% from _self import tableHeader, tableBody %}
+	{{tableHeader(shipment)}}
+	{{tableBody(shipment)}}
+{% endmacro %}
+
+{% macro tableBody(shipment) %}
+	{% from _self import showTableItem %}
+	{# <tbody> #}
+	{% for item in shipment.items %}
+		{{ showTableItem(item, loop.index) }}
+	{% endfor %}
+	{# </tbody> #}
+{% endmacro %}
+
+
+{% macro tableHeader(shipment) %}
+	{# <thead> #}
+
+	<tr>
+		<th colspan="8">
+				<div
+					class="container d-flex justify-content-center">
+			Product Enumeration
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th>
+			SN
+		</th>
+		<th>
+			EAN/ID
+		</th>
+		<th colspan="5">
+			Product
+		</th>
+		<th>
+			Quantity
+		</th>
+	</tr>
+	{# </thead> #}
+{% endmacro %}
+
+{% macro showTableItem(item, index) %}
+
+	{% set product = item.product %}
+	<tr>
+		<td>
+			{{index}}
+		</td>
+		<td>
+			{% if product %}
+				{{ product.gtin?? '[NA]' }}
+				{% else %}
+
+			{% endif %}
+		</td>
+
+		<td colspan="5">
+			{% if item.name %}
+				<span>{{item.name}}</span>
+			{% elseif product %}
+				{{ product.name?? '[NA]' }}
+			{% else %}
+				<span>N/A</span>
+			{% endif %}
+		</td>
+
+		<td>
+			{{item.quantity}}
+		</td>
+	</tr>
+
+{% endmacro %}
