@@ -43,6 +43,12 @@ class OrderToShipmentMapper
         }
 
 
+        $shipment->getAdditionalServices()->clear();
+        foreach ($order->getAdditionalServices() as $service) {
+            $shipment->addAdditionalService($service);
+        }
+
+
 
         return $shipment;
     }
@@ -57,8 +63,7 @@ class OrderToShipmentMapper
             ->setProduct($orderItem->getProduct())
             ->setQuantity($orderItem->getQuantity())
             ->setInternalOrderItemId($orderItem->getId())
-            ->setFulfilment($orderItem->getFulfilment()?->copy())
-            ;
+            ->setFulfilment($orderItem->getFulfilment()?->copy());
 
         return $shipmentItem;
     }
