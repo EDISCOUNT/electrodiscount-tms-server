@@ -1,16 +1,16 @@
 {% macro  shipmentPacklist(shipment, label) %}
-{% import 'test/shipment/address.html.twig' as address %}
-{% from 'test/shipment/shipment_item.html.twig' import showShipmentItems %}
+	{% import 'test/shipment/address.html.twig' as address %}
+	{% from 'test/shipment/shipment_item.html.twig' import showShipmentItems %}
 	<table
-		class="table table-bordered table-sm">
+		class="table table-bordered r-table-sm">
 		{# <tbody> #}
 		<tr>
-			<td colspan="4" rowspan="4">
+			<td colspan="4" rowspan="4" class="p-3">
 				{% set barcode = shipment_barcode(shipment) %}
 				{% set image = 'data:image/svg+xml;base64,' ~ (barcode | base64_encode) %}
-				<div class="container py-3 px-5 d-flex justify-content-between">
+				<div class="container py-3 px-3 d-flex justify-content-between">
 					<div>
-						MY IMAGE
+						<img src="{{ asset('images/logo.png') }}" class="rounded float-left" height="50" width="100" alt="Logo">
 					</div>
 
 					<div class="">

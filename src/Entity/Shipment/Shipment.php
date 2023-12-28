@@ -120,6 +120,9 @@ class Shipment
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Address $billingAddress = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -435,6 +438,18 @@ class Shipment
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getBillingAddress(): ?Address
+    {
+        return $this->billingAddress;
+    }
+
+    public function setBillingAddress(?Address $billingAddress): static
+    {
+        $this->billingAddress = $billingAddress;
 
         return $this;
     }

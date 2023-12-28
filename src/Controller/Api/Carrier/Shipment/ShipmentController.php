@@ -21,6 +21,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
+#[Route('/api/carrier/shipment/shipments', name: 'app_api_carrier_shipment_shipment')]
 class ShipmentController extends AbstractController
 {
 
@@ -47,7 +48,8 @@ class ShipmentController extends AbstractController
     ) {
     }
 
-    #[Route('/api/carrier/shipment/shipments', name: 'app_api_carrier_shipment_shipment')]
+
+    #[Route('', name: 'app_api_carrier_shipment_shipment_index')]
     public function index(Request  $request): Response
     {
         try {
