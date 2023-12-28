@@ -39,8 +39,8 @@ class OrderController extends AbstractController
 
         $page = (int)$request->query->get('page', 1);
         $limit = (int) $request->query->get('limit', 10);
-        $status = $request->query->get('limit', 'ALL');
-        $filfilmentMethod = $request->query->get('fulfilment-method', 'ALL');
+        $status = $request->query->get('status', 'all');
+        $filfilmentMethod = $request->query->get('fulfilment-method', 'all');
 
         if ($page < 1) {
             $page = 1;
@@ -56,7 +56,7 @@ class OrderController extends AbstractController
             limit: $limit,
             criteria: [
                 'status' => $status,
-                'fulfilmentMethod' => $filfilmentMethod
+                // 'fulfilment-method' => $filfilmentMethod
             ]
         );
 

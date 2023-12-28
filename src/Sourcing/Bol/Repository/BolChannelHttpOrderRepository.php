@@ -55,7 +55,8 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
         $collection = array_map(fn (array $data) => $this->buildOrder(
             data: $this->doGetOrderItem($data['orderId']),
             channel: $this->channel,
-        ), $data['orders']);
+            orderSummary: $data,
+        ), $data['orders']?? []);
         $page = new Pagerfanta(new ArrayAdapter($collection));
         return $page;
     }
@@ -76,21 +77,23 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
 
 
 
-    private function buildOrder(array $data, Channel $channel): Order
+    private function buildOrder(array $data, Channel $channel, ?array $orderSummary = null): Order
     {
         $order = new Order();
-        $this->mapOrder($order, $data);
+        $this->mapOrder($order, $data, $orderSummary);
         $order->setChannel($channel);
         return $order;
     }
-    private function mapOrder(Order $order, array $data): void
+    private function mapOrder(Order $order, array $data, ?array $orderSummary = null): void
     {
         $order
             ->setChannelOrderId($data['orderId'])
             ->setChannelOrderCreatedAt(new \DateTimeImmutable($data['orderPlacedDateTime'] ?? ''));
         // 
         foreach (($data['orderItems'] ?? []) as $itemData) {
-            $item = $this->buildOrderItem($itemData);
+            $orderItemSummary = $this->getOrderItemSummary($orderSummary, $itemData['orderItemId']);
+
+            $item = $this->buildOrderItem($itemData, $orderItemSummary);
             $order->addItem($item);
         }
 
@@ -114,13 +117,13 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
     }
 
 
-    private function buildOrderItem(array $data): OrderItem
+    private function buildOrderItem(array $data, ?array $orderItemSummary = null): OrderItem
     {
         $orderItem = new OrderItem();
-        $this->mapOrderItem($orderItem, $data);
+        $this->mapOrderItem($orderItem, $data, $orderItemSummary);
         return $orderItem;
     }
-    private function mapOrderItem(OrderItem $orderItem, array $data): void
+    private function mapOrderItem(OrderItem $orderItem, array $data, ?array $orderItemSummary = null): void
     {
         $orderItem
             ->setChannelOrderItemId($data['orderItemId'])
@@ -129,6 +132,12 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
             ->setStatus($data['fulfilmentStatus'] ?? null)
             ->setQuantityShipped($data['quantityShipped'])
             ->setQuantityCancelled($data['quantityShipped']);
+
+
+        if ($orderItemSummary) {
+            $orderItem
+                ->setStatus($orderItemSummary['fulfilmentStatus'] ?? null);
+        }
 
 
         if (isset($data['fulfilment'])) {
@@ -242,13 +251,18 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
 
         $metadata = $this->channel->getMetadata();
         $clientId = $metadata['client_id'];
+        if (isset($criteria['status'])) {
+            $criteria['status'] = $this->buildStausQuery($criteria['status']);
+        }
+        $criteria['page'] = $page;
+        $params = http_build_query($criteria);
 
         $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
-        $url = "https://api.bol.com/retailer/orders?fulfilment-method=FBR&status=OPEN&page={$page}";
+        $url = "https://api.bol.com/retailer/orders?fulfilment-method=FBR&{$params}";
         $key = 'url-' . md5($url . '-' . $clientId);
 
         return $this->cache->get($key, function (ItemInterface $item) use ($url, $authToken) {
-            $item->expiresAfter(60 * 5);    // 5 minutes
+            $item->expiresAfter(20);    // 20 seconds
             $result = $this->httpClient
                 ->request(
                     "GET",
@@ -293,5 +307,31 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
             $data = $result->toArray(throw: true);
             return $data;
         });
+    }
+
+
+
+    private function getOrderItemSummary(?array $orderSummary, string | int $orderItemId): ?array
+    {
+        if ($orderSummary) {
+            foreach ($orderSummary['orderItems'] as $item) {
+                if ($item['orderItemId'] == $orderItemId) {
+                    return $item;
+                }
+            }
+        }
+        return null;
+    }
+
+    private function buildStausQuery(string $status): array|string|null
+    {
+        $map = [
+            'open' => 'OPEN',
+            'shipped' => 'SHIPPED',
+            'all' => 'ALL',
+        ];
+        if (isset($map[$status]))
+            return $map[$status];
+        return null;
     }
 }

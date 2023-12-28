@@ -35,7 +35,9 @@ class OrderToShipmentMapper
             ->setCode($code)
             ->setChannel($channel)
             ->setChannelOrderId($order->getChannelOrderId())
-            ->setDestinationAddress($order->getShippingAddress());
+            ->setDestinationAddress($order->getShippingAddress())
+            ->setBillingAddress($order->getBillingAddress())
+            ;
 
         foreach ($order->getItems() as $orderItem) {
             $shipmentItem = $this->buildShipmentItem($orderItem);

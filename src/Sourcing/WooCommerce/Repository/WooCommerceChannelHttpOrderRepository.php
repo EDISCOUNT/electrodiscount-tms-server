@@ -132,6 +132,7 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
             ->setQuantity($data['quantity'] ?? 1)
             // ->setProductTitle($data['name'] ?? '')
             ->setQuantityShipped($data['quantityShipped'] ?? 0)
+            ->setName($data['name'] ?? null)
             ->setQuantityCancelled($data['quantityCancelled'] ?? 0);
 
 
@@ -251,13 +252,21 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         $metadata = $this->channel->getMetadata();
         $clientId = $metadata['client_id'];
 
+        if (isset($criteria['status'])) {
+            $criteria['status'] = $this->buildStausQuery($criteria['status']);
+        }
+        $criteria['page'] = $page;
+        $criteria['per_page'] = $limit;
+        $params = http_build_query($criteria);
+
+
         $key = 'woo-orders-' . md5(serialize($criteria) . $clientId . serialize($orderBy) . $page . $limit);
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($limit, $page) {
-            $item->expiresAfter(60 * 5);    // 5 minutes
+        return $this->cache->get($key, function (ItemInterface $item) use ($limit, $page, $criteria) {
+            $item->expiresAfter(20);    // 20 seconds
             $result = $this->client->get('orders', [
-                'per_page' => $limit,
-                'page' => $page,
+                ...$criteria,
+
             ]);
             return  json_decode(json_encode($result), true);
         });
@@ -276,5 +285,19 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
             $result = $this->client->get('orders/' . $id);
             return  json_decode(json_encode($result), true);
         });
+    }
+
+
+    private function buildStausQuery(string $status): array|string|null
+    {
+        $map = [
+            'open' => ['pending',], //'pending',//
+            'shipped' => ['processing', 'completed'],
+            'all' => 'ALL',
+        ];
+        if (isset($map[$status])) {
+            return $map[$status];
+        }
+        return null;
     }
 }

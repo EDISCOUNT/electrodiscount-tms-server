@@ -9,6 +9,7 @@ use App\Form\Shipment\ShipmentType;
 use App\Repository\Shipment\ShipmentRepository;
 use App\Service\Shipment\ShipmentEventLogger;
 use App\Service\Util\CodeGeneratorInterface;
+use App\Util\Doctrine\QueryBuilderHelper;
 use CoopTilleuls\UrlSignerBundle\UrlSigner\UrlSignerInterface;
 use DateInterval;
 use DateTime;
@@ -59,6 +60,7 @@ class ShipmentController extends AbstractController
         $page = (int)$request->query->get('page', 1);
         $limit = (int)$request->query->get('limit', 10);
         $statuses = $request->query->get('status',);
+        $filter = $request->query->get('filter',);
         if (($statuses != null) && !is_array($statuses)) {
             $statuses = [$statuses];
         }
@@ -76,6 +78,11 @@ class ShipmentController extends AbstractController
                 // ->setParameter('statuses', $statuses)
             ;
         }
+
+        if ($filter) {
+            QueryBuilderHelper::applyCriteria($qb, $filter, 'shipment');
+        }
+
         $adapter = new QueryAdapter($qb);
         $pagination = new Pagerfanta($adapter);
 
@@ -135,7 +142,9 @@ class ShipmentController extends AbstractController
                 'shipment:with_carrier',
                 'carrier:list',
                 'shipment:with_fulfilment',
+                'shipment_item:with_fulfilment',
                 'shipment_fulfilment:list',
+                'shipment:with_additional_services',
                 'additional_service:list',
                 ...self::SERIALIZER_GROUPS
             ],
@@ -244,7 +253,7 @@ class ShipmentController extends AbstractController
     private function generateSignedUrl(string $code): string
     {
         $url = $this->generateUrl(
-            'app_shipment_shipment_packlist_request', 
+            'app_shipment_shipment_packlist_request',
             ['code' => $code],
             referenceType: UrlGeneratorInterface::ABSOLUTE_URL,
         );

@@ -47,6 +47,7 @@ class ShipmentItem
     #[ORM\JoinColumn(nullable: false)]
     private ?Shipment $shipment = null;
 
+    #[Groups(['shipment_item:with_fulfilment', 'shipment_item:write'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ShipmentFulfilment $fulfilment = null;
 

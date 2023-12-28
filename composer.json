@@ -16,6 +16,7 @@
         "knplabs/knp-snappy-bundle": "^1.10",
         "lexik/jwt-authentication-bundle": "^2.20",
         "nelmio/cors-bundle": "*",
+        "oilstone/php-rsql-parser": "^1.0",
         "oneup/flysystem-bundle": "^4.11",
         "pagerfanta/doctrine-orm-adapter": "*",
         "phpdocumentor/reflection-docblock": "^5.3",

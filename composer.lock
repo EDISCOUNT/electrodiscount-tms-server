@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5145c9cbd1673e62bab38ff399b1e138",
+    "content-hash": "2b802552754bdfeaf8d55c0c75ffefb1",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -2562,6 +2562,47 @@
                 "source": "https://github.com/nelmio/NelmioCorsBundle/tree/2.4.0"
             },
             "time": "2023-11-30T16:41:19+00:00"
+        },
+        {
+            "name": "oilstone/php-rsql-parser",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oilstone/php-rsql-parser.git",
+                "reference": "3c286c4ff6614350f850d630bafb5cf7797a65a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oilstone/php-rsql-parser/zipball/3c286c4ff6614350f850d630bafb5cf7797a65a7",
+                "reference": "3c286c4ff6614350f850d630bafb5cf7797a65a7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Oilstone\\RsqlParser\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Online Solutions",
+                    "email": "support@onlinesolutionsltd.com"
+                }
+            ],
+            "description": "PHP library for parsing RSQL or FIQL queries. Designed for use in RESTful APIs.",
+            "homepage": "https://github.com/oilstone/php-rsql-parser",
+            "support": {
+                "issues": "https://github.com/oilstone/php-rsql-parser/issues",
+                "source": "https://github.com/oilstone/php-rsql-parser/tree/v1.0.5"
+            },
+            "time": "2023-11-27T17:19:30+00:00"
         },
         {
             "name": "oneup/flysystem-bundle",
