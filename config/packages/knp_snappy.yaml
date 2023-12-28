@@ -1,0 +1,12 @@
+# app/config/config.yml (or config/packages/knp_snappy.yaml if using Symfony4 and the Flex recipe)
+knp_snappy:
+    temporary_folder: "%kernel.cache_dir%/snappy"
+    process_timeout: 20 # In seconds
+    pdf:
+        enabled:    true
+        binary:     /usr/bin/wkhtmltopdf #"\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe\"" for Windows users
+        options:    []
+    image:
+        enabled:    true
+        binary:     /usr/bin/wkhtmltoimage #"\"C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe\"" for Windows users
+        options:    []
