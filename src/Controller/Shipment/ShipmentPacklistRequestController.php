@@ -57,8 +57,8 @@ class ShipmentPacklistRequestController extends AbstractController
         try {
             return $this->getFromWKPdf($content);
         } catch (\Exception $e) {
-            // return $this->getFromDomPdf($content);
-            throw $e;
+            return $this->getFromDomPdf($content);
+            // throw $e;
         }
     }
 

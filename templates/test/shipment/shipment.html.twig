@@ -10,7 +10,7 @@
 				{% set image = 'data:image/svg+xml;base64,' ~ (barcode | base64_encode) %}
 				<div class="container py-3 px-3 d-flex justify-content-between">
 					<div>
-						<img src="{{ asset('images/logo.png') }}" class="rounded float-left" height="50" width="100" alt="Logo">
+						<img src="{{ 'assets/images/logo.png' | embed_image }}" class="rounded float-left" height="50" width="100" alt="Logo">
 					</div>
 
 					<div class="">
