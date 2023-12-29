@@ -5,10 +5,14 @@ namespace App\Controller\Api\Carrier\Shipment;
 use App\Entity\Account\User;
 use App\Entity\Carrier\Carrier;
 use App\Entity\Shipment\Shipment;
+use App\Form\Shipment\ShipmentPacklistRequestType;
 use App\Form\Shipment\ShipmentTransitionType;
 use App\Repository\Shipment\ShipmentRepository;
 use App\Service\Shipment\ShipmentEventLogger;
 use App\Service\Util\CodeGeneratorInterface;
+use CoopTilleuls\UrlSignerBundle\UrlSigner\UrlSignerInterface;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -19,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/api/carrier/shipment/shipments', name: 'app_api_carrier_shipment_shipment')]
@@ -45,6 +50,7 @@ class ShipmentController extends AbstractController
         private ShipmentEventLogger $logger,
         #[Target('shipment_operation')]
         private WorkflowInterface $workflow,
+        private UrlSignerInterface $urlSigner,
     ) {
     }
 
@@ -151,6 +157,43 @@ class ShipmentController extends AbstractController
                 'status' => 'error',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    
+    #[Route('/operation/generate-packlist', name: 'app_api_carrier_shipment_shipment_generate_packlist', methods: ['POST'])]
+    public function generatePacklist(Request $request): Response
+    {
+        $form = $this->createForm(ShipmentPacklistRequestType::class, null, ['csrf_protection' => false]);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data, false);
+
+        if ($form->isValid()) {
+            $shipments = $form->get('shipments')->getData();
+
+            $shipmentIds = array_map(fn (Shipment $shipment) => $shipment->getId(), $shipments->toArray());
+            $idJson = json_encode($shipmentIds);
+            $idEncoded = base64_encode($idJson);
+
+            $url = $this->generateSignedUrl(code: $idEncoded);
+
+            return $this->json([
+                'url' => $url,
+            ]);
+        }
+        return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
+    }
+
+    
+    private function generateSignedUrl(string $code): string
+    {
+        $url = $this->generateUrl(
+            'app_shipment_shipment_packlist_request',
+            ['code' => $code],
+            referenceType: UrlGeneratorInterface::ABSOLUTE_URL,
+        );
+        // Will expire after 10 seconds.
+        $expiration = (new DateTime('now'))->add(new DateInterval('PT60S'));
+        return $this->urlSigner->sign($url, $expiration);
     }
 
     private function getCarrier(): Carrier

@@ -3,9 +3,9 @@ framework:
         dsn: '%env(MAILER_DSN)%'
 
         envelope:
-            sender: 'fabien@example.com'
-            recipients: ['foo@example.com', 'bar@example.com']
+            sender: 'callistusnkamuo@gmail.com'
+            # recipients: ['foo@example.com', 'bar@example.com']
         headers:
-            From: 'Fabien <fabien@example.com>'
-            Bcc: 'baz@example.com'
-            X-Custom-Header: 'foobar'
+            From: 'Callistus Nkamuo <callistusnkamuo@gmail.com>'
+            # Bcc: 'baz@example.com'
+            # X-Custom-Header: 'foobar'

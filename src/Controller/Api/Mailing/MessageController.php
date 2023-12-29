@@ -3,6 +3,7 @@
 namespace App\Controller\Api\Mailing;
 
 use App\Entity\Mailing\Message;
+use App\Entity\Mailing\Template\EmailMessageTemplate;
 use App\Form\Mailing\MessageType;
 use App\Repository\Mailing\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -67,9 +68,20 @@ class MessageController extends AbstractController
         $form->submit($data, false);
 
         if ($form->isValid()) {
-            $this->sendEmail($message);
             $entityManager->persist($message);
+
+            $saveAsTemplate = $form->get('saveAsTemplate')->getData()?? false;
+            $label = $form->get('label')->getData()?? $message->getSubject();
+
+            if ($saveAsTemplate) {
+                $template = $this->saveMesaageAsTemplate($message);
+                $template->setLabel($label);
+                $entityManager->persist($template);
+            }
             $entityManager->flush();
+
+            
+            $this->sendEmail($message);
 
             return $this->json(
                 $message,
@@ -131,6 +143,15 @@ class MessageController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
+
+
+
+    private function saveMesaageAsTemplate(Message $message): EmailMessageTemplate{
+        $template = new EmailMessageTemplate();
+        $template->setSubject($message->getSubject());
+        $template->setMessage($message->getMessage());
+        return $template;
+    }
 
 
 

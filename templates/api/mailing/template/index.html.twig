@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EmailMessageTemplate index{% endblock %}
+
+{% block body %}
+    <h1>EmailMessageTemplate index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Label</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Enabled</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for email_message_template in email_message_templates %}
+            <tr>
+                <td>{{ email_message_template.id }}</td>
+                <td>{{ email_message_template.label }}</td>
+                <td>{{ email_message_template.subject }}</td>
+                <td>{{ email_message_template.message }}</td>
+                <td>{{ email_message_template.enabled ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_api_mailing_template_show', {'id': email_message_template.id}) }}">show</a>
+                    <a href="{{ path('app_api_mailing_template_edit', {'id': email_message_template.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_api_mailing_template_new') }}">Create new</a>
+{% endblock %}

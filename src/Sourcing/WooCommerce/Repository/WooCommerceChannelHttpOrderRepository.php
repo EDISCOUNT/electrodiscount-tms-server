@@ -57,8 +57,12 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
             data: $this->doGetOrderItem($data['id']),
             channel: $this->channel,
         ), $data);
-        $page = new Pagerfanta(new ArrayAdapter($collection));
-        return $page;
+
+        $pagination = new Pagerfanta(new ArrayAdapter($collection));
+        $pagination
+            ->setCurrentPage($page)
+            ->setMaxPerPage($limit);
+        return $pagination;
     }
 
     /**

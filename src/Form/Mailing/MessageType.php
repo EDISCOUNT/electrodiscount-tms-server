@@ -6,7 +6,9 @@ use App\Entity\Mailing\EmailAddress;
 use App\Entity\Mailing\Message;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -38,6 +40,14 @@ class MessageType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+            ])
+            ->add('saveAsTemplate', CheckboxType::class, [
+                'required' => false,
+                'mapped'   => false,
+            ])
+            ->add('label', TextType::class, [
+                'required' => false,
+                'mapped'   => false,
             ]);
     }
 

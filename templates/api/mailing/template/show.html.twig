@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EmailMessageTemplate{% endblock %}
+
+{% block body %}
+    <h1>EmailMessageTemplate</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ email_message_template.id }}</td>
+            </tr>
+            <tr>
+                <th>Label</th>
+                <td>{{ email_message_template.label }}</td>
+            </tr>
+            <tr>
+                <th>Subject</th>
+                <td>{{ email_message_template.subject }}</td>
+            </tr>
+            <tr>
+                <th>Message</th>
+                <td>{{ email_message_template.message }}</td>
+            </tr>
+            <tr>
+                <th>Enabled</th>
+                <td>{{ email_message_template.enabled ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_api_mailing_template_index') }}">back to list</a>
+
+    <a href="{{ path('app_api_mailing_template_edit', {'id': email_message_template.id}) }}">edit</a>
+
+    {{ include('api/mailing/template/_delete_form.html.twig') }}
+{% endblock %}

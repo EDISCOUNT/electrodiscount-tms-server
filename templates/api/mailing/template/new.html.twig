@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New EmailMessageTemplate{% endblock %}
+
+{% block body %}
+    <h1>Create new EmailMessageTemplate</h1>
+
+    {{ include('api/mailing/template/_form.html.twig') }}
+
+    <a href="{{ path('app_api_mailing_template_index') }}">back to list</a>
+{% endblock %}

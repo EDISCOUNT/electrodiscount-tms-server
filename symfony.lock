@@ -158,6 +158,12 @@
             "version": "4.4"
         }
     },
+    "symfony/mailchimp-mailer": {
+        "version": "7.0",
+        "recipe": {
+            "version": "4.4"
+        }
+    },
     "symfony/mailer": {
         "version": "7.0",
         "recipe": {
@@ -255,6 +261,12 @@
             "./config/packages/security.yaml",
             "./config/routes/security.yaml"
         ]
+    },
+    "symfony/sendgrid-mailer": {
+        "version": "7.0",
+        "recipe": {
+            "version": "4.4"
+        }
     },
     "symfony/stimulus-bundle": {
         "version": "2.13",

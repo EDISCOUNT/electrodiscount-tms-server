@@ -56,9 +56,12 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
             data: $this->doGetOrderItem($data['orderId']),
             channel: $this->channel,
             orderSummary: $data,
-        ), $data['orders']?? []);
-        $page = new Pagerfanta(new ArrayAdapter($collection));
-        return $page;
+        ), $data['orders'] ?? []);
+        $pagination = new Pagerfanta(new ArrayAdapter($collection));
+        $pagination
+            ->setCurrentPage($page)
+            ->setMaxPerPage($limit);
+        return $pagination;
     }
 
     /**
@@ -246,41 +249,101 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
 
 
 
-    public function doGetOrderPage(int $page = 1, $limit = 10, $criteria = [], $orderBy = []): array
+
+    // public function buildCascadeOrderPage(int $page = 1, $limit = 10, $criteria = [], $orderBy = []): array
+    // {
+    //     $maxItemsPerpage = 50;
+    //     // $totalItems
+    // }
+
+
+
+    public function doGetOrderPage(int $page = 1, int $limit = 10, $criteria = [], $orderBy = []): array
     {
-
-        $metadata = $this->channel->getMetadata();
-        $clientId = $metadata['client_id'];
-        if (isset($criteria['status'])) {
-            $criteria['status'] = $this->buildStausQuery($criteria['status']);
+        if($limit < 0){
+            $limit = 1000;
         }
-        $criteria['page'] = $page;
-        $params = http_build_query($criteria);
-
         $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
-        $url = "https://api.bol.com/retailer/orders?fulfilment-method=FBR&{$params}";
-        $key = 'url-' . md5($url . '-' . $clientId);
+        // $httpClient = HttpClient::create();
+        $maxItemsPerPage = 50;
+        $numRequests = ceil($limit / $maxItemsPerPage);
+        $requests = [];
+        $orders = [];
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($url, $authToken) {
-            $item->expiresAfter(20);    // 20 seconds
-            $result = $this->httpClient
-                ->request(
-                    "GET",
-                    $url,
-                    [
-                        // 'timeout' => 150,
-                        'headers' => [
-                            'Authorization' => 'Bearer ' . $authToken,
-                            'Accept' => 'application/vnd.retailer.v10+json',
-                            // 'Accept' => 'application/json',
-                        ],
-                    ]
-                );
+        $status = 'OPEN';
 
-            $data = $result->toArray(throw: true);
-            return $data;
-        });
+        if (isset($criteria['status'])) {
+            $status = $this->buildStausQuery($criteria['status']);
+        }
+
+
+        for ($i = 0; $i < $numRequests; $i++) {
+            $requests[] = $this->httpClient->request('GET', 'https://api.bol.com/retailer/orders', [
+                'query' => [
+                    'page' => $page + $i,
+                    'fulfilment-method' => 'ALL',
+                    'status' => $status,
+                    // 'fulfilment-method' => 'FBR',
+                    // 'limit' => $maxItemsPerPage,
+                    // add other query parameters as needed
+                ],
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $authToken,
+                    'Accept' => 'application/vnd.retailer.v10+json',
+                    // 'Accept' => 'application/json',
+                ],
+            ]);
+        }
+
+        foreach ($this->httpClient->stream($requests) as $response => $chunk) {
+            if ($chunk->isLast()) {
+                $data = $response->toArray();
+                if (isset($data['orders'])) {
+                    $orders = array_merge($orders, $data['orders']);
+                }
+                // $results = array_merge($results, $data);
+            }
+        }
+        return [
+            'orders' => $orders,
+        ];
     }
+
+    // public function doGetOrderPage(int $page = 1, $limit = 10, $criteria = [], $orderBy = []): array
+    // {
+
+    //     $metadata = $this->channel->getMetadata();
+    //     $clientId = $metadata['client_id'];
+    //     if (isset($criteria['status'])) {
+    //         $criteria['status'] = $this->buildStausQuery($criteria['status']);
+    //     }
+    //     $criteria['page'] = $page;
+    //     $params = http_build_query($criteria);
+
+    //     $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
+    //     $url = "https://api.bol.com/retailer/orders?fulfilment-method=FBR&{$params}";
+    //     $key = 'url-' . md5($url . serialize($criteria). '-' . $clientId);
+
+    //     return $this->cache->get($key, function (ItemInterface $item) use ($url, $authToken) {
+    //         $item->expiresAfter(20);    // 20 seconds
+    //         $result = $this->httpClient
+    //             ->request(
+    //                 "GET",
+    //                 $url,
+    //                 [
+    //                     // 'timeout' => 150,
+    //                     'headers' => [
+    //                         'Authorization' => 'Bearer ' . $authToken,
+    //                         'Accept' => 'application/vnd.retailer.v10+json',
+    //                         // 'Accept' => 'application/json',
+    //                     ],
+    //                 ]
+    //             );
+
+    //         $data = $result->toArray(throw: true);
+    //         return $data;
+    //     });
+    // }
 
     public function doGetOrderItem(mixed $id): array
     {
