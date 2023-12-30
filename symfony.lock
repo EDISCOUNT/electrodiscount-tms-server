@@ -308,6 +308,12 @@
             "./templates/base.html.twig"
         ]
     },
+    "symfony/twilio-notifier": {
+        "version": "7.0",
+        "recipe": {
+            "version": "5.0"
+        }
+    },
     "symfony/uid": {
         "version": "7.0",
         "recipe": {

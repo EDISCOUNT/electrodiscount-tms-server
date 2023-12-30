@@ -29,13 +29,13 @@ class SmsController extends AbstractController
         if ($form->isValid()) {
 
             /** @var array<string> */
-            $phoneNumbers = $form->get('phoneNumbers')->getData();
+            $recipients = $form->get('recipients')->getData();
             $message = $form->get('message')->getData();
 
             $sentMessages = [];
 
 
-            foreach ($phoneNumbers as $phoneNumber) {
+            foreach ($recipients as $phoneNumber) {
                     // $options = (new ProviderOptions())
                     // ->setPriority('high')
                 ;
@@ -45,6 +45,7 @@ class SmsController extends AbstractController
                     $phoneNumber,
                     // the message
                     $message,
+                    '+2348102512540',
                     // optionally, you can override default "from" defined in transports
                     // '+1422222222',
                     // you can also add options object implementing MessageOptionsInterface
