@@ -25,6 +25,7 @@ class WooCommerceChannelOrderRepositoryFactory implements ChannelEntityRepositor
         private ProductRepository $productRepository,
         private CodeGeneratorInterface $codeGenerator,
         private WooCommerceUrlFactory $urlFactory,
+        private HttpClientInterface $client,
     ) {
     }
     /**
@@ -57,7 +58,7 @@ class WooCommerceChannelOrderRepositoryFactory implements ChannelEntityRepositor
 
         return new WooCommerceChannelHttpOrderRepository(
             channel: $channel,
-            client: $client,
+            httpClient: $this->client,
             cache: $this->cache,
             productRepository: $this->productRepository,
             additionalServiceRepository: $this->additionalServiceRepository,

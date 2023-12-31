@@ -48,6 +48,11 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
     public function paginate($page = 1, $limit = 10, $criteria = [], $orderBy = []): Pagerfanta
     {
 
+        
+        if($limit <= 0){
+            $limit = 1000;
+        }
+        
         $data = $this->doGetOrderPage($page, $limit, $criteria, $orderBy);
         $orders = $data['orders']?? [];
         $slice = array_slice($orders,0, $limit);

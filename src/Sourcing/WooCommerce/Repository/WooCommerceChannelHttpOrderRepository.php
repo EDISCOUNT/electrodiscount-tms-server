@@ -2,6 +2,9 @@
 
 namespace App\Sourcing\WooCommerce\Repository;
 
+use App\Entity\Order\Order;
+use App\Entity\Order\OrderItem;
+use Pagerfanta\Pagerfanta;
 use App\Entity\Addressing\Address;
 use App\Entity\Catalog\Product;
 use App\Entity\Channel\Channel;
@@ -9,19 +12,16 @@ use App\Entity\Order\AdditionalService;
 use App\Entity\Shipment\ShipmentFulfilment;
 use App\Sourcing\Repository\RepositoryInterface;
 use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use App\Entity\Order\Order;
-use App\Entity\Order\OrderItem;
 use App\Repository\Catalog\ProductRepository;
 use App\Repository\Order\AdditionalServiceRepository;
 use App\Service\Util\CodeGeneratorInterface;
-use App\Sourcing\WooCommerce\Authentication\AccessTokenProviderInterface;
 use App\Sourcing\Exception\EntityNotFoundException;
-use App\Sourcing\WooCommerce\Factory\WooCommerceUrlFactory;
+use Automattic\WooCommerce\Client;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
-use Automattic\WooCommerce\Client;
+use Automattic\WooCommerce\HttpClient\Options;
+use Automattic\WooCommerce\HttpClient\OAuth;
 
 /**
  * @template T
@@ -29,14 +29,44 @@ use Automattic\WooCommerce\Client;
  */
 class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 {
+
+    private string $url;
+    private ?string $consumerSecret;
+    private ?string $consumerKey;
+
+    private Options $options;
+
     public function __construct(
         private CacheInterface $cache,
         private AdditionalServiceRepository $additionalServiceRepository,
         private ProductRepository $productRepository,
         private CodeGeneratorInterface $codeGenerator,
         private Channel $channel,
-        private Client $client,
+        private HttpClientInterface $httpClient,
+        array $options = []
     ) {
+
+        $options = [
+            ...$options,
+            ...[
+                'wp_api' => true,
+                'version' => 'wc/v3',
+                'query_string_auth' => true,
+                'verify_ssl' => false,
+            ]
+        ];
+
+
+        $metadata = $channel->getMetadata();
+
+        $consumerKey = $metadata['client_id'];
+        $consumerSecret = $metadata['client_secret'];
+        $url = $metadata['base_url'] ?? '';
+
+        $this->options        = new Options($options);
+        $this->url            = $this->buildApiUrl($url);
+        $this->consumerKey    = $consumerKey;
+        $this->consumerSecret = $consumerSecret;
     }
 
     /**
@@ -48,6 +78,10 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
      */
     public function paginate($page = 1, $limit = 10, $criteria = [], $orderBy = []): Pagerfanta
     {
+
+        if ($limit <= 0) {
+            $limit = 1000;
+        }
 
         $data = $this->doGetOrderPage($page, $limit, $criteria, $orderBy);
 
@@ -163,7 +197,6 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         }
 
 
-
         $orderItem
             ->setChannelProductId($data['product_id'] ?? null)
             ->setChannelVariantId($data['variation_id'] ?? null)
@@ -253,27 +286,65 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 
     public function doGetOrderPage(int $page = 1, $limit = 10, $criteria = [], $orderBy = []): array
     {
+
         $metadata = $this->channel->getMetadata();
         $clientId = $metadata['client_id'];
 
         if (isset($criteria['status'])) {
             $criteria['status'] = $this->buildStausQuery($criteria['status']);
+            // unset($criteria['status']);
+        }
+
+        $maxItemsPerPage = 100;
+        $numRequests = ceil($limit / $maxItemsPerPage);
+        $requests = [];
+        $orders = [];
+
+
+        $perPage = $limit;
+        if ($perPage > $maxItemsPerPage) {
+            $perPage = $maxItemsPerPage;
         }
         $criteria['page'] = $page;
-        $criteria['per_page'] = $limit;
-        $params = http_build_query($criteria);
+        $criteria['per_page'] = $perPage;
 
-
+        $url = sprintf('%s%s', $this->url, 'orders');
         $key = 'woo-orders-' . md5(serialize($criteria) . $clientId . serialize($orderBy) . $page . $limit);
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($limit, $page, $criteria) {
-            $item->expiresAfter(20);    // 20 seconds
-            $result = $this->client->get('orders', [
-                ...$criteria,
 
+
+        for ($i = 0; $i < $numRequests; $i++) {
+            $requests[] = $this->httpClient->request('GET', $url, [
+                ...$this->authenticate($url, 'GET', [
+                    ...$criteria,
+                    'page' => $page + $i,
+                ]),
             ]);
-            return  json_decode(json_encode($result), true);
-        });
+        }
+
+        foreach ($this->httpClient->stream($requests) as $response => $chunk) {
+            if ($chunk->isLast()) {
+                $data = $response->toArray();
+                // if (isset($data['orders'])) {
+                $orders = array_merge($orders, $data);
+                // }
+                // $results = array_merge($results, $data);
+            }
+        }
+        return [
+            ...$orders,
+        ];
+
+
+
+        // return $this->cache->get($key, function (ItemInterface $item) use ($url, $criteria) {
+        //     $item->expiresAfter(20);    // 20 seconds
+        //     $response = $this->httpClient->request('GET', $url, [
+        //         ...$this->authenticate($url, 'GET', $criteria),
+        //     ]);
+        //     $result = $response->toArray();
+        //     return  $result;
+        // });
     }
 
     public function doGetOrderItem(mixed $id): array
@@ -284,10 +355,15 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 
         $key = 'woo-order-' . $clientId  . $id;
 
-        return $this->cache->get($key, function (ItemInterface $item) use ($id) {
+        $url = sprintf('%s%s/%s', $this->url, 'orders', $id);
+
+        return $this->cache->get($key, function (ItemInterface $item) use ($url) {
             $item->expiresAfter(60 * 5);    // 5 minutes
-            $result = $this->client->get('orders/' . $id);
-            return  json_decode(json_encode($result), true);
+            $response = $this->httpClient->request('GET', $url, [
+                ...$this->authenticate($url, 'GET', []),
+            ]);
+            $result = $response->toArray();
+            return  $result;
         });
     }
 
@@ -295,13 +371,103 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     private function buildStausQuery(string $status): array|string|null
     {
         $map = [
-            'open' => ['pending',], //'pending',//
-            'shipped' => ['processing', 'completed'],
-            'all' => 'ALL',
+            'open' => ['pending', 'processing'], //'pending',//
+            'shipped' => ['completed'],
+            'all' => ['pending', 'processing', 'completed'],
         ];
         if (isset($map[$status])) {
             return $map[$status];
         }
         return null;
+    }
+
+
+    protected function isSsl()
+    {
+        return 'https://' === \substr($this->url, 0, 8);
+    }
+
+
+    /**
+     * Authenticate.
+     *
+     * @param string $url        Request URL.
+     * @param string $method     Request method.
+     * @param array  $parameters Request parameters.
+     *
+     * @return array
+     */
+    protected function authenticate($url, $method, $parameters = [])
+    {
+
+        $headers = $this->getRequestHeaders(false);
+
+        // Setup authentication.
+        if (!$this->options->isOAuthOnly() && $this->isSsl()) {
+            return [
+                'headers' => [
+                    'Authorization' => 'Basic ' . \base64_encode($this->consumerKey . ':' . $this->consumerSecret),
+                    // 'Accepts' => 'application/json',
+                    ...$headers,
+                ],
+                'query' => $parameters,
+            ];
+        } else {
+            $oAuth = new OAuth(
+                $url,
+                $this->consumerKey,
+                $this->consumerSecret,
+                $this->options->getVersion(),
+                $method,
+                $parameters,
+                $this->options->oauthTimestamp()
+            );
+            $parameters = $oAuth->getParameters();
+        }
+
+        return [
+            'query' => $parameters,
+            'headers' => [
+                // 'Accepts' => 'application/json',
+                ...$headers,
+            ]
+        ];
+    }
+
+
+    /**
+     * Get request headers.
+     *
+     * @param  bool $sendData If request send data or not.
+     *
+     * @return array
+     */
+    protected function getRequestHeaders($sendData = false)
+    {
+        $headers = [
+            'Accept'     => 'application/json',
+            'User-Agent' => $this->options->userAgent() . '/' . Client::VERSION,
+        ];
+
+        if ($sendData) {
+            $headers['Content-Type'] = 'application/json;charset=utf-8';
+        }
+
+        return $headers;
+    }
+
+
+    /**
+     * Build API URL.
+     *
+     * @param string $url Store URL.
+     *
+     * @return string
+     */
+    protected function buildApiUrl($url)
+    {
+        $api = $this->options->isWPAPI() ? $this->options->apiPrefix() : '/wc-api/';
+
+        return \rtrim($url, '/') . $api . $this->options->getVersion() . '/';
     }
 }
