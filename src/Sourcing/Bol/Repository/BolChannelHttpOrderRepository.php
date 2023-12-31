@@ -49,6 +49,8 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
     {
 
         $data = $this->doGetOrderPage($page, $limit, $criteria, $orderBy);
+        $orders = $data['orders']?? [];
+        $slice = array_slice($orders,0, $limit);
 
         // $collection = $data['orders']; //array_map(fn (array $data) => $this->buildOrder($data), $data['orders']);
 
@@ -56,7 +58,7 @@ class BolChannelHttpOrderRepository implements RepositoryInterface
             data: $this->doGetOrderItem($data['orderId']),
             channel: $this->channel,
             orderSummary: $data,
-        ), $data['orders'] ?? []);
+        ),  $slice);
         $pagination = new Pagerfanta(new ArrayAdapter($collection));
         $pagination
             ->setCurrentPage($page)
