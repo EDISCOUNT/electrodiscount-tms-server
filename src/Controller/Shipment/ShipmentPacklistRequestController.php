@@ -4,7 +4,6 @@ namespace App\Controller\Shipment;
 
 use App\Entity\Shipment\Shipment;
 use App\Repository\Shipment\ShipmentRepository;
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

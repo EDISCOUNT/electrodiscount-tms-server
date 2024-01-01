@@ -3,8 +3,10 @@
 namespace App\Form\Order;
 
 use App\Entity\Shipment\Shipment;
+use App\Entity\Shipment\ShipmentFulfilmentType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,7 +21,8 @@ class ImportShipmentOrderType extends AbstractType
                 'label' => 'Carrier',
                 'required' => false,
             ])
-        ;
+            ->add('fulfilmentType', EnumType::class, ['class' => ShipmentFulfilmentType::class])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

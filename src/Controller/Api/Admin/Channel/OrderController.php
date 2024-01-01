@@ -16,7 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Order\ImportShipmentOrderType;
 use App\Entity\Carrier\Carrier;
 use App\Entity\Shipment\Shipment;
+use App\Entity\Shipment\ShipmentFulfilmentType;
 use App\Service\Shipment\ShipmentEventLogger;
+use App\Service\Shipment\ShipmentNotificationManager;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
 
@@ -27,6 +29,7 @@ class OrderController extends AbstractController
         private ShipmentSourceManager $shipmentSourceManager,
         private EntityManagerInterface $entityManager,
         private ShipmentEventLogger $logger,
+        private ShipmentNotificationManager $notifier,
         #[Target('shipment_operation')]
         private WorkflowInterface $workflow,
     ) {
@@ -120,6 +123,9 @@ class OrderController extends AbstractController
         $form = $this->createForm(ImportShipmentOrderType::class, $shipment, ['csrf_protection' => false]);
 
         $data = json_decode($request->getContent(), true);
+        // if(isset($data['fulfilmentType'])){
+        //     $data['fulfilmentType'] = ShipmentFulfilmentType::from($data['fulfilmentType']);
+        // }
         $form->submit($data, false);
 
 
@@ -128,9 +134,13 @@ class OrderController extends AbstractController
 
             $this->logger->logImported($shipment, channel: $channel, order: $order);
 
+            
+            // $shipment->setFulfilmentType($fulfilmentType);
+
             if ($carrier = $shipment->getCarrier()) {
                 $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                 $this->logger->logAssigned($shipment, carrier: $carrier);
+                $this->notifier->notifyCarrierOfAssignment($shipment);
             }
             
             $this->entityManager->persist($shipment);
@@ -163,6 +173,9 @@ class OrderController extends AbstractController
         $form = $this->createForm(BulkImportShipmentOrderType::class, options: ['csrf_protection' => false]);
 
         $data = json_decode($request->getContent(), true);
+        // if(isset($data['fulfilmentType'])){
+        //     $data['fulfilmentType'] = ShipmentFulfilmentType::from($data['fulfilmentType']);
+        // }
         $form->submit($data, false);
 
 
@@ -180,6 +193,12 @@ class OrderController extends AbstractController
              * @var Carrier | null
              */
             $carrier = $data['carrier'] ?? null;
+            
+            /**
+             * @var ShipmentFulfilmentType
+             */
+            $fulfilmentType = $data['fulfilmentType'] ?? ShipmentFulfilmentType::PICKUP_AND_DELIVER;
+
             /**
              * @var string[]
              */
@@ -190,12 +209,14 @@ class OrderController extends AbstractController
                 $order = $repository->getById($orderId);
                 $shipment = $this->shipmentSourceManager->importShipmentForOrder($order, commit: false);
                 $shipment->setCarrier($carrier);
+                $shipment->setFulfilmentType($fulfilmentType);
                 $this->shipmentSourceManager->commitShipment($shipment, $order);
                 $this->logger->logImported($shipment, channel: $channel, order: $order);
                 
                 if ($carrier = $shipment->getCarrier()) {
                     $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                     $this->logger->logAssigned($shipment, carrier: $carrier);
+                    $this->notifier->notifyCarrierOfAssignment($shipment);
                 }
 
                 $this->entityManager->persist($shipment);

@@ -3,9 +3,11 @@
 namespace App\Form\Order;
 
 use App\Entity\Carrier\Carrier;
+use App\Entity\Shipment\ShipmentFulfilmentType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,7 +32,9 @@ class BulkImportShipmentOrderType extends AbstractType
                 'constraints' => [
                     new Count(min: 1),
                 ]
-            ]);
+            ])
+            ->add('fulfilmentType', EnumType::class, ['class' => ShipmentFulfilmentType::class])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

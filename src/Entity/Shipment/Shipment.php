@@ -120,8 +120,13 @@ class Shipment
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Groups(['shipment:with_address', 'shipment:read', 'shipment:write'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Address $billingAddress = null;
+
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(length: 32, options: ['default' => 'PICKUP_AND_DELIVERY'])]
+    private ShipmentFulfilmentType $fulfilmentType = ShipmentFulfilmentType::PICKUP_AND_DELIVER;
 
     public function __construct()
     {
@@ -452,5 +457,23 @@ class Shipment
         $this->billingAddress = $billingAddress;
 
         return $this;
+    }
+
+    public function getFulfilmentType(): ?ShipmentFulfilmentType
+    {
+        return $this->fulfilmentType;
+    }
+
+    public function setFulfilmentType(ShipmentFulfilmentType $fulfilmentType): static
+    {
+        $this->fulfilmentType = $fulfilmentType;
+
+        return $this;
+    }
+
+
+
+    public function isDropship(){
+        return $this->fulfilmentType === ShipmentFulfilmentType::DROPSHIPPING;
     }
 }

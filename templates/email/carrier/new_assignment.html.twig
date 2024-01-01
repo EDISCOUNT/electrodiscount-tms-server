@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>New Assignment</title>
+	</head>
+	<body>
+		<div style="font-family: 'Arial', sans-serif; margin: 20px auto; padding: 20px; background-color: #f4f4f4; text-align: center; max-width: 600px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+			<img src="https://parcelplanner.eu/images/logo.png" alt="Company Logo" style="max-width: 100%; margin-bottom: 20px;">
+
+			<h2 style="color: #333;">New Shipment Task Assigned</h2>
+
+			<p style="color: #666; font-size: 16px;">Dear
+				{{carrier.name}},</p>
+
+			<p style="color: #666; font-size: 16px;">You have been assigned a new shipment task. The details are provided in the attached packlist document.</p>
+
+			<p style="color: #666; font-size: 16px;">Here are the key details:</p>
+
+			<ul style="list-style-type: none; padding: 0;">
+				<li style="color: #333; font-size: 16px; margin-bottom: 10px;">Shipment Code:
+					{{ shipment.code }}</li>
+				<li style="color: #333; font-size: 16px; margin-bottom: 10px;">Order ID:
+					{{ shipment.channelOrderId?? 'N/A' }}</li>
+				<li style="color: #333; font-size: 16px; margin-bottom: 10px;">Shipment Date: [Shipment Date]</li>
+				{% if shipment.isDropship %}
+
+					<li style="color: #333; font-size: 16px; margin-bottom: 10px;">
+						<span>Drop Shipping</span>
+					</li>
+
+				{% else %}
+					<li style="color: #333; font-size: 16px; margin-bottom: 10px;">Pickup Location:
+						{% if shipment.originAddress %}
+							{{ shipment.originAddress.formattedRepresentaion}}
+						{% else %}
+							<span>N/A</span>
+						{% endif %}
+					</li>
+				{% endif %}
+				<li style="color: #333; font-size: 16px; margin-bottom: 10px;">Delivery Location:
+					{% if shipment.destinationAddress %}
+						{{ shipment.destinationAddress.formattedRepresentaion}}
+					{% else %}
+						<span>N/A</span>
+					{% endif %}
+				</li>
+			</ul>
+
+			<p style="color: #666; font-size: 16px;">The packlist document is attached to this email. Please review it for further details.</p>
+
+			<a href="https://your-website.com/login" style="text-decoration: none; display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: #fff; font-size: 18px; border-radius: 5px;">Login to Your Account</a>
+
+			<p style="color: #888; font-size: 14px; margin-top: 20px;">If you have any questions or need assistance, please contact our support team at [support@your-company.com].</p>
+
+		</div>
+
+	</body>
+</html>

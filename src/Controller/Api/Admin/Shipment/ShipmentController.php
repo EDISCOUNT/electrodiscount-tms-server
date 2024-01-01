@@ -8,6 +8,7 @@ use App\Form\Shipment\ShipmentTransitionType;
 use App\Form\Shipment\ShipmentType;
 use App\Repository\Shipment\ShipmentRepository;
 use App\Service\Shipment\ShipmentEventLogger;
+use App\Service\Shipment\ShipmentNotificationManager;
 use App\Service\Util\CodeGeneratorInterface;
 use App\Util\Doctrine\QueryBuilderHelper;
 use CoopTilleuls\UrlSignerBundle\UrlSigner\UrlSignerInterface;
@@ -48,6 +49,7 @@ class ShipmentController extends AbstractController
         private ShipmentRepository $shipmentRepository,
         private CodeGeneratorInterface $codeGenerator,
         private ShipmentEventLogger $logger,
+        private ShipmentNotificationManager $notifier,
         #[Target('shipment_operation')]
         private WorkflowInterface $workflow,
         private UrlSignerInterface $urlSigner,
@@ -117,6 +119,7 @@ class ShipmentController extends AbstractController
             if ($carrier = $shipment->getCarrier()) {
                 $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                 $this->logger->logAssigned($shipment, carrier: $carrier);
+                $this->notifier->notifyCarrierOfAssignment($shipment);
             }
 
             $entityManager->persist($shipment);
@@ -154,12 +157,21 @@ class ShipmentController extends AbstractController
     #[Route('/{shipment}', name: 'app_api_admin_shipment_shipment_update', methods: ['PATCH'])]
     public function update(Request $request, Shipment $shipment, EntityManagerInterface $entityManager): Response
     {
+
+        $carrier = $shipment->getCarrier();
         $form = $this->createForm(ShipmentType::class, $shipment, ['csrf_protection' => false]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data, false);
 
         if ($form->isValid()) {
+
+            if ( ($carrier == null)  && ($carrier = $shipment->getCarrier())) {
+                $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
+                $this->logger->logAssigned($shipment, carrier: $carrier);
+                $this->notifier->notifyCarrierOfAssignment($shipment);
+            }
+
 
             $this->logger->logUpdated($shipment, $data);
             $entityManager->flush();

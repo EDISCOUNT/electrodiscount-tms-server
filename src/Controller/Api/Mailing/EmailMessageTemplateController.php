@@ -34,6 +34,7 @@ class EmailMessageTemplateController extends AbstractController
         $page = (int) $request->query->get('page', 1);
         $limit = (int) $request->query->get('limit', 10);
         $ownerId =  $request->query->get('owner_id');
+        $search =  $request->query->get('search');
 
         if ($page < 1) {
             $page = 1;
@@ -54,6 +55,10 @@ class EmailMessageTemplateController extends AbstractController
         } else {
             $qb->andWhere('template.owner = :owner')
                 ->setParameter('owner', $this->getUser());
+        }
+        if ($search) {
+            $qb->andWhere('template.label LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
         }
         $adapter = new QueryAdapter($qb);
         $pagination = new Pagerfanta($adapter);
