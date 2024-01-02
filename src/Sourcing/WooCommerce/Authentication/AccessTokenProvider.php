@@ -8,7 +8,7 @@ class AccessTokenProvider implements AccessTokenProviderInterface
 {
 
     public function __construct(
-        private HttpClientInterface $httpClient
+        private Channel $channel
     ) {
     }
 

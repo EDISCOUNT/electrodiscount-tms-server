@@ -1,0 +1,2755 @@
+      
+[
+  {
+    "id": 12222,
+    "parent_id": 0,
+    "status": "processing",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T20:01:13",
+    "date_modified": "2024-01-02T20:01:55",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "97.02",
+    "total": "654.00",
+    "total_tax": "97.02",
+    "customer_id": 378,
+    "order_key": "wc_order_BFsjRhvMMradr",
+    "billing": {
+      "first_name": "Zeeshan",
+      "last_name": "Ali",
+      "company": "",
+      "address_1": "Lahore",
+      "address_2": "",
+      "city": "Lahore",
+      "state": "",
+      "postcode": "39460",
+      "country": "PK",
+      "email": "coursebyza@gmail.com",
+      "phone": "03254578450"
+    },
+    "shipping": {
+      "first_name": "Zeeshan",
+      "last_name": "Ali",
+      "company": "",
+      "address_1": "Lahore",
+      "address_2": "",
+      "city": "Lahore",
+      "state": "",
+      "postcode": "39460",
+      "country": "PK",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_banktransfer",
+    "payment_method_title": "Bankoverdracht",
+    "transaction_id": "",
+    "customer_ip_address": "137.59.230.161",
+    "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": "2024-01-02T20:01:55",
+    "cart_hash": "fdea58a225ec7998e95950162d2cdc72",
+    "number": "12222",
+    "meta_data": [
+      {
+        "id": 184276,
+        "key": "_billing_delivery_date",
+        "value": "03.01.2024"
+      },
+      {
+        "id": 184277,
+        "key": "_billing_pickup_date",
+        "value": "18.01.2024"
+      },
+      {
+        "id": 184278,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 184279,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "[\"1\"]"
+      },
+      {
+        "id": 184280,
+        "key": "_billing_topservice_",
+        "value": "[\"1\"]"
+      },
+      {
+        "id": 184281,
+        "key": "_billing_pelletkachels_",
+        "value": "[\"10\"]"
+      },
+      {
+        "id": 184282,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 184283,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 184284,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/checkout/"
+      },
+      {
+        "id": 184285,
+        "key": "mailchimp_woocommerce_is_subscribed",
+        "value": "1"
+      },
+      {
+        "id": 184286,
+        "key": "_mollie_payment_id",
+        "value": "tr_UaXev8t8t9"
+      },
+      {
+        "id": 184287,
+        "key": "_mollie_order_id",
+        "value": "tr_UaXev8t8t9"
+      },
+      {
+        "id": 184288,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 184289,
+        "key": "_mollie_customer_id",
+        "value": "cst_qTk9gwfNA5"
+      },
+      {
+        "id": 184290,
+        "key": "_mollie_payment_instructions",
+        "value": "Voltooi je betaling door het totale bedrag over te maken naar de volgende bankrekening:\n\n\nBegunstigde: Stichting Mollie Payments\nIBAN: <strong>NL70 DEUT 0265 2623 13</strong>\nBIC: DEUTNL2A\nVermeld de betalingsreferentie <strong>RF65-6228-0832-9194</strong>\n\nDe betaling vervalt op <strong>16 januari 2024</strong>. Zorg ervoor dat je vóór deze datum het totale bedrag overmaakt.\n"
+      },
+      {
+        "id": 184291,
+        "key": "_wcpdf_invoice_settings",
+        "value": {
+          "display_shipping_address": "always",
+          "display_email": "1",
+          "display_phone": "1",
+          "display_customer_notes": "1",
+          "display_date": "invoice_date",
+          "due_date": "",
+          "header_logo": "6664",
+          "header_logo_height": "",
+          "vat_number": "",
+          "coc_number": "",
+          "shop_name": {
+            "default": "www.ElectroDiscount.be"
+          },
+          "shop_address": {
+            "default": "Pauwengraaf 35\r\n3630 Maasmechelen, Belgie\r\nTel: +32496303100\r\nwww.electrodiscount.be\r\ninfo@electrodiscount.be\r\n\r\nBankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB\r\n"
+          },
+          "footer": {
+            "default": "Bankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB"
+          },
+          "extra_1": {
+            "default": ""
+          },
+          "extra_2": {
+            "default": ""
+          },
+          "extra_3": {
+            "default": ""
+          }
+        }
+      },
+      {
+        "id": 184292,
+        "key": "_wcpdf_invoice_display_date",
+        "value": "invoice_date"
+      },
+      {
+        "id": 184293,
+        "key": "_wcpdf_invoice_creation_trigger",
+        "value": "email_attachment"
+      },
+      {
+        "id": 184294,
+        "key": "_wcpdf_invoice_date",
+        "value": "1704222075"
+      },
+      {
+        "id": 184295,
+        "key": "_wcpdf_invoice_date_formatted",
+        "value": "2024-01-02 20:01:15"
+      },
+      {
+        "id": 184296,
+        "key": "_wcpdf_invoice_number",
+        "value": "1000"
+      },
+      {
+        "id": 184297,
+        "key": "_wcpdf_invoice_number_data",
+        "value": {
+          "number": 1000,
+          "formatted_number": "1000",
+          "prefix": "",
+          "suffix": "",
+          "document_type": "invoice",
+          "order_id": 12222,
+          "padding": ""
+        }
+      },
+      {
+        "id": 184302,
+        "key": "pewc_product_extra_id",
+        "value": ""
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3744,
+        "name": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+        "product_id": 4390,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "461.98",
+        "subtotal_tax": "97.02",
+        "total": "461.98",
+        "total_tax": "97.02",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "97.016529",
+            "subtotal": "97.016529"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32331,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4390,
+              "title": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+              "groups": [],
+              "price_with_extras": 559,
+              "original_price": 559,
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4390,
+              "title": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+              "groups": [],
+              "price_with_extras": 559,
+              "original_price": 559,
+              "aelia_currency": false
+            }
+          },
+          {
+            "id": 32351,
+            "key": "_reduced_stock",
+            "value": "1",
+            "display_key": "reduced_stock",
+            "display_value": "1"
+          }
+        ],
+        "sku": "8806090609251",
+        "price": 461.983471,
+        "image": {
+          "id": "4649",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/9758307176388415007.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3747,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "97.02",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32350,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [
+      {
+        "id": 3745,
+        "name": "Pelletkachels:: Levering aan huis.",
+        "tax_class": "0",
+        "tax_status": "taxable",
+        "amount": "75",
+        "total": "75.00",
+        "total_tax": "0.00",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "",
+            "subtotal": ""
+          }
+        ],
+        "meta_data": []
+      },
+      {
+        "id": 3746,
+        "name": "TopService: ( Niet geldig voor airco's  ) : Leveren + Aansluiten op gewenste plek tot op 3e verdiep via de trap.",
+        "tax_class": "0",
+        "tax_status": "taxable",
+        "amount": "20",
+        "total": "20.00",
+        "total_tax": "0.00",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "",
+            "subtotal": ""
+          }
+        ],
+        "meta_data": []
+      }
+    ],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12222/?pay_for_order=true&key=wc_order_BFsjRhvMMradr",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T19:01:13",
+    "date_modified_gmt": "2024-01-02T19:01:55",
+    "date_completed_gmt": null,
+    "date_paid_gmt": "2024-01-02T19:01:55",
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12222"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ],
+      "customer": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/customers/378"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12221,
+    "parent_id": 0,
+    "status": "processing",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T19:48:01",
+    "date_modified": "2024-01-02T19:49:36",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "136.93",
+    "total": "789.00",
+    "total_tax": "136.93",
+    "customer_id": 376,
+    "order_key": "wc_order_IHcjgOIyMZ9S6",
+    "billing": {
+      "first_name": "Aad",
+      "last_name": "Verhart",
+      "company": "",
+      "address_1": "van Zuylen van Nijeveltstraat 303",
+      "address_2": "",
+      "city": "wassenaar",
+      "state": "",
+      "postcode": "2242 LJ",
+      "country": "NL",
+      "email": "aadverhart@gmail.com",
+      "phone": "0655300914"
+    },
+    "shipping": {
+      "first_name": "Aad",
+      "last_name": "Verhart",
+      "company": "",
+      "address_1": "van Zuylen van Nijeveltstraat 303",
+      "address_2": "",
+      "city": "wassenaar",
+      "state": "",
+      "postcode": "2242 LJ",
+      "country": "NL",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_ideal",
+    "payment_method_title": "iDEAL",
+    "transaction_id": "ord_1.jy0uwx",
+    "customer_ip_address": "217.102.166.38",
+    "customer_user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/23.0 Chrome/115.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": "2024-01-02T19:49:36",
+    "cart_hash": "00bd3310526e72a70206a61ac3402166",
+    "number": "12221",
+    "meta_data": [
+      {
+        "id": 184213,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 184214,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "\"\""
+      },
+      {
+        "id": 184215,
+        "key": "_billing_topservice_",
+        "value": "\"\""
+      },
+      {
+        "id": 184216,
+        "key": "_billing_pelletkachels_",
+        "value": "\"\""
+      },
+      {
+        "id": 184217,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 184218,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 184219,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/my-account/view-order/12221/"
+      },
+      {
+        "id": 184220,
+        "key": "mailchimp_woocommerce_is_subscribed",
+        "value": "1"
+      },
+      {
+        "id": 184221,
+        "key": "_mollie_order_id",
+        "value": "ord_1.jy0uwx"
+      },
+      {
+        "id": 184222,
+        "key": "_mollie_payment_id",
+        "value": "tr_xyyH5C8L4r"
+      },
+      {
+        "id": 184223,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 184224,
+        "key": "_mollie_customer_id",
+        "value": "cst_zNwMmGyE6v"
+      },
+      {
+        "id": 184228,
+        "key": "_mollie_payment_instructions",
+        "value": "Betaling voltooid door <strong>A.L. Verhart eo C.Q.M. Verhart-Wensveen</strong> (IBAN (laatste 4 cijfers): 3698, BIC: RABONL2U)"
+      },
+      {
+        "id": 184229,
+        "key": "_wcpdf_invoice_settings",
+        "value": {
+          "display_shipping_address": "always",
+          "display_email": "1",
+          "display_phone": "1",
+          "display_customer_notes": "1",
+          "display_date": "invoice_date",
+          "due_date": "",
+          "header_logo": "6664",
+          "header_logo_height": "",
+          "vat_number": "",
+          "coc_number": "",
+          "shop_name": {
+            "default": "www.ElectroDiscount.be"
+          },
+          "shop_address": {
+            "default": "Pauwengraaf 35\r\n3630 Maasmechelen, Belgie\r\nTel: +32496303100\r\nwww.electrodiscount.be\r\ninfo@electrodiscount.be\r\n\r\nBankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB\r\n"
+          },
+          "footer": {
+            "default": "Bankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB"
+          },
+          "extra_1": {
+            "default": ""
+          },
+          "extra_2": {
+            "default": ""
+          },
+          "extra_3": {
+            "default": ""
+          }
+        }
+      },
+      {
+        "id": 184230,
+        "key": "_wcpdf_invoice_display_date",
+        "value": "invoice_date"
+      },
+      {
+        "id": 184231,
+        "key": "_wcpdf_invoice_creation_trigger",
+        "value": "email_attachment"
+      },
+      {
+        "id": 184232,
+        "key": "_wcpdf_invoice_date",
+        "value": "1704221383"
+      },
+      {
+        "id": 184233,
+        "key": "_wcpdf_invoice_date_formatted",
+        "value": "2024-01-02 19:49:43"
+      },
+      {
+        "id": 184234,
+        "key": "_wcpdf_invoice_number",
+        "value": "999"
+      },
+      {
+        "id": 184235,
+        "key": "_wcpdf_invoice_number_data",
+        "value": {
+          "number": 999,
+          "formatted_number": "999",
+          "prefix": "",
+          "suffix": "",
+          "document_type": "invoice",
+          "order_id": 12221,
+          "padding": ""
+        }
+      },
+      {
+        "id": 184236,
+        "key": "_mollie_paid_and_processed",
+        "value": "1"
+      },
+      {
+        "id": 184237,
+        "key": "_ga_tracked",
+        "value": "1"
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3742,
+        "name": "Zelfbouw LG S12ET airco met 5m muur montage set",
+        "product_id": 4956,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "652.07",
+        "subtotal_tax": "136.93",
+        "total": "652.07",
+        "total_tax": "136.93",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "136.933884",
+            "subtotal": "136.933884"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32313,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            }
+          },
+          {
+            "id": 32321,
+            "key": "_reduced_stock",
+            "value": "1",
+            "display_key": "reduced_stock",
+            "display_value": "1"
+          }
+        ],
+        "sku": "",
+        "price": 652.066116,
+        "image": {
+          "id": "10511",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/LG-airco-S12ET-5m-muurmontage-3.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3743,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "136.93",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32320,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12221/?pay_for_order=true&key=wc_order_IHcjgOIyMZ9S6",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T18:48:01",
+    "date_modified_gmt": "2024-01-02T18:49:36",
+    "date_completed_gmt": null,
+    "date_paid_gmt": "2024-01-02T18:49:36",
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12221"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ],
+      "customer": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/customers/376"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12220,
+    "parent_id": 0,
+    "status": "processing",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T19:45:45",
+    "date_modified": "2024-01-02T19:46:16",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "112.64",
+    "total": "649.00",
+    "total_tax": "112.64",
+    "customer_id": 0,
+    "order_key": "wc_order_pf3smnfEHeCLd",
+    "billing": {
+      "first_name": "Miranda",
+      "last_name": "Rave",
+      "company": "",
+      "address_1": "oude Kerkweg",
+      "address_2": "16",
+      "city": "Hattem",
+      "state": "",
+      "postcode": "8051 KX",
+      "country": "NL",
+      "email": "famhrave@hotmail.com",
+      "phone": "0681207911"
+    },
+    "shipping": {
+      "first_name": "Miranda",
+      "last_name": "Rave",
+      "company": "",
+      "address_1": "oude Kerkweg",
+      "address_2": "16",
+      "city": "Hattem",
+      "state": "",
+      "postcode": "8051 KX",
+      "country": "NL",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_ideal",
+    "payment_method_title": "iDEAL",
+    "transaction_id": "ord_1.scyfid",
+    "customer_ip_address": "77.166.18.20",
+    "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": "2024-01-02T19:46:16",
+    "cart_hash": "64b93f8e8e48b8e3c0a359b7e9b11f97",
+    "number": "12220",
+    "meta_data": [
+      {
+        "id": 184152,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 184153,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "[\"3\"]"
+      },
+      {
+        "id": 184154,
+        "key": "_billing_topservice_",
+        "value": "\"\""
+      },
+      {
+        "id": 184155,
+        "key": "_billing_pelletkachels_",
+        "value": "\"\""
+      },
+      {
+        "id": 184156,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 184157,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 184158,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/checkout/order-received/12220/?key=wc_order_pf3smnfEHeCLd&utm_nooverride=1&order_id=12220&filter_flag=onMollieReturn"
+      },
+      {
+        "id": 184159,
+        "key": "_mollie_order_id",
+        "value": "ord_1.scyfid"
+      },
+      {
+        "id": 184160,
+        "key": "_mollie_payment_id",
+        "value": "tr_E6VFibcgaf"
+      },
+      {
+        "id": 184161,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 184165,
+        "key": "_mollie_payment_instructions",
+        "value": "Betaling voltooid door <strong>Hr H Rave en/of Mw A M Rave-Samsen</strong> (IBAN (laatste 4 cijfers): 8808, BIC: INGBNL2A)"
+      },
+      {
+        "id": 184166,
+        "key": "_wcpdf_invoice_settings",
+        "value": {
+          "display_shipping_address": "always",
+          "display_email": "1",
+          "display_phone": "1",
+          "display_customer_notes": "1",
+          "display_date": "invoice_date",
+          "due_date": "",
+          "header_logo": "6664",
+          "header_logo_height": "",
+          "vat_number": "",
+          "coc_number": "",
+          "shop_name": {
+            "default": "www.ElectroDiscount.be"
+          },
+          "shop_address": {
+            "default": "Pauwengraaf 35\r\n3630 Maasmechelen, Belgie\r\nTel: +32496303100\r\nwww.electrodiscount.be\r\ninfo@electrodiscount.be\r\n\r\nBankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB\r\n"
+          },
+          "footer": {
+            "default": "Bankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB"
+          },
+          "extra_1": {
+            "default": ""
+          },
+          "extra_2": {
+            "default": ""
+          },
+          "extra_3": {
+            "default": ""
+          }
+        }
+      },
+      {
+        "id": 184167,
+        "key": "_wcpdf_invoice_display_date",
+        "value": "invoice_date"
+      },
+      {
+        "id": 184168,
+        "key": "_wcpdf_invoice_creation_trigger",
+        "value": "email_attachment"
+      },
+      {
+        "id": 184169,
+        "key": "_wcpdf_invoice_date",
+        "value": "1704221183"
+      },
+      {
+        "id": 184170,
+        "key": "_wcpdf_invoice_date_formatted",
+        "value": "2024-01-02 19:46:23"
+      },
+      {
+        "id": 184171,
+        "key": "_wcpdf_invoice_number",
+        "value": "998"
+      },
+      {
+        "id": 184172,
+        "key": "_wcpdf_invoice_number_data",
+        "value": {
+          "number": 998,
+          "formatted_number": "998",
+          "prefix": "",
+          "suffix": "",
+          "document_type": "invoice",
+          "order_id": 12220,
+          "padding": ""
+        }
+      },
+      {
+        "id": 184173,
+        "key": "_mollie_paid_and_processed",
+        "value": "1"
+      },
+      {
+        "id": 184174,
+        "key": "_ga_tracked",
+        "value": "1"
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3740,
+        "name": "BEKO RFNE312E33WN NoFrost - Freezer Guard",
+        "product_id": 3432,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "536.36",
+        "subtotal_tax": "112.64",
+        "total": "536.36",
+        "total_tax": "112.64",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "112.636364",
+            "subtotal": "112.636364"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32295,
+            "key": "product_extras",
+            "value": {
+              "product_id": 3432,
+              "title": "BEKO RFNE312E33WN NoFrost - Freezer Guard",
+              "groups": [],
+              "price_with_extras": 649,
+              "original_price": 649,
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 3432,
+              "title": "BEKO RFNE312E33WN NoFrost - Freezer Guard",
+              "groups": [],
+              "price_with_extras": 649,
+              "original_price": 649,
+              "aelia_currency": false
+            }
+          },
+          {
+            "id": 32303,
+            "key": "_reduced_stock",
+            "value": "1",
+            "display_key": "reduced_stock",
+            "display_value": "1"
+          }
+        ],
+        "sku": "",
+        "price": 536.363636,
+        "image": {
+          "id": "3499",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/beko-rfne312e33wn.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3741,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "112.64",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32302,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12220/?pay_for_order=true&key=wc_order_pf3smnfEHeCLd",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T18:45:45",
+    "date_modified_gmt": "2024-01-02T18:46:16",
+    "date_completed_gmt": null,
+    "date_paid_gmt": "2024-01-02T18:46:16",
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12220"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12219,
+    "parent_id": 0,
+    "status": "cancelled",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T19:45:23",
+    "date_modified": "2024-01-02T19:53:04",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "136.93",
+    "total": "789.00",
+    "total_tax": "136.93",
+    "customer_id": 376,
+    "order_key": "wc_order_MHBZw24kOpu0x",
+    "billing": {
+      "first_name": "Aad",
+      "last_name": "Verhart",
+      "company": "",
+      "address_1": "van Zuylen van Nijeveltstraat 303",
+      "address_2": "",
+      "city": "wassenaar",
+      "state": "",
+      "postcode": "2242 LJ",
+      "country": "NL",
+      "email": "aadverhart@gmail.com",
+      "phone": "0655300914"
+    },
+    "shipping": {
+      "first_name": "Aad",
+      "last_name": "Verhart",
+      "company": "",
+      "address_1": "van Zuylen van Nijeveltstraat 303",
+      "address_2": "",
+      "city": "wassenaar",
+      "state": "",
+      "postcode": "2242 LJ",
+      "country": "NL",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_ideal",
+    "payment_method_title": "iDEAL",
+    "transaction_id": "",
+    "customer_ip_address": "217.102.166.38",
+    "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": null,
+    "cart_hash": "00bd3310526e72a70206a61ac3402166",
+    "number": "12219",
+    "meta_data": [
+      {
+        "id": 184100,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 184101,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "\"\""
+      },
+      {
+        "id": 184102,
+        "key": "_billing_topservice_",
+        "value": "\"\""
+      },
+      {
+        "id": 184103,
+        "key": "_billing_pelletkachels_",
+        "value": "\"\""
+      },
+      {
+        "id": 184104,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 184105,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 184106,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/cart/?cancel_order=true&order=wc_order_MHBZw24kOpu0x&order_id=12219&redirect=https://electrodiscount.be/my-account/&_wpnonce=fcfe5aa9bf"
+      },
+      {
+        "id": 184107,
+        "key": "mailchimp_woocommerce_is_subscribed",
+        "value": "1"
+      },
+      {
+        "id": 184108,
+        "key": "_mollie_order_id",
+        "value": "ord_1.yvnuc1"
+      },
+      {
+        "id": 184109,
+        "key": "_mollie_payment_id",
+        "value": "tr_mWP4pRGrUJ"
+      },
+      {
+        "id": 184110,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 184111,
+        "key": "_mollie_customer_id",
+        "value": "cst_zNwMmGyE6v"
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3738,
+        "name": "Zelfbouw LG S12ET airco met 5m muur montage set",
+        "product_id": 4956,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "652.07",
+        "subtotal_tax": "136.93",
+        "total": "652.07",
+        "total_tax": "136.93",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "136.933884",
+            "subtotal": "136.933884"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32278,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            }
+          }
+        ],
+        "sku": "",
+        "price": 652.066116,
+        "image": {
+          "id": "10511",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/LG-airco-S12ET-5m-muurmontage-3.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3739,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "136.93",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32285,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12219/?pay_for_order=true&key=wc_order_MHBZw24kOpu0x",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T18:45:23",
+    "date_modified_gmt": "2024-01-02T18:53:04",
+    "date_completed_gmt": null,
+    "date_paid_gmt": null,
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12219"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ],
+      "customer": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/customers/376"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12218,
+    "parent_id": 0,
+    "status": "pending",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T19:40:48",
+    "date_modified": "2024-01-02T19:40:48",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "136.93",
+    "total": "789.00",
+    "total_tax": "136.93",
+    "customer_id": 0,
+    "order_key": "wc_order_PBzw1c3ricwTo",
+    "billing": {
+      "first_name": "Aad",
+      "last_name": "Verhart",
+      "company": "",
+      "address_1": "van Zuylen van Nijeveltstraat 303",
+      "address_2": "",
+      "city": "wassenaar",
+      "state": "",
+      "postcode": "2242 LJ",
+      "country": "NL",
+      "email": "aadverhart@gmail.com",
+      "phone": "0655300914"
+    },
+    "shipping": {
+      "first_name": "Aad",
+      "last_name": "Verhart",
+      "company": "",
+      "address_1": "van Zuylen van Nijeveltstraat 303",
+      "address_2": "",
+      "city": "wassenaar",
+      "state": "",
+      "postcode": "2242 LJ",
+      "country": "NL",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_ideal",
+    "payment_method_title": "iDEAL",
+    "transaction_id": "",
+    "customer_ip_address": "217.102.166.38",
+    "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": null,
+    "cart_hash": "00bd3310526e72a70206a61ac3402166",
+    "number": "12218",
+    "meta_data": [
+      {
+        "id": 184052,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 184053,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "\"\""
+      },
+      {
+        "id": 184054,
+        "key": "_billing_topservice_",
+        "value": "\"\""
+      },
+      {
+        "id": 184055,
+        "key": "_billing_pelletkachels_",
+        "value": "\"\""
+      },
+      {
+        "id": 184056,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 184057,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 184058,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/shop/airco/lg-airco-kopen-en-zelf-monteren/lg-airco-zelfbouw-setjes/lg-airconditioner-kopen-dual-inverter-wifi-koelen-en-verwarmen/"
+      },
+      {
+        "id": 184059,
+        "key": "_mollie_order_id",
+        "value": "ord_1.kgkmjx"
+      },
+      {
+        "id": 184060,
+        "key": "_mollie_payment_id",
+        "value": "tr_uP4dvRhRgL"
+      },
+      {
+        "id": 184061,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3736,
+        "name": "Zelfbouw LG S12ET airco met 5m muur montage set",
+        "product_id": 4956,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "652.07",
+        "subtotal_tax": "136.93",
+        "total": "652.07",
+        "total_tax": "136.93",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "136.933884",
+            "subtotal": "136.933884"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32261,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            }
+          }
+        ],
+        "sku": "",
+        "price": 652.066116,
+        "image": {
+          "id": "10511",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/LG-airco-S12ET-5m-muurmontage-3.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3737,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "136.93",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32268,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12218/?pay_for_order=true&key=wc_order_PBzw1c3ricwTo",
+    "is_editable": true,
+    "needs_payment": true,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T18:40:48",
+    "date_modified_gmt": "2024-01-02T18:40:48",
+    "date_completed_gmt": null,
+    "date_paid_gmt": null,
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12218"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12217,
+    "parent_id": 0,
+    "status": "processing",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T19:38:12",
+    "date_modified": "2024-01-02T19:38:50",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "97.02",
+    "total": "559.00",
+    "total_tax": "97.02",
+    "customer_id": 0,
+    "order_key": "wc_order_pKaGFN7gspLAf",
+    "billing": {
+      "first_name": "Zeeshan",
+      "last_name": "Ali",
+      "company": "",
+      "address_1": "Lahore",
+      "address_2": "",
+      "city": "Lahore",
+      "state": "",
+      "postcode": "LV-39460",
+      "country": "LV",
+      "email": "coursebyza@gmail.com",
+      "phone": "+37168924811"
+    },
+    "shipping": {
+      "first_name": "Zeeshan",
+      "last_name": "Ali",
+      "company": "",
+      "address_1": "Lahore",
+      "address_2": "",
+      "city": "Lahore",
+      "state": "",
+      "postcode": "LV-39460",
+      "country": "LV",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_banktransfer",
+    "payment_method_title": "Bankoverdracht",
+    "transaction_id": "",
+    "customer_ip_address": "137.59.230.161",
+    "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": "2024-01-02T19:38:50",
+    "cart_hash": "02d84a5f3ab21176a2b59581efac8e38",
+    "number": "12217",
+    "meta_data": [
+      {
+        "id": 183990,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 183991,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": ""
+      },
+      {
+        "id": 183992,
+        "key": "_billing_topservice_",
+        "value": ""
+      },
+      {
+        "id": 183993,
+        "key": "_billing_pelletkachels_",
+        "value": ""
+      },
+      {
+        "id": 183994,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 183995,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 183996,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/"
+      },
+      {
+        "id": 183997,
+        "key": "mailchimp_woocommerce_is_subscribed",
+        "value": "1"
+      },
+      {
+        "id": 183998,
+        "key": "_mollie_payment_id",
+        "value": "tr_obLrYkG8GR"
+      },
+      {
+        "id": 183999,
+        "key": "_mollie_order_id",
+        "value": "tr_obLrYkG8GR"
+      },
+      {
+        "id": 184000,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 184001,
+        "key": "_mollie_payment_instructions",
+        "value": "Voltooi je betaling door het totale bedrag over te maken naar de volgende bankrekening:\n\n\nBegunstigde: Stichting Mollie Payments\nIBAN: <strong>NL70 DEUT 0265 2623 13</strong>\nBIC: DEUTNL2A\nVermeld de betalingsreferentie <strong>RF80-1127-1287-2850</strong>\n\nDe betaling vervalt op <strong>16 januari 2024</strong>. Zorg ervoor dat je vóór deze datum het totale bedrag overmaakt.\n"
+      },
+      {
+        "id": 184002,
+        "key": "_wcpdf_invoice_settings",
+        "value": {
+          "display_shipping_address": "always",
+          "display_email": "1",
+          "display_phone": "1",
+          "display_customer_notes": "1",
+          "display_date": "invoice_date",
+          "due_date": "",
+          "header_logo": "6664",
+          "header_logo_height": "",
+          "vat_number": "",
+          "coc_number": "",
+          "shop_name": {
+            "default": "www.ElectroDiscount.be"
+          },
+          "shop_address": {
+            "default": "Pauwengraaf 35\r\n3630 Maasmechelen, Belgie\r\nTel: +32496303100\r\nwww.electrodiscount.be\r\ninfo@electrodiscount.be\r\n\r\nBankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB\r\n"
+          },
+          "footer": {
+            "default": "Bankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB"
+          },
+          "extra_1": {
+            "default": ""
+          },
+          "extra_2": {
+            "default": ""
+          },
+          "extra_3": {
+            "default": ""
+          }
+        }
+      },
+      {
+        "id": 184003,
+        "key": "_wcpdf_invoice_display_date",
+        "value": "invoice_date"
+      },
+      {
+        "id": 184004,
+        "key": "_wcpdf_invoice_creation_trigger",
+        "value": "email_attachment"
+      },
+      {
+        "id": 184005,
+        "key": "_wcpdf_invoice_date",
+        "value": "1704220693"
+      },
+      {
+        "id": 184006,
+        "key": "_wcpdf_invoice_date_formatted",
+        "value": "2024-01-02 19:38:13"
+      },
+      {
+        "id": 184007,
+        "key": "_wcpdf_invoice_number",
+        "value": "997"
+      },
+      {
+        "id": 184008,
+        "key": "_wcpdf_invoice_number_data",
+        "value": {
+          "number": 997,
+          "formatted_number": "997",
+          "prefix": "",
+          "suffix": "",
+          "document_type": "invoice",
+          "order_id": 12217,
+          "padding": ""
+        }
+      },
+      {
+        "id": 184013,
+        "key": "pewc_product_extra_id",
+        "value": ""
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3734,
+        "name": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+        "product_id": 4390,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "461.98",
+        "subtotal_tax": "97.02",
+        "total": "461.98",
+        "total_tax": "97.02",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "97.016529",
+            "subtotal": "97.016529"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32243,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4390,
+              "title": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+              "groups": [],
+              "price_with_extras": 559,
+              "original_price": 559,
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4390,
+              "title": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+              "groups": [],
+              "price_with_extras": 559,
+              "original_price": 559,
+              "aelia_currency": false
+            }
+          },
+          {
+            "id": 32251,
+            "key": "_reduced_stock",
+            "value": "1",
+            "display_key": "reduced_stock",
+            "display_value": "1"
+          }
+        ],
+        "sku": "8806090609251",
+        "price": 461.983471,
+        "image": {
+          "id": "4649",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/9758307176388415007.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3735,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "97.02",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32250,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12217/?pay_for_order=true&key=wc_order_pKaGFN7gspLAf",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T18:38:12",
+    "date_modified_gmt": "2024-01-02T18:38:50",
+    "date_completed_gmt": null,
+    "date_paid_gmt": "2024-01-02T18:38:50",
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12217"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12216,
+    "parent_id": 0,
+    "status": "processing",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T19:31:05",
+    "date_modified": "2024-01-02T19:32:18",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "97.02",
+    "total": "654.00",
+    "total_tax": "97.02",
+    "customer_id": 378,
+    "order_key": "wc_order_8LL6wZRNVAqHR",
+    "billing": {
+      "first_name": "Zeeshan",
+      "last_name": "Ali",
+      "company": "",
+      "address_1": "Lahore",
+      "address_2": "",
+      "city": "Lahore",
+      "state": "",
+      "postcode": "39460",
+      "country": "PK",
+      "email": "coursebyza@gmail.com",
+      "phone": "03254578450"
+    },
+    "shipping": {
+      "first_name": "",
+      "last_name": "",
+      "company": "",
+      "address_1": "",
+      "address_2": "",
+      "city": "",
+      "state": "",
+      "postcode": "",
+      "country": "",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_banktransfer",
+    "payment_method_title": "Bankoverdracht",
+    "transaction_id": "",
+    "customer_ip_address": "137.59.230.161",
+    "customer_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": "2024-01-02T19:32:18",
+    "cart_hash": "fdea58a225ec7998e95950162d2cdc72",
+    "number": "12216",
+    "meta_data": [
+      {
+        "id": 183927,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 183928,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "[\"1\"]"
+      },
+      {
+        "id": 183929,
+        "key": "_billing_topservice_",
+        "value": "[\"1\"]"
+      },
+      {
+        "id": 183930,
+        "key": "_billing_pelletkachels_",
+        "value": "[\"10\"]"
+      },
+      {
+        "id": 183931,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 183932,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/"
+      },
+      {
+        "id": 183933,
+        "key": "mailchimp_woocommerce_is_subscribed",
+        "value": "1"
+      },
+      {
+        "id": 183934,
+        "key": "_mollie_payment_id",
+        "value": "tr_S9qQYMYqTh"
+      },
+      {
+        "id": 183935,
+        "key": "_mollie_order_id",
+        "value": "tr_S9qQYMYqTh"
+      },
+      {
+        "id": 183936,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 183937,
+        "key": "_mollie_customer_id",
+        "value": "cst_qTk9gwfNA5"
+      },
+      {
+        "id": 183938,
+        "key": "_mollie_payment_instructions",
+        "value": "Voltooi je betaling door het totale bedrag over te maken naar de volgende bankrekening:\n\n\nBegunstigde: Stichting Mollie Payments\nIBAN: <strong>NL70 DEUT 0265 2623 13</strong>\nBIC: DEUTNL2A\nVermeld de betalingsreferentie <strong>RF35-0050-5494-6668</strong>\n\nDe betaling vervalt op <strong>16 januari 2024</strong>. Zorg ervoor dat je vóór deze datum het totale bedrag overmaakt.\n"
+      },
+      {
+        "id": 183939,
+        "key": "_wcpdf_invoice_settings",
+        "value": {
+          "display_shipping_address": "always",
+          "display_email": "1",
+          "display_phone": "1",
+          "display_customer_notes": "1",
+          "display_date": "invoice_date",
+          "due_date": "",
+          "header_logo": "6664",
+          "header_logo_height": "",
+          "vat_number": "",
+          "coc_number": "",
+          "shop_name": {
+            "default": "www.ElectroDiscount.be"
+          },
+          "shop_address": {
+            "default": "Pauwengraaf 35\r\n3630 Maasmechelen, Belgie\r\nTel: +32496303100\r\nwww.electrodiscount.be\r\ninfo@electrodiscount.be\r\n\r\nBankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB\r\n"
+          },
+          "footer": {
+            "default": "Bankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB"
+          },
+          "extra_1": {
+            "default": ""
+          },
+          "extra_2": {
+            "default": ""
+          },
+          "extra_3": {
+            "default": ""
+          }
+        }
+      },
+      {
+        "id": 183940,
+        "key": "_wcpdf_invoice_display_date",
+        "value": "invoice_date"
+      },
+      {
+        "id": 183941,
+        "key": "_wcpdf_invoice_creation_trigger",
+        "value": "email_attachment"
+      },
+      {
+        "id": 183942,
+        "key": "_wcpdf_invoice_date",
+        "value": "1704220266"
+      },
+      {
+        "id": 183943,
+        "key": "_wcpdf_invoice_date_formatted",
+        "value": "2024-01-02 19:31:06"
+      },
+      {
+        "id": 183944,
+        "key": "_wcpdf_invoice_number",
+        "value": "996"
+      },
+      {
+        "id": 183945,
+        "key": "_wcpdf_invoice_number_data",
+        "value": {
+          "number": 996,
+          "formatted_number": "996",
+          "prefix": "",
+          "suffix": "",
+          "document_type": "invoice",
+          "order_id": 12216,
+          "padding": ""
+        }
+      },
+      {
+        "id": 183950,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 183951,
+        "key": "pewc_product_extra_id",
+        "value": ""
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3730,
+        "name": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+        "product_id": 4390,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "461.98",
+        "subtotal_tax": "97.02",
+        "total": "461.98",
+        "total_tax": "97.02",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "97.016529",
+            "subtotal": "97.016529"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32213,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4390,
+              "title": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+              "groups": [],
+              "price_with_extras": 559,
+              "original_price": 559,
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4390,
+              "title": "Samsung ww90T554AAW/S2 wasmachine 9kg Ecobubble Addwash inverter",
+              "groups": [],
+              "price_with_extras": 559,
+              "original_price": 559,
+              "aelia_currency": false
+            }
+          },
+          {
+            "id": 32233,
+            "key": "_reduced_stock",
+            "value": "1",
+            "display_key": "reduced_stock",
+            "display_value": "1"
+          }
+        ],
+        "sku": "8806090609251",
+        "price": 461.983471,
+        "image": {
+          "id": "4649",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/9758307176388415007.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3733,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "97.02",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32232,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [
+      {
+        "id": 3731,
+        "name": "Pelletkachels:: Levering aan huis.",
+        "tax_class": "0",
+        "tax_status": "taxable",
+        "amount": "75",
+        "total": "75.00",
+        "total_tax": "0.00",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "",
+            "subtotal": ""
+          }
+        ],
+        "meta_data": []
+      },
+      {
+        "id": 3732,
+        "name": "TopService: ( Niet geldig voor airco's  ) : Leveren + Aansluiten op gewenste plek tot op 3e verdiep via de trap.",
+        "tax_class": "0",
+        "tax_status": "taxable",
+        "amount": "20",
+        "total": "20.00",
+        "total_tax": "0.00",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "",
+            "subtotal": ""
+          }
+        ],
+        "meta_data": []
+      }
+    ],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12216/?pay_for_order=true&key=wc_order_8LL6wZRNVAqHR",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T18:31:05",
+    "date_modified_gmt": "2024-01-02T18:32:18",
+    "date_completed_gmt": null,
+    "date_paid_gmt": "2024-01-02T18:32:18",
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12216"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ],
+      "customer": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/customers/378"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12214,
+    "parent_id": 0,
+    "status": "pending",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T18:40:58",
+    "date_modified": "2024-01-02T18:40:58",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "136.93",
+    "total": "789.00",
+    "total_tax": "136.93",
+    "customer_id": 377,
+    "order_key": "wc_order_q4seCYYYbVnmn",
+    "billing": {
+      "first_name": "Aad",
+      "last_name": "Verhart",
+      "company": "",
+      "address_1": "Van zullen Van nijeveltstraat 303",
+      "address_2": "",
+      "city": "Wassenaar",
+      "state": "",
+      "postcode": "2242 LJ",
+      "country": "NL",
+      "email": "al.verhart@casema.nl",
+      "phone": "0655300914"
+    },
+    "shipping": {
+      "first_name": "",
+      "last_name": "",
+      "company": "",
+      "address_1": "",
+      "address_2": "",
+      "city": "",
+      "state": "",
+      "postcode": "",
+      "country": "",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_ideal",
+    "payment_method_title": "iDEAL",
+    "transaction_id": "",
+    "customer_ip_address": "217.102.166.38",
+    "customer_user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/23.0 Chrome/115.0.0.0 Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": null,
+    "cart_hash": "00bd3310526e72a70206a61ac3402166",
+    "number": "12214",
+    "meta_data": [
+      {
+        "id": 183871,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 183872,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "\"\""
+      },
+      {
+        "id": 183873,
+        "key": "_billing_topservice_",
+        "value": "\"\""
+      },
+      {
+        "id": 183874,
+        "key": "_billing_pelletkachels_",
+        "value": "\"\""
+      },
+      {
+        "id": 183875,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 183876,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/shop/airco/airco-split-unit/lg-s12et-35kw-12000btu-wifi-koelen-en-verwarmen/?utm_campaign=Channable&utm_content=&utm_source=Google+Shopping&utm_medium=referral&utm_term=4419&gad_source=1&gclid=EAIaIQobChMIj9rU-J6_gwMVO5CDBx3jiAjaEAQYAiABEgLSYvD_BwE"
+      },
+      {
+        "id": 183877,
+        "key": "delivery_date",
+        "value": "2024-01-09"
+      },
+      {
+        "id": 183878,
+        "key": "_mollie_order_id",
+        "value": "ord_1.9hck0v"
+      },
+      {
+        "id": 183879,
+        "key": "_mollie_payment_id",
+        "value": "tr_w4VLDHhjhT"
+      },
+      {
+        "id": 183880,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 183881,
+        "key": "_mollie_customer_id",
+        "value": "cst_MQCaDDgYvA"
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3728,
+        "name": "Zelfbouw LG S12ET airco met 5m muur montage set",
+        "product_id": 4956,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "652.07",
+        "subtotal_tax": "136.93",
+        "total": "652.07",
+        "total_tax": "136.93",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "136.933884",
+            "subtotal": "136.933884"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32196,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4956,
+              "title": "Zelfbouw LG S12ET airco met 5m muur montage set",
+              "groups": [],
+              "aelia_currency": false
+            }
+          }
+        ],
+        "sku": "",
+        "price": 652.066116,
+        "image": {
+          "id": "10511",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/LG-airco-S12ET-5m-muurmontage-3.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3729,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "136.93",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32203,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12214/?pay_for_order=true&key=wc_order_q4seCYYYbVnmn",
+    "is_editable": true,
+    "needs_payment": true,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T17:40:58",
+    "date_modified_gmt": "2024-01-02T17:40:58",
+    "date_completed_gmt": null,
+    "date_paid_gmt": null,
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12214"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ],
+      "customer": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/customers/377"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12213,
+    "parent_id": 0,
+    "status": "cancelled",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T16:28:09",
+    "date_modified": "2024-01-02T18:27:59",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "74.45",
+    "total": "429.00",
+    "total_tax": "74.45",
+    "customer_id": 0,
+    "order_key": "wc_order_qcbTrmP5J6iB0",
+    "billing": {
+      "first_name": "Michael",
+      "last_name": "Maris",
+      "company": "",
+      "address_1": "Baron Leroystraat 17",
+      "address_2": "",
+      "city": "Deurne",
+      "state": "",
+      "postcode": "2100",
+      "country": "BE",
+      "email": "renomaris@outlook.be",
+      "phone": "0499813954"
+    },
+    "shipping": {
+      "first_name": "",
+      "last_name": "",
+      "company": "",
+      "address_1": "",
+      "address_2": "",
+      "city": "",
+      "state": "",
+      "postcode": "",
+      "country": "",
+      "phone": ""
+    },
+    "payment_method": "mollie_wc_gateway_belfius",
+    "payment_method_title": "Belfius Direct Net",
+    "transaction_id": "",
+    "customer_ip_address": "109.132.234.50",
+    "customer_user_agent": "Mozilla/5.0 (Linux; Android 13; SAMSUNG SM-A135F) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/23.0 Chrome/115.0.0.0 Mobile Safari/537.36",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": null,
+    "cart_hash": "889f136467c2228f834aae63df8e00ec",
+    "number": "12213",
+    "meta_data": [
+      {
+        "id": 183827,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 183828,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": "\"\""
+      },
+      {
+        "id": 183829,
+        "key": "_billing_topservice_",
+        "value": "\"\""
+      },
+      {
+        "id": 183830,
+        "key": "_billing_pelletkachels_",
+        "value": "\"\""
+      },
+      {
+        "id": 183831,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 183832,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/wc-api/mollie_wc_gateway_belfius?order_id=12213&key=wc_order_qcbTrmP5J6iB0&filter_flag"
+      },
+      {
+        "id": 183833,
+        "key": "mailchimp_woocommerce_is_subscribed",
+        "value": "1"
+      },
+      {
+        "id": 183834,
+        "key": "delivery_date",
+        "value": "2024-01-11"
+      },
+      {
+        "id": 183835,
+        "key": "_mollie_order_id",
+        "value": "ord_1.9tst6z"
+      },
+      {
+        "id": 183836,
+        "key": "_mollie_payment_id",
+        "value": "tr_9euzBBJJCT"
+      },
+      {
+        "id": 183837,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 183838,
+        "key": "_mollie_cancelled_payment_id",
+        "value": "ord_1.9tst6z"
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3726,
+        "name": "Indesit Vrieskast UI4 F1T W  No Frost - 4 Lade - 195L",
+        "product_id": 12036,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "354.55",
+        "subtotal_tax": "74.45",
+        "total": "354.55",
+        "total_tax": "74.45",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "74.454545",
+            "subtotal": "74.454545"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32179,
+            "key": "product_extras",
+            "value": {
+              "product_id": 12036,
+              "title": "Indesit Vrieskast UI4 F1T W  No Frost - 4 Lade - 195L",
+              "groups": [],
+              "price_with_extras": 429,
+              "original_price": 429,
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 12036,
+              "title": "Indesit Vrieskast UI4 F1T W  No Frost - 4 Lade - 195L",
+              "groups": [],
+              "price_with_extras": 429,
+              "original_price": 429,
+              "aelia_currency": false
+            }
+          }
+        ],
+        "sku": "UI4 F1T W",
+        "price": 354.545455,
+        "image": {
+          "id": "12037",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/11/558545.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3727,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "74.45",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32186,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12213/?pay_for_order=true&key=wc_order_qcbTrmP5J6iB0",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T15:28:09",
+    "date_modified_gmt": "2024-01-02T17:27:59",
+    "date_completed_gmt": null,
+    "date_paid_gmt": null,
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12213"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12212,
+    "parent_id": 0,
+    "status": "processing",
+    "currency": "EUR",
+    "version": "8.4.0",
+    "prices_include_tax": true,
+    "date_created": "2024-01-02T15:57:40",
+    "date_modified": "2024-01-02T19:19:11",
+    "discount_total": "0.00",
+    "discount_tax": "0.00",
+    "shipping_total": "0.00",
+    "shipping_tax": "0.00",
+    "cart_tax": "114.37",
+    "total": "659.00",
+    "total_tax": "114.37",
+    "customer_id": 0,
+    "order_key": "wc_order_MrN9yFkkj15tK",
+    "billing": {
+      "first_name": "Menno",
+      "last_name": "Aret",
+      "company": "BeClear B.V.",
+      "address_1": "Conradstraat 29",
+      "address_2": "",
+      "city": "Alphen aan den Rijn",
+      "state": "",
+      "postcode": "2405 BB",
+      "country": "NL",
+      "email": "menno.aret@beclear.nl",
+      "phone": "+31655143891"
+    },
+    "shipping": {
+      "first_name": "Menno",
+      "last_name": "Aret",
+      "company": "BeClear B.V.",
+      "address_1": "Conradstraat 29",
+      "address_2": "",
+      "city": "Alphen aan den Rijn",
+      "state": "",
+      "postcode": "2405 BB",
+      "country": "NL",
+      "phone": "+31655143891"
+    },
+    "payment_method": "mollie_wc_gateway_ideal",
+    "payment_method_title": "iDEAL",
+    "transaction_id": "ord_1.kj0vgf",
+    "customer_ip_address": "143.178.99.39",
+    "customer_user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1.2 Mobile/15E148 Safari/604.1",
+    "created_via": "checkout",
+    "customer_note": "",
+    "date_completed": null,
+    "date_paid": "2024-01-02T15:58:05",
+    "cart_hash": "afb35588b740415a47c575b9f312297e",
+    "number": "12212",
+    "meta_data": [
+      {
+        "id": 183772,
+        "key": "_billing_1",
+        "value": ""
+      },
+      {
+        "id": 183773,
+        "key": "_billing_maak_uw_keuzes_",
+        "value": ""
+      },
+      {
+        "id": 183774,
+        "key": "_billing_topservice_",
+        "value": ""
+      },
+      {
+        "id": 183775,
+        "key": "_billing_pelletkachels_",
+        "value": ""
+      },
+      {
+        "id": 183776,
+        "key": "is_vat_exempt",
+        "value": "no"
+      },
+      {
+        "id": 183777,
+        "key": "mailchimp_woocommerce_landing_site",
+        "value": "https://electrodiscount.be/checkout/order-received/12212/?key=wc_order_MrN9yFkkj15tK&utm_nooverride=1&order_id=12212&filter_flag=onMollieReturn"
+      },
+      {
+        "id": 183778,
+        "key": "delivery_date",
+        "value": "2024-01-05"
+      },
+      {
+        "id": 183779,
+        "key": "_mollie_order_id",
+        "value": "ord_1.kj0vgf"
+      },
+      {
+        "id": 183780,
+        "key": "_mollie_payment_id",
+        "value": "tr_NFi6P3qQ8Z"
+      },
+      {
+        "id": 183781,
+        "key": "_mollie_payment_mode",
+        "value": "live"
+      },
+      {
+        "id": 183785,
+        "key": "_mollie_payment_instructions",
+        "value": "Betaling voltooid door <strong>BeClear B.V.</strong> (IBAN (laatste 4 cijfers): 7381, BIC: KNABNL2H)"
+      },
+      {
+        "id": 183786,
+        "key": "_wcpdf_invoice_settings",
+        "value": {
+          "display_shipping_address": "always",
+          "display_email": "1",
+          "display_phone": "1",
+          "display_customer_notes": "1",
+          "display_date": "invoice_date",
+          "due_date": "",
+          "header_logo": "6664",
+          "header_logo_height": "",
+          "vat_number": "",
+          "coc_number": "",
+          "shop_name": {
+            "default": "www.ElectroDiscount.be"
+          },
+          "shop_address": {
+            "default": "Pauwengraaf 35\r\n3630 Maasmechelen, Belgie\r\nTel: +32496303100\r\nwww.electrodiscount.be\r\ninfo@electrodiscount.be\r\n\r\nBankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB\r\n"
+          },
+          "footer": {
+            "default": "Bankgegevens: \r\nBNP Paribas Fortis \r\nIBAN : BE50 0016 4165 8918\r\nBIC : GEBABEBB"
+          },
+          "extra_1": {
+            "default": ""
+          },
+          "extra_2": {
+            "default": ""
+          },
+          "extra_3": {
+            "default": ""
+          }
+        }
+      },
+      {
+        "id": 183787,
+        "key": "_wcpdf_invoice_display_date",
+        "value": "invoice_date"
+      },
+      {
+        "id": 183788,
+        "key": "_wcpdf_invoice_creation_trigger",
+        "value": "email_attachment"
+      },
+      {
+        "id": 183789,
+        "key": "_wcpdf_invoice_date",
+        "value": "1704207498"
+      },
+      {
+        "id": 183790,
+        "key": "_wcpdf_invoice_date_formatted",
+        "value": "2024-01-02 15:58:18"
+      },
+      {
+        "id": 183791,
+        "key": "_wcpdf_invoice_number",
+        "value": "995"
+      },
+      {
+        "id": 183792,
+        "key": "_wcpdf_invoice_number_data",
+        "value": {
+          "number": 995,
+          "formatted_number": "995",
+          "prefix": "",
+          "suffix": "",
+          "document_type": "invoice",
+          "order_id": 12212,
+          "padding": ""
+        }
+      },
+      {
+        "id": 183793,
+        "key": "_ga_tracked",
+        "value": "1"
+      },
+      {
+        "id": 183794,
+        "key": "_mollie_paid_and_processed",
+        "value": "1"
+      },
+      {
+        "id": 183892,
+        "key": "_shipping_gewenste_levering_datum",
+        "value": ""
+      },
+      {
+        "id": 183893,
+        "key": "pewc_product_extra_id",
+        "value": ""
+      }
+    ],
+    "line_items": [
+      {
+        "id": 3724,
+        "name": "LG airco S12ET 3,5kw/12000btu Wifi - Koelen en Verwarmen",
+        "product_id": 4419,
+        "variation_id": 0,
+        "quantity": 1,
+        "tax_class": "",
+        "subtotal": "544.63",
+        "subtotal_tax": "114.37",
+        "total": "544.63",
+        "total_tax": "114.37",
+        "taxes": [
+          {
+            "id": 1,
+            "total": "114.371901",
+            "subtotal": "114.371901"
+          }
+        ],
+        "meta_data": [
+          {
+            "id": 32160,
+            "key": "product_extras",
+            "value": {
+              "product_id": 4419,
+              "title": "LG airco S12ET 3,5kw/12000btu Wifi - Koelen en Verwarmen",
+              "groups": [],
+              "aelia_currency": false
+            },
+            "display_key": "product_extras",
+            "display_value": {
+              "product_id": 4419,
+              "title": "LG airco S12ET 3,5kw/12000btu Wifi - Koelen en Verwarmen",
+              "groups": [],
+              "aelia_currency": false
+            }
+          },
+          {
+            "id": 32161,
+            "key": "epofw_field_Bezorging",
+            "value": "{\"epofw_field_Bezorging\":{\"epofw_label\":\"Gratis bezorging\",\"product_id\":4419,\"epofw_type\":\"checkbox\",\"epofw_name\":\"epofw_field_Bezorging\",\"epofw_value\":\"Gratis levering binnen 48u ( Belgi\\u00eb & Nederland )\",\"epofw_price\":\"0\",\"epofw_original_price\":\"0\",\"epofw_price_type\":\"fixed\",\"epofw_form_data\":{\"field_status\":\"on\",\"field\":{\"type\":\"checkbox\",\"name\":\"Bezorging\",\"id\":\"Bezorging\",\"class\":\"Bezorging\"},\"epofw_field_settings\":{\"options\":{\"Gratis levering binnen 48u ( Belgi\\u00eb & Nederland )\":\"Gratis levering binnen 48u ( Belgi\\u00eb & Nederland )||fixed||0.00\",\"Zelf afhalen in Maasmechelen\":\"Zelf afhalen in Maasmechelen||fixed||-25\"}},\"label\":{\"title\":\"Gratis bezorging\",\"enable_title_extra\":\"on\",\"class\":\"Bezorging\",\"subtitle\":\"\",\"subtitle_class\":\"\"}}}}",
+            "display_key": "Gratis bezorging (&euro;&nbsp;0,00)",
+            "display_value": "Gratis levering binnen 48u ( België & Nederland )"
+          },
+          {
+            "id": 32169,
+            "key": "_reduced_stock",
+            "value": "1",
+            "display_key": "reduced_stock",
+            "display_value": "1"
+          }
+        ],
+        "sku": "8806098066452",
+        "price": 544.628099,
+        "image": {
+          "id": "4666",
+          "src": "https://electrodiscount.be/wp-content/uploads/2023/01/884848_1f55f9ca3d6d45adb95760178e8782e0_mv2_f33ad052-a3c1-480d-bf0b-4d81b31ed9a0.jpg"
+        },
+        "parent_name": null
+      }
+    ],
+    "tax_lines": [
+      {
+        "id": 3725,
+        "rate_code": "BTW-1",
+        "rate_id": 1,
+        "label": "BTW",
+        "compound": false,
+        "tax_total": "114.37",
+        "shipping_tax_total": "0.00",
+        "rate_percent": 21,
+        "meta_data": [
+          {
+            "id": 32168,
+            "key": "_wcpdf_rate_percentage",
+            "value": "21.0000",
+            "display_key": "wcpdf_rate_percentage",
+            "display_value": "21.0000"
+          }
+        ]
+      }
+    ],
+    "shipping_lines": [],
+    "fee_lines": [],
+    "coupon_lines": [],
+    "refunds": [],
+    "payment_url": "https://electrodiscount.be/checkout/order-pay/12212/?pay_for_order=true&key=wc_order_MrN9yFkkj15tK",
+    "is_editable": false,
+    "needs_payment": false,
+    "needs_processing": true,
+    "date_created_gmt": "2024-01-02T14:57:40",
+    "date_modified_gmt": "2024-01-02T18:19:11",
+    "date_completed_gmt": null,
+    "date_paid_gmt": "2024-01-02T14:58:05",
+    "currency_symbol": "€",
+    "_links": {
+      "self": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders/12212"
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://electrodiscount.be/wp-json/wc/v3/orders"
+        }
+      ]
+    }
+  }
+]
+    

@@ -371,9 +371,9 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     private function buildStausQuery(string $status): array|string|null
     {
         $map = [
-            'open' => ['pending', 'processing'], //'pending',//
+            'open' => ['processing'], //'pending',//
             'shipped' => ['completed'],
-            'all' => ['pending', 'processing', 'completed'],
+            'all' => ['pending', 'processing', 'completed', 'on-hold', 'cancelled', 'refunded', 'failed'],
         ];
         if (isset($map[$status])) {
             return $map[$status];
@@ -401,12 +401,13 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     {
 
         $headers = $this->getRequestHeaders(false);
+        $basic = 'Basic ' . \base64_encode($this->consumerKey . ':' . $this->consumerSecret);
 
         // Setup authentication.
         if (!$this->options->isOAuthOnly() && $this->isSsl()) {
             return [
                 'headers' => [
-                    'Authorization' => 'Basic ' . \base64_encode($this->consumerKey . ':' . $this->consumerSecret),
+                    'Authorization' => $basic ,
                     // 'Accepts' => 'application/json',
                     ...$headers,
                 ],

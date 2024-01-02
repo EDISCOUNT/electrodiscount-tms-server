@@ -36,10 +36,10 @@ class BolChannelSourceManager extends ChannelSourceManager
     public function commitShipment(Shipment $shipment, Order $order): mixed
     {
         $reference = $shipment->getCode();
-        // $shipmentInfo = $this->createShipmentForOrder($order, $reference);
-        // return $shipmentInfo;
+        $shipmentInfo = $this->createShipmentForOrder($order, $reference);
+        return $shipmentInfo;
         //TODO: REVERT THIS IN ORDER TO COMMIT SHIPMENT
-        return null;
+        // return null;
     }
 
 
