@@ -18,7 +18,6 @@ use App\Sourcing\WooCommerce\Factory\WooCommerceUrlFactory;
 class WooCommerceChannelHttpProductRepository implements RepositoryInterface
 {
     public function __construct(
-        private AccessTokenProviderInterface $tokenProvider,
         private HttpClientInterface $httpClient,
         private string $baseURL,
         private Channel $channel,
@@ -35,7 +34,7 @@ class WooCommerceChannelHttpProductRepository implements RepositoryInterface
     public function paginate($page = 1, $limit = 10, $criteria = [], $ProductBy = []): Pagerfanta
     {
 
-        $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
+        $authToken = '';// $this->tokenProvider->getAccessTokenForChannel($this->channel);
 
         $result = $this->httpClient->request("GET", "https://api.bol.com/retailer/Products", [
             'timeout' => 150,
@@ -59,7 +58,7 @@ class WooCommerceChannelHttpProductRepository implements RepositoryInterface
      */
     public function getById(string|int $id): mixed
     {
-        $authToken = $this->tokenProvider->getAccessTokenForChannel($this->channel);
+        $authToken = '';// $this->tokenProvider->getAccessTokenForChannel($this->channel);
 
         $result = $this->httpClient->request("GET", "https://api.bol.com/retailer/Products/{$id}", [
             'timeout' => 150,

@@ -17,11 +17,9 @@ use App\Repository\Catalog\ProductRepository;
 use App\Repository\Order\AdditionalServiceRepository;
 use App\Service\Util\CodeGeneratorInterface;
 use App\Sourcing\Exception\EntityNotFoundException;
-use Automattic\WooCommerce\Client;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
-use Automattic\WooCommerce\HttpClient\Options;
-use Automattic\WooCommerce\HttpClient\OAuth;
+use App\Sourcing\WooCommerce\Authentication\WooCommereAuthenticator;
 
 /**
  * @template T
@@ -30,11 +28,9 @@ use Automattic\WooCommerce\HttpClient\OAuth;
 class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 {
 
-    private string $url;
-    private ?string $consumerSecret;
-    private ?string $consumerKey;
 
-    private Options $options;
+    private WooCommereAuthenticator $authenticator;
+    private string $url;
 
     public function __construct(
         private CacheInterface $cache,
@@ -46,27 +42,8 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         array $options = []
     ) {
 
-        $options = [
-            ...$options,
-            ...[
-                'wp_api' => true,
-                'version' => 'wc/v3',
-                'query_string_auth' => true,
-                'verify_ssl' => false,
-            ]
-        ];
-
-
-        $metadata = $channel->getMetadata();
-
-        $consumerKey = $metadata['client_id'];
-        $consumerSecret = $metadata['client_secret'];
-        $url = $metadata['base_url'] ?? '';
-
-        $this->options        = new Options($options);
-        $this->url            = $this->buildApiUrl($url);
-        $this->consumerKey    = $consumerKey;
-        $this->consumerSecret = $consumerSecret;
+      $this->authenticator = new WooCommereAuthenticator($channel, $options);
+      $this->url = $this->authenticator->getURL();
     }
 
     /**
@@ -315,7 +292,7 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 
         for ($i = 0; $i < $numRequests; $i++) {
             $requests[] = $this->httpClient->request('GET', $url, [
-                ...$this->authenticate($url, 'GET', [
+                ...$this->authenticator->authenticate($url, 'GET', [
                     ...$criteria,
                     'page' => $page + $i,
                 ]),
@@ -360,7 +337,7 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         return $this->cache->get($key, function (ItemInterface $item) use ($url) {
             $item->expiresAfter(60 * 5);    // 5 minutes
             $response = $this->httpClient->request('GET', $url, [
-                ...$this->authenticate($url, 'GET', []),
+                ...$this->authenticator->authenticate($url, 'GET', []),
             ]);
             $result = $response->toArray();
             return  $result;
@@ -382,93 +359,4 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     }
 
 
-    protected function isSsl()
-    {
-        return 'https://' === \substr($this->url, 0, 8);
-    }
-
-
-    /**
-     * Authenticate.
-     *
-     * @param string $url        Request URL.
-     * @param string $method     Request method.
-     * @param array  $parameters Request parameters.
-     *
-     * @return array
-     */
-    protected function authenticate($url, $method, $parameters = [])
-    {
-
-        $headers = $this->getRequestHeaders(false);
-        $basic = 'Basic ' . \base64_encode($this->consumerKey . ':' . $this->consumerSecret);
-
-        // Setup authentication.
-        if (!$this->options->isOAuthOnly() && $this->isSsl()) {
-            return [
-                'headers' => [
-                    'Authorization' => $basic ,
-                    // 'Accepts' => 'application/json',
-                    ...$headers,
-                ],
-                'query' => $parameters,
-            ];
-        } else {
-            $oAuth = new OAuth(
-                $url,
-                $this->consumerKey,
-                $this->consumerSecret,
-                $this->options->getVersion(),
-                $method,
-                $parameters,
-                $this->options->oauthTimestamp()
-            );
-            $parameters = $oAuth->getParameters();
-        }
-
-        return [
-            'query' => $parameters,
-            'headers' => [
-                // 'Accepts' => 'application/json',
-                ...$headers,
-            ]
-        ];
-    }
-
-
-    /**
-     * Get request headers.
-     *
-     * @param  bool $sendData If request send data or not.
-     *
-     * @return array
-     */
-    protected function getRequestHeaders($sendData = false)
-    {
-        $headers = [
-            'Accept'     => 'application/json',
-            'User-Agent' => $this->options->userAgent() . '/' . Client::VERSION,
-        ];
-
-        if ($sendData) {
-            $headers['Content-Type'] = 'application/json;charset=utf-8';
-        }
-
-        return $headers;
-    }
-
-
-    /**
-     * Build API URL.
-     *
-     * @param string $url Store URL.
-     *
-     * @return string
-     */
-    protected function buildApiUrl($url)
-    {
-        $api = $this->options->isWPAPI() ? $this->options->apiPrefix() : '/wc-api/';
-
-        return \rtrim($url, '/') . $api . $this->options->getVersion() . '/';
-    }
 }

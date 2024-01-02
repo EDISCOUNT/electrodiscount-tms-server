@@ -16,7 +16,6 @@ class WooCommerceChannelProductRepositoryFactory implements ChannelEntityReposit
 {
 
     public function __construct(
-        private AccessTokenProviderInterface $provider,
         private HttpClientInterface $client,
         private WooCommerceUrlFactory $urlFactory,
     ) {
@@ -35,7 +34,6 @@ class WooCommerceChannelProductRepositoryFactory implements ChannelEntityReposit
         );
         return new WooCommerceChannelHttpProductRepository(
             channel: $channel,
-            tokenProvider: $this->provider,
             httpClient: $this->client,
             baseURL: $baseURL,
         );

@@ -9,18 +9,19 @@ use App\Sourcing\WooCommerce\Authentication\AccessTokenProviderInterface;
 use App\Sourcing\Channel\ChannelSourceManager;
 use App\Sourcing\Channel\OrderToShipmentMapper;
 use App\Sourcing\Factory\ChannelEntityRepositoryFactoryInterface;
+use App\Sourcing\WooCommerce\Authentication\WooCommereAuthenticator;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WooCommerceChannelSourceManager extends ChannelSourceManager
 {
 
 
-    public function __construct(
+    // private WooCommereAuthenticator $authenticator;
 
+    public function __construct(
         private ChannelEntityRepositoryFactoryInterface $orderRepositoryFactory,
         private ChannelEntityRepositoryFactoryInterface $productRepositoryFactory,
         private OrderToShipmentMapper $orderToShipmentMapper,
-        private AccessTokenProviderInterface $accessTokenProvider,
         private HttpClientInterface $httpClient,
         private array $config = [],
 
@@ -42,48 +43,27 @@ class WooCommerceChannelSourceManager extends ChannelSourceManager
 
     private function createShipmentForOrder(Order $order, ?string $reference = null): array
     {
+
+        $channel = $order->getChannel();
+        $authenticator = new WooCommereAuthenticator($channel);
+        $baseURL = $authenticator->getURL();
+        $id = $order->getChannelOrderId();
+
+        $url = sprintf('%s%s/%s', $baseURL, 'orders', $id);
+
         try {
+            $response = $this->httpClient->request('PATCH', $url, [
+                ...$authenticator->authenticate($url, 'PATCH', []),
+                'json' => [
+                    'status' => 'completed',
+                ]
+            ]);
 
-            // $authToken = $this->getAccessToken($order->getChannel());
-
-            // $orderItems = [];
-            // foreach ($order->getItems() as $orderItem) {
-            //     $item = [
-            //         'orderItemId' => $orderItem->getChannelOrderItemId(),
-            //         'quantity' => $orderItem->getQuantity(),
-            //     ];
-            //     $orderItems[] = $item;
-            // }
-
-
-            // // Make a POST request with $this->httpClient
-            // $response = $this->httpClient->request('POST', 'https://api.bol.com/retailer/shipments', [
-            //     'json' => [
-            //         'orderItems' => $orderItems,
-            //         'shipmentReference' => $reference,
-            //     ],
-            //     'headers' => [
-            //         'Authorization' => 'Bearer ' . $authToken,
-            //         'Content-Type' => 'application/vnd.retailer.v10+json',
-            //         'Accept' => 'application/vnd.retailer.v10+json',
-            //     ]
-            // ]);
-
-            // // Process the response
-            // // $statusCode = $response->getStatusCode();
-            // $data = $response->toArray();
-            // return $data;
-
-            return [];
-
+            $result = $response->toArray();
+            return $result;
             // Your code here
         } catch (\Throwable $err) {
             throw $err;
         }
-    }
-
-    public function getAccessToken(Channel $channel): string
-    {
-        return $this->accessTokenProvider->getAccessTokenForChannel($channel);
     }
 }

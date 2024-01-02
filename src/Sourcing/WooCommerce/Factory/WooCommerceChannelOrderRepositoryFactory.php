@@ -19,7 +19,6 @@ class WooCommerceChannelOrderRepositoryFactory implements ChannelEntityRepositor
 {
 
     public function __construct(
-        private AccessTokenProviderInterface $provider,
         private CacheInterface $cache,
         private AdditionalServiceRepository $additionalServiceRepository,
         private ProductRepository $productRepository,
