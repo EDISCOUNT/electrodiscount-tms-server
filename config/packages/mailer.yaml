@@ -3,9 +3,8 @@ framework:
         dsn: '%env(MAILER_DSN)%'
 
         envelope:
-            sender: 'callistusnkamuo@gmail.com'
-            # recipients: ['foo@example.com', 'bar@example.com']
+            sender: 'order@electrodiscount.be'
         headers:
-            From: 'Callistus Nkamuo <callistusnkamuo@gmail.com>'
+            From: 'Order Planning <order@electrodiscount.be>'
             # Bcc: 'baz@example.com'
             # X-Custom-Header: 'foobar'
