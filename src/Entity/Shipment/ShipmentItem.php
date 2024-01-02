@@ -52,7 +52,7 @@ class ShipmentItem
     private ?ShipmentFulfilment $fulfilment = null;
 
     #[Groups(['shipment_item:list', 'shipment_item:read', 'shipment_item:write'])]
-    #[ORM\Column(length: 64, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
 
