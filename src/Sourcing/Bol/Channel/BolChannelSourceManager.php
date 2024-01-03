@@ -64,6 +64,10 @@ class BolChannelSourceManager extends ChannelSourceManager
                 'json' => [
                     'orderItems' => $orderItems,
                     'shipmentReference' => $reference,
+                    'transport' => [
+                        'transporterCode' => 'OTHER',
+                        'trackAndTrace' => 'Carrier will call 30 min in advance',
+                    ]
                 ],
                 'headers' => [
                     'Authorization' => 'Bearer ' . $authToken,

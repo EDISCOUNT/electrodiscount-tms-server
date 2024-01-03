@@ -4,6 +4,7 @@ namespace App\Controller\Shipment;
 
 use App\Entity\Shipment\Shipment;
 use App\Repository\Shipment\ShipmentRepository;
+use App\Service\Shipment\ShipmentNotificationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,8 +16,7 @@ class ShipmentPacklistRequestController extends AbstractController
 
     public function __construct(
         private ShipmentRepository $shipmentRepository,
-        // private ContainerInterface $rcontainer,
-        private Pdf $pdfGenerator,
+        private ShipmentNotificationManager $notifier,
     ) {
     }
 
@@ -45,46 +45,8 @@ class ShipmentPacklistRequestController extends AbstractController
     }
 
 
-
-
     private function generatePDF(array $shipments): string
     {
-        $content =  $this->renderView('test/shipment/index.html.twig', [
-            'shipments' => $shipments,
-        ]);
-
-        try {
-            return $this->getFromWKPdf($content);
-        } catch (\Exception $e) {
-            return $this->getFromDomPdf($content);
-            // throw $e;
-        }
-    }
-
-
-
-    public function getFromWKPdf(string $html): string
-    {
-        $output = $this->pdfGenerator->getOutputFromHtml($html);
-        return $output;
-    }
-
-    public function getFromDomPdf(string $html): string
-    {
-        //   instantiate and use the dompdf class
-        $dompdf = new \Dompdf\Dompdf();
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'landscape');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser
-        // $dompdf->stream();
-
-        $output = $dompdf->output();
-        return $output;
+        return $this->notifier->generatePDF($shipments);
     }
 }

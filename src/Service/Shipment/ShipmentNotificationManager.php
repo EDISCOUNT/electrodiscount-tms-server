@@ -6,13 +6,31 @@ use App\Entity\Shipment\Shipment;
 use Knp\Snappy\Pdf;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Twig\Environment;
 
 class ShipmentNotificationManager
 {
+
+    private array $options = [
+        [
+            'value' => 'shipment_is_safely_delivered',
+            'text' => 'Shipment is safely delivered',
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ],
+    ];
     public function __construct(
         private ShipmentEventLogger $logger,
         private MailerInterface $mailer,
@@ -63,10 +81,11 @@ class ShipmentNotificationManager
 
 
 
-    private function generatePDF(array $shipments): string
+    public function generatePDF(array $shipments): string
     {
         $content =  $this->twig->render('test/shipment/index.html.twig', [
             'shipments' => $shipments,
+            'options' => $this->options,
         ]);
 
         try {
