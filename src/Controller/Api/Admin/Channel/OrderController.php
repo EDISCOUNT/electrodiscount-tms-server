@@ -77,6 +77,7 @@ class OrderController extends AbstractController
                 'order:with_items',
                 'order:with_channel',
                 'order:with_address',
+                'order:with_fulfilment',
                 'channel:list',
                 'address:list',
                 'order_item:read',

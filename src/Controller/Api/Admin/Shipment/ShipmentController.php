@@ -35,6 +35,11 @@ class ShipmentController extends AbstractController
         'shipment:with_address',
         'shipment:with_carrier',
         'shipment:with_channel',
+
+        'shipment:with_fulfilment',
+        'shipment_item:with_fulfilment',
+        'shipment_fulfilment:list',
+
         'address:list',
         'carrier:list',
         'shipment_item:read',
@@ -144,9 +149,6 @@ class ShipmentController extends AbstractController
                 'shipment:read',
                 'shipment:with_carrier',
                 'carrier:list',
-                'shipment:with_fulfilment',
-                'shipment_item:with_fulfilment',
-                'shipment_fulfilment:list',
                 'shipment:with_additional_services',
                 'additional_service:list',
                 ...self::SERIALIZER_GROUPS
@@ -166,7 +168,7 @@ class ShipmentController extends AbstractController
 
         if ($form->isValid()) {
 
-            if ( ($carrier == null)  && ($carrier = $shipment->getCarrier())) {
+            if (($carrier == null)  && ($carrier = $shipment->getCarrier())) {
                 $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                 $this->logger->logAssigned($shipment, carrier: $carrier);
                 $this->notifier->notifyCarrierOfAssignment($shipment);

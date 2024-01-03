@@ -130,6 +130,10 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
             $order->addAdditionalService($service);
         }
         // additionalServices
+
+        if($fulfilment = $this->buildFulfilment($data)){
+            $order->setFulfilment($fulfilment);
+        }
     }
 
 
@@ -148,30 +152,7 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
             // ->setProductTitle($data['name'] ?? '')
             ->setQuantityShipped($data['quantityShipped'] ?? 0)
             ->setName($data['name'] ?? null)
-            ->setQuantityCancelled($data['quantityCancelled'] ?? 0);
-
-
-        if (isset($data['fulfilment'])) {
-            $fData = $data['fulfilment'];
-
-            $method = $fData['method'] ?? null;
-
-            if ($method != 'FBR') {
-                throw new \Exception("Fulfilment method is not FBR");
-            }
-
-            $fulfilment = new ShipmentFulfilment();
-            $fulfilment
-                ->setMethod($fData['method'] ?? null)
-                ->setDistributionParty($fData['distributionParty'] ?? null)
-                ->setLatestDeliveryDate(isset($fData['latestDeliveryDate']) ? new \DateTime($fData['latestDeliveryDate']) : null)
-                ->setExactDeliveryDate(isset($fData['exactDeliveryDate']) ? new \DateTime($fData['exactDeliveryDate']) : null)
-                ->setExpiryDate(isset($fData['expiryDate']) ? new \DateTime($fData['expiryDate']) : null)
-                ->setTimeFrameType($fData['timeFrameType'] ?? null);
-
-            $orderItem
-                ->setFulfilment($fulfilment);
-        }
+            ->setQuantityCancelled($data['quantityCancelled'] ?? 0);       
 
 
         $orderItem
@@ -209,6 +190,21 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
 
 
 
+    private function buildFulfilment(array $orderData): ?ShipmentFulfilment
+    {
+        $fulfilment = new ShipmentFulfilment();
+
+        foreach($orderData['meta_data']?? [] as $meta){
+            if($meta['key'] == 'tracking_number'){
+                // $fulfilment->setTrackingNumber($meta['value']);
+            }
+            if($meta['key'] == '_billing_delivery_date'){
+                $fulfilment->setExactDeliveryDate($meta['value']? new \DateTimeImmutable($meta['value']): null);
+            }
+        }
+       
+        return $fulfilment;
+    }
 
     private function buildAddress(array $data): Address
     {

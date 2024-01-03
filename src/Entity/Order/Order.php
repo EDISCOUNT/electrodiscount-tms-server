@@ -4,6 +4,7 @@ namespace App\Entity\Order;
 
 use App\Entity\Addressing\Address;
 use App\Entity\Channel\Channel;
+use App\Entity\Shipment\ShipmentFulfilment;
 use App\Repository\Order\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -83,6 +84,10 @@ class Order
     #[Groups(['order:list', 'order:read','order:write'])]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $channelOrderCreatedAt = null;
+
+    #[Groups(['order:with_fulfilment','order:write'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?ShipmentFulfilment $fulfilment = null;
 
     public function __construct()
     {
@@ -313,6 +318,18 @@ class Order
     public function setChannelOrderCreatedAt(?\DateTimeImmutable $channelOrderCreatedAt): static
     {
         $this->channelOrderCreatedAt = $channelOrderCreatedAt;
+
+        return $this;
+    }
+
+    public function getFulfilment(): ?ShipmentFulfilment
+    {
+        return $this->fulfilment;
+    }
+
+    public function setFulfilment(?ShipmentFulfilment $fulfilment): static
+    {
+        $this->fulfilment = $fulfilment;
 
         return $this;
     }
