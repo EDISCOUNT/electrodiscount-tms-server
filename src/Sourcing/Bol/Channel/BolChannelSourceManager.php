@@ -65,7 +65,7 @@ class BolChannelSourceManager extends ChannelSourceManager
                     'orderItems' => $orderItems,
                     'shipmentReference' => $reference,
                     'transport' => [
-                        'transporterCode' => 'OTHER',
+                        'transporterCode' => 'COURIER',//'OTHER',
                         'trackAndTrace' => 'ChauffeurBelt30minOpVoorhand', //'Carrier will call 30 min in advance',
                     ]
                 ],

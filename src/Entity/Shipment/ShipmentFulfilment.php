@@ -34,7 +34,7 @@ class ShipmentFulfilment
     private ?\DateTimeInterface $exactDeliveryDate = null;
 
     #[Groups(['shipment_fulfilment:list', 'shipment_fulfilment:read', 'shipment_fulfilment:write'])]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $expiryDate = null;
 
     #[Groups(['shipment_fulfilment:list', 'shipment_fulfilment:read', 'shipment_fulfilment:write'])]
@@ -99,7 +99,7 @@ class ShipmentFulfilment
         return $this->expiryDate;
     }
 
-    public function setExpiryDate(\DateTimeInterface $expiryDate): static
+    public function setExpiryDate(?\DateTimeInterface $expiryDate): static
     {
         $this->expiryDate = $expiryDate;
 

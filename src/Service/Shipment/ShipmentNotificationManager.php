@@ -29,6 +29,20 @@ class ShipmentNotificationManager
         [
             'value' => 'client_was_around_for_delivery',
             'text' => 'Client was around for delivery'
+        ], [
+            'value' => 'shipment_is_safely_delivered',
+            'text' => 'Shipment is safely delivered',
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ], [
+            'value' => 'shipment_is_safely_delivered',
+            'text' => 'Shipment is safely delivered',
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
         ],
     ];
     public function __construct(

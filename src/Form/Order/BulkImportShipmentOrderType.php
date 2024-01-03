@@ -6,6 +6,7 @@ use App\Entity\Carrier\Carrier;
 use App\Entity\Shipment\ShipmentFulfilmentType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -34,6 +35,10 @@ class BulkImportShipmentOrderType extends AbstractType
                 ]
             ])
             ->add('fulfilmentType', EnumType::class, ['class' => ShipmentFulfilmentType::class])
+            ->add('notify', CheckboxType::class, [
+                'label' => 'Notify client',
+                'required' => false,
+            ])
             ;
     }
 

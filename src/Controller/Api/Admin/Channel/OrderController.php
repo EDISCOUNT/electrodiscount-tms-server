@@ -135,15 +135,20 @@ class OrderController extends AbstractController
 
             $this->logger->logImported($shipment, channel: $channel, order: $order);
 
-            
+
             // $shipment->setFulfilmentType($fulfilmentType);
+
+            /** @var bool */
+            $notify = $form->get('notify')->getData() ?? false;
 
             if ($carrier = $shipment->getCarrier()) {
                 $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                 $this->logger->logAssigned($shipment, carrier: $carrier);
-                $this->notifier->notifyCarrierOfAssignment($shipment);
+                if ($notify) {
+                    $this->notifier->notifyCarrierOfAssignment($shipment);
+                }
             }
-            
+
             $this->entityManager->persist($shipment);
             $this->entityManager->flush();
 
@@ -194,7 +199,7 @@ class OrderController extends AbstractController
              * @var Carrier | null
              */
             $carrier = $data['carrier'] ?? null;
-            
+
             /**
              * @var ShipmentFulfilmentType
              */
@@ -205,6 +210,9 @@ class OrderController extends AbstractController
              */
             $orderIds = $data['orders'];
 
+            /** @var bool */
+            $notify = $data['notify'] ?? false;
+
 
             foreach ($orderIds as $orderId) {
                 $order = $repository->getById($orderId);
@@ -213,11 +221,13 @@ class OrderController extends AbstractController
                 $shipment->setFulfilmentType($fulfilmentType);
                 $this->shipmentSourceManager->commitShipment($shipment, $order);
                 $this->logger->logImported($shipment, channel: $channel, order: $order);
-                
+
                 if ($carrier = $shipment->getCarrier()) {
                     $this->workflow->apply($shipment, Shipment::STATUS_ASSIGNED);
                     $this->logger->logAssigned($shipment, carrier: $carrier);
-                    $this->notifier->notifyCarrierOfAssignment($shipment);
+                    if ($notify) {
+                        $this->notifier->notifyCarrierOfAssignment($shipment);
+                    }
                 }
 
                 $this->entityManager->persist($shipment);

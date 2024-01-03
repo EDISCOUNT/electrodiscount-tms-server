@@ -9,12 +9,46 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ShipmentController extends AbstractController
 {
+    private array $options = [
+        [
+            'value' => 'shipment_is_safely_delivered',
+            'text' => 'Shipment is safely delivered',
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ], [
+            'value' => 'shipment_is_safely_delivered',
+            'text' => 'Shipment is safely delivered',
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ], [
+            'value' => 'shipment_is_safely_delivered',
+            'text' => 'Shipment is safely delivered',
+        ],
+        [
+            'value' => 'client_was_around_for_delivery',
+            'text' => 'Client was around for delivery'
+        ],
+    ];
+
     #[Route('/test/shipment/{shipment}', name: 'app_test_shipment')]
     public function index(Shipment $shipment): Response
     {
         return $this->render('test/shipment/index.html.twig', [
             'shipment' => $shipment,
             'shipments' => [$shipment],
+            'options' => $this->options,
         ]);
     }
 
