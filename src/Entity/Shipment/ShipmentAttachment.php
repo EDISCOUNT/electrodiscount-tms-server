@@ -25,6 +25,9 @@ class ShipmentAttachment
     #[ORM\Column(length: 64)]
     private ?string $type = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $meta = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class ShipmentAttachment
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getMeta(): ?array
+    {
+        return $this->meta;
+    }
+
+    public function setMeta(?array $meta): static
+    {
+        $this->meta = $meta;
 
         return $this;
     }

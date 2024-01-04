@@ -16,6 +16,7 @@ use CoopTilleuls\UrlSignerBundle\UrlSigner\UrlSignerInterface;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemOperator;
 use LogicException;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -59,6 +60,8 @@ class ShipmentController extends AbstractController
         #[Target('shipment_operation')]
         private WorkflowInterface $workflow,
         private UrlSignerInterface $urlSigner,
+        #[Target('default_filesystem')]
+        private FilesystemOperator $filesystem,
     ) {
     }
 
@@ -213,6 +216,14 @@ class ShipmentController extends AbstractController
             if ($form->isValid()) {
 
                 $transition = $form->get('transition')->getData();
+                $attachments = $form->get('attachments') ->getData();
+
+
+                return new Response();
+                foreach($attachments as $attachment){
+                    // $file = $att
+                }
+                
 
                 $this->workflow->apply($shipment, $transition);
 
