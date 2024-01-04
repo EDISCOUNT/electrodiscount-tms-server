@@ -126,7 +126,8 @@ class ShipmentController extends AbstractController
         try {
             $form = $this->createForm(ShipmentTransitionType::class, $shipment, ['csrf_protection' => false]);
 
-            $data = json_decode($request->getContent(), true);
+            // $data = json_decode($request->getContent(), true);
+            $data = $request->request->all();
             $form->submit($data, false);
 
             if ($form->isValid()) {

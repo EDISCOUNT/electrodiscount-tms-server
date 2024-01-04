@@ -128,12 +128,17 @@ class Shipment
     #[ORM\Column(length: 32, options: ['default' => 'PICKUP_AND_DELIVERY'])]
     private ShipmentFulfilmentType $fulfilmentType = ShipmentFulfilmentType::PICKUP_AND_DELIVER;
 
+    #[Groups(['shipment:with_attachments', 'shipment:write'])]
+    #[ORM\ManyToMany(targetEntity: ShipmentAttachment::class)]
+    private Collection $attachments;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
         $this->additionalServices = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->attachments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -475,5 +480,29 @@ class Shipment
 
     public function isDropship(){
         return $this->fulfilmentType === ShipmentFulfilmentType::DROPSHIPPING;
+    }
+
+    /**
+     * @return Collection<int, ShipmentAttachment>
+     */
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
+    }
+
+    public function addAttachment(ShipmentAttachment $attachment): static
+    {
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments->add($attachment);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(ShipmentAttachment $attachment): static
+    {
+        $this->attachments->removeElement($attachment);
+
+        return $this;
     }
 }
