@@ -20,6 +20,7 @@ framework:
                 - delivered
                 - completed
                 - cancelled
+                - onhold
             transitions:
                 assigned:
                     from: new
@@ -28,14 +29,14 @@ framework:
                     from: assigned
                     to: processing
                 ready:
-                    from: processing
+                    from: [assigned, processing]
                     to: ready
 
                 intransit:
-                    from: ready
+                    from: [processing, ready]
                     to: intransit
                 delivered:
-                    from: intransit
+                    from: [ready, intransit]
                     to: delivered
                 completed:
                     from: delivered
@@ -44,3 +45,7 @@ framework:
                 cancelled:
                     from: [new, assigned]
                     to: cancelled
+
+                onhold:
+                    from: [new, assigned, processing, ready, intransit]
+                    to: onhold

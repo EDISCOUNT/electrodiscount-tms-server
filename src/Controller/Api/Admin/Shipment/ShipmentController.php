@@ -3,6 +3,7 @@
 namespace App\Controller\Api\Admin\Shipment;
 
 use App\Entity\Shipment\Shipment;
+use App\Form\Shipment\BulkUpdateShipmentStatusType;
 use App\Form\Shipment\ShipmentPacklistRequestType;
 use App\Form\Shipment\ShipmentTransitionType;
 use App\Form\Shipment\ShipmentType;
@@ -215,6 +216,14 @@ class ShipmentController extends AbstractController
 
                 $this->workflow->apply($shipment, $transition);
 
+                if (true) {
+                    $this->logger->logTransition(
+                        $shipment,
+                        $transition,
+                        // attachments: $data['attachments'] ?? []
+                    );
+                }
+
                 $this->entityManager->persist($shipment);
                 $this->entityManager->flush();
 
@@ -224,6 +233,64 @@ class ShipmentController extends AbstractController
                         ...self::SERIALIZER_GROUPS
                     ],
                 ]);
+            }
+            return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
+        } catch (LogicException $e) {
+            return $this->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+            ], Response::HTTP_BAD_REQUEST);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    #[Route('/apply-transition', name: 'app_api_admin_shipment_shipment_bulk_apply_transition', methods: ['POST'])]
+    public function bulkUpdateStatus(Request $request): Response
+    {
+        try {
+            $form = $this->createForm(BulkUpdateShipmentStatusType::class, options: ['csrf_protection' => false]);
+
+            // $data = json_decode($request->getContent(), true);
+            $data = $request->request->all();
+            $form->submit($data, false);
+
+            if ($form->isValid()) {
+
+                /** @var Shipment[] */
+                $updated_shipments = [];
+
+                $transition = $form->get('transition')->getData();
+                /** @var Shipment[] */
+                $shipments = $form->get('shipments')->getData();
+                foreach ($shipments as $shipment) {
+
+                    if ($this->workflow->can($shipment, $transition)) {
+                        $this->workflow->apply($shipment, $transition);
+                        $this->logger->logTransition(
+                            $shipment,
+                            $transition,
+                            // attachments: $data['attachments'] ?? []
+                        );
+                        $this->entityManager->persist($shipment);
+                        $updated_shipments[] = $shipment;
+                    }
+                }
+                $this->entityManager->flush();
+                $updated_shipment_ids = array_map(fn (Shipment $shipment) => $shipment->getId(), $updated_shipments);
+                return $this->json(
+                    $updated_shipment_ids,
+                    context: [
+                        'groups' => [
+                            'shipment:read',
+                            ...self::SERIALIZER_GROUPS
+                        ],
+                    ]
+                );
             }
             return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
         } catch (LogicException $e) {

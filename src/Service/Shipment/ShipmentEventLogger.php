@@ -24,6 +24,8 @@ class ShipmentEventLogger
     public const EVENT_SHIPMENT_CANCELLED = 'shipment.cancelled';
     public const EVENT_SHIPMENT_UPDATED = 'shipment.updated';
 
+    public const SHIPMENT_TRANSITION_TEMPLATE = 'shipment.%s';
+
 
     public function __construct(
         private CodeGeneratorInterface $codeGenerator
@@ -108,6 +110,29 @@ class ShipmentEventLogger
     }
 
 
+    public function logTransition(Shipment $shipment, string $transition, ?string $title = null, ?string $subtitle = null, ?iterable $attachments = null): void
+    {
+        $eventType = sprintf(self::SHIPMENT_TRANSITION_TEMPLATE, $transition);
+        $title ??= sprintf("Shipment %s", ucfirst($transition));
+        $subtitle ??= null;
+        $event = new ShipmentEvent();
+        $event
+            ->setTitle($title,)
+            ->setSubtitle($subtitle)
+            ->setType($eventType);
+        $shipment->addEvent($event);
+
+        if ($attachments) {
+            foreach ($attachments as $attachment) {
+                $event->addAttachment($attachment);
+            }
+        }
+
+        $this->finalize(
+            event: $event,
+            shipment: $shipment,
+        );
+    }
     public function logProcessed(Shipment $shipment, ?Carrier $carrier): void
     {
 

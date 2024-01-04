@@ -3,6 +3,8 @@
 namespace App\Entity\Shipment;
 
 use App\Repository\Shipment\ShipmentEventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -47,9 +49,13 @@ class ShipmentEvent
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToMany(targetEntity: ShipmentAttachment::class)]
+    private Collection $attachments;
+
     public function __construct()
     {
         $this->eventOccuredAt = $this->createdAt = new \DateTimeImmutable();
+        $this->attachments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,6 +155,30 @@ class ShipmentEvent
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ShipmentAttachment>
+     */
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
+    }
+
+    public function addAttachment(ShipmentAttachment $attachment): static
+    {
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments->add($attachment);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(ShipmentAttachment $attachment): static
+    {
+        $this->attachments->removeElement($attachment);
 
         return $this;
     }

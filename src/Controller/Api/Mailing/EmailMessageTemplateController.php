@@ -100,13 +100,13 @@ class EmailMessageTemplateController extends AbstractController
             return $this->json(
                 $template,
                 Response::HTTP_CREATED,
-                // context: [
-                //     'groups' => [
-                //         'message_template:list',
-                //         'message_template:with_owner',
-                //         'user:list',
-                //     ]
-                // ]
+                context: [
+                    'groups' => [
+                        'message_template:list',
+                        'message_template:with_owner',
+                        'user:list',
+                    ]
+                ]
             );
         }
 

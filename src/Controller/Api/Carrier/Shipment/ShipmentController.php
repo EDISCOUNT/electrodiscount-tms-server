@@ -5,6 +5,7 @@ namespace App\Controller\Api\Carrier\Shipment;
 use App\Entity\Account\User;
 use App\Entity\Carrier\Carrier;
 use App\Entity\Shipment\Shipment;
+use App\Form\Shipment\BulkUpdateShipmentStatusType;
 use App\Form\Shipment\ShipmentPacklistRequestType;
 use App\Form\Shipment\ShipmentTransitionType;
 use App\Repository\Shipment\ShipmentRepository;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
+use App\Util\Doctrine\QueryBuilderHelper;
 
 #[Route('/api/carrier/shipment/shipments', name: 'app_api_carrier_shipment_shipment')]
 class ShipmentController extends AbstractController
@@ -60,9 +62,14 @@ class ShipmentController extends AbstractController
     {
         try {
 
-            $page = $request->query->get('page', 1);
-            $limit = $request->query->get('limit', 10);
-
+            $page = (int)$request->query->get('page', 1);
+            $limit = (int)$request->query->get('limit', 10);
+            $statuses = $request->query->get('status',);
+            $filter = $request->query->get('filter',);
+            if (($statuses != null) && !is_array($statuses)) {
+                $statuses = [$statuses];
+            }
+    
             if ($page < 1) {
                 $page = 1;
             }
@@ -70,12 +77,25 @@ class ShipmentController extends AbstractController
                 $limit = 100;
             }
 
+            
+
             $carrier = $this->getCarrier();
+    
             $qb = $this->shipmentRepository->createQueryBuilder('shipment');
             $qb
-                ->innerJoin('shipment.carrier', 'carrier')
-                ->andWhere('carrier.id = :carrier')
-                ->setParameter('carrier', $carrier);
+            ->innerJoin('shipment.carrier', 'carrier')
+            ->andWhere('carrier.id = :carrier')
+            ->setParameter('carrier', $carrier);
+            
+            if ($statuses) {
+                $qb->andWhere($qb->expr()->in('shipment.status', $statuses))
+                    // ->setParameter('statuses', $statuses)
+                ;
+            }
+    
+            if ($filter) {
+                QueryBuilderHelper::applyCriteria($qb, $filter, 'shipment');
+            }
 
             $adapter = new QueryAdapter($qb);
             $pagination = new Pagerfanta($adapter);
@@ -102,7 +122,7 @@ class ShipmentController extends AbstractController
         }
     }
 
-    
+
     #[Route('/{shipment}', name: 'app_api_carrier_shipment_shipment_show', methods: ['GET'])]
     public function show(Shipment $shipment): Response
     {
@@ -119,7 +139,7 @@ class ShipmentController extends AbstractController
         ]);
     }
 
-    
+
     #[Route('/{shipment}/apply-transition', name: 'app_api_carrier_shipment_shipment_apply_transition', methods: ['POST'])]
     public function updateStatus(Shipment $shipment, Request $request): Response
     {
@@ -135,6 +155,13 @@ class ShipmentController extends AbstractController
                 $transition = $form->get('transition')->getData();
 
                 $this->workflow->apply($shipment, $transition);
+                if (true) {
+                    $this->logger->logTransition(
+                        $shipment,
+                        $transition,
+                        // attachments: $data['attachments'] ?? []
+                    );
+                }
 
                 $this->entityManager->persist($shipment);
                 $this->entityManager->flush();
@@ -160,7 +187,68 @@ class ShipmentController extends AbstractController
         }
     }
 
+
     
+    
+    #[Route('/apply-transition', name: 'app_api_carrier_shipment_shipment_bulk_apply_transition', methods: ['POST'])]
+    public function bulkUpdateStatus(Request $request): Response
+    {
+        try {
+            $form = $this->createForm(BulkUpdateShipmentStatusType::class, options: ['csrf_protection' => false]);
+
+            // $data = json_decode($request->getContent(), true);
+            $data = $request->request->all();
+            $form->submit($data, false);
+
+            if ($form->isValid()) {
+
+                /** @var Shipment[] */
+                $updated_shipments = [];
+
+                $transition = $form->get('transition')->getData();
+                /** @var Shipment[] */
+                $shipments = $form->get('shipments')->getData();
+                foreach ($shipments as $shipment) {
+
+                    if ($this->workflow->can($shipment, $transition)) {
+                        $this->workflow->apply($shipment, $transition);
+                        $this->logger->logTransition(
+                            $shipment,
+                            $transition,
+                            // attachments: $data['attachments'] ?? []
+                        );
+                        $this->entityManager->persist($shipment);
+                        $updated_shipments[] = $shipment;
+                    }
+                }
+                $this->entityManager->flush();
+                $updated_shipment_ids = array_map(fn (Shipment $shipment) => $shipment->getId(), $updated_shipments);
+                return $this->json(
+                    $updated_shipment_ids,
+                    context: [
+                        'groups' => [
+                            'shipment:read',
+                            ...self::SERIALIZER_GROUPS
+                        ],
+                    ]
+                );
+            }
+            return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
+        } catch (LogicException $e) {
+            return $this->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+            ], Response::HTTP_BAD_REQUEST);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'message' => $e->getMessage(),
+                'status' => 'error',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
     #[Route('/operation/generate-packlist', name: 'app_api_carrier_shipment_shipment_generate_packlist', methods: ['POST'])]
     public function generatePacklist(Request $request): Response
     {
@@ -184,7 +272,7 @@ class ShipmentController extends AbstractController
         return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
     }
 
-    
+
     private function generateSignedUrl(string $code): string
     {
         $url = $this->generateUrl(
@@ -215,7 +303,7 @@ class ShipmentController extends AbstractController
 
 
 
-    
+
     private function getFormErrors($form): array
     {
         $errors = [];

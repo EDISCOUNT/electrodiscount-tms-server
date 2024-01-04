@@ -9,16 +9,13 @@ use App\Util\Rsql\Operator\LessThan;
 use App\Util\Rsql\Operator\LessThanOrEqualTo;
 use App\Util\Rsql\Operator\NotLike;
 use App\Util\Rsql\Operator\SameWeek;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Util\Rsql\Operator\SameDay;
+use DateTimeInterface;
 use Doctrine\ORM\QueryBuilder;
 // use Prettus\FIQLParser\Parser;
-use GraphQL\Error\UserError;
 use Oilstone\RsqlParser\Condition;
 use Oilstone\RsqlParser\Expression;
 use Oilstone\RsqlParser\Operators;
-use Oilstone\RsqlParser\Operators\Operator;
-use Symfony\Component\VarDumper\VarDumper;
 use Oilstone\RsqlParser\Parser;
 
 
@@ -30,6 +27,7 @@ Operators::custom(EqualTo::class);
 Operators::custom(LessThan::class);
 Operators::custom(GreaterThan::class);
 Operators::custom(SameWeek::class);
+Operators::custom(SameDay::class);
 
 
 class ExceptionH extends \Exception
@@ -68,7 +66,8 @@ class RSQLHelper
             // die($criteria);
 
         } catch (\Throwable $e) {
-            throw new UserError($e->getMessage(), $e->getCode(), $e);
+            throw $e;
+            // throw new UserError($e->getMessage(), $e->getCode(), $e);
         }
 
         // $parser = new Parser();
@@ -456,7 +455,7 @@ class DoctrineQueryBuilder
         });
 
 
-        $this->addOperator('=sameweek=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, ?string $value) {
+        $this->addOperator('=sameweek=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, DateTimeInterface $value) {
             // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
 
             $param = uniqid(':param_');
@@ -464,6 +463,16 @@ class DoctrineQueryBuilder
             //
             $field = "{$rootName}{$alias}";
             return "WEEK($field) = WEEK($param) AND YEAR($field) = YEAR($param)"; //
+        });
+
+        $this->addOperator('=sameday=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, DateTimeInterface $value) {
+            // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
+
+            $param = uniqid(':param_');
+            $qb->setParameter($param, $value);
+            //
+            $field = "{$rootName}{$alias}";
+            return "DATE($field) = DATE($param)"; //
         });
     }
 }
