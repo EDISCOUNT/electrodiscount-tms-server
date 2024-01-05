@@ -34,7 +34,7 @@ framework:
                     to: ready
 
                 intransit:
-                    from: [processing, ready, onhold]
+                    from: [assigned, processing, ready, onhold]
                     to: intransit
                 delivered:
                     from: [ready, intransit]
