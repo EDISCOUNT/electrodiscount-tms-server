@@ -34,6 +34,15 @@ class WooCommerceChannelSourceManager extends ChannelSourceManager
         );
     }
 
+    public function mapOrderToShipment(Order $order): Shipment{
+        $shipment = parent::mapOrderToShipment($order);
+        if($order->getPaymentMethodCode() === 'cod'){
+            $shipment->setCodAmount($order->getTotal());
+            $shipment->setCodCurrency($order->getCurrency());
+        }
+        return $shipment;
+    }
+
     public function commitShipment(Shipment $shipment, Order $order): mixed
     {
         $reference = $shipment->getCode();

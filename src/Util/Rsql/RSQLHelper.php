@@ -233,7 +233,14 @@ class DoctrineQueryBuilder
 
 
         if (in_array($type, ['date', 'time', 'datetime'])) {
-            return  new \DateTime($value);
+            /** @var \DateTime|null */
+            $dateTime = null;
+            $systemTimezone = new \DateTimeZone(date_default_timezone_get());
+
+            if(!($dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s.u\Z', $value, timezone: $systemTimezone))){
+                $dateTime = new \DateTime($value);
+            }
+            return $dateTime;
         }
 
 

@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -53,7 +54,9 @@ class ShipmentTransitionType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'mapped' => false,
-            ]);
+            ])
+            ;
+
 
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
@@ -67,7 +70,7 @@ class ShipmentTransitionType extends AbstractType
                     if (!$attachments) {
                         $form->get('attachments')->addError(new FormError("You must provide at least one attachment for a delivery"));
                     }
-                    break;
+                break;
             }
         });
     }

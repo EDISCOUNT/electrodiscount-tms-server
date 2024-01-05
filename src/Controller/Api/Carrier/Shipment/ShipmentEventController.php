@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Controller\Api\Admin\Shipment;
+namespace App\Controller\Api\Carrier\Shipment;
 
 use App\Entity\Shipment\Shipment;
 use App\Entity\Shipment\ShipmentEvent;
 use App\Repository\Shipment\ShipmentEventRepository;
-use App\Repository\Shipment\ShipmentRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +20,7 @@ class ShipmentEventController extends AbstractController
     ) {
     }
 
-    #[Route('/api/admin/shipment/shipments/{shipment}/events', name: 'app_api_admin_shipment_shipment_event_index')]
+    #[Route('/api/carrier/shipment/shipments/{shipment}/events', name: 'app_api_carrier_shipment_shipment_event_index')]
     public function index(Request  $request, Shipment $shipment): Response
     {
         $page = (int)$request->query->get('page', 1);
@@ -57,7 +56,7 @@ class ShipmentEventController extends AbstractController
         ]);
     }
 
-    #[Route('/api/admin/shipment/shipments/{shipment}/events/{event}', name: 'app_api_admin_shipment_shipment_event_show')]
+    #[Route('/api/carrier/shipment/shipments/{shipment}/events/{event}', name: 'app_api_carrier_shipment_shipment_event_show')]
     public function show(Shipment $shipment, ShipmentEvent $event): Response
     {
         // if($event->getShipment() != $shipment){

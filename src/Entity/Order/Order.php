@@ -89,6 +89,9 @@ class Order
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?ShipmentFulfilment $fulfilment = null;
 
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $paymentMethodCode = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -330,6 +333,18 @@ class Order
     public function setFulfilment(?ShipmentFulfilment $fulfilment): static
     {
         $this->fulfilment = $fulfilment;
+
+        return $this;
+    }
+
+    public function getPaymentMethodCode(): ?string
+    {
+        return $this->paymentMethodCode;
+    }
+
+    public function setPaymentMethodCode(?string $paymentMethodCode): static
+    {
+        $this->paymentMethodCode = $paymentMethodCode;
 
         return $this;
     }

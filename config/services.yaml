@@ -7,12 +7,15 @@ parameters:
     bol.client_id: "%env(BOL_CLIENT_ID)%"
     bol.client_secret: "%env(BOL_CLIENT_SECRET)%"
     bol.access_token: "%env(BOL_ACCESS_TOKEN)%"
+    timezone: '%env(APP_TIMEZONE)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $normalizer: '@serializer.normalizer.object'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -113,3 +116,5 @@ services:
     #         # $accessToken: '%bol.access_token%'
     #         # $channelSourceManagers:
     #         #     - '@app.shipment.sourcing.source.bol_dot_com.channel_source_manager'
+
+    Symfony\Bridge\Twig\Extension\HttpFoundationExtension: "@twig.extension.httpfoundation"

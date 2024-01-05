@@ -3,11 +3,13 @@
 namespace App\Controller\Api\Admin\Shipment;
 
 use App\Entity\Shipment\Shipment;
+use App\Entity\Shipment\ShipmentAttachment;
 use App\Form\Shipment\BulkUpdateShipmentStatusType;
 use App\Form\Shipment\ShipmentPacklistRequestType;
 use App\Form\Shipment\ShipmentTransitionType;
 use App\Form\Shipment\ShipmentType;
 use App\Repository\Shipment\ShipmentRepository;
+use App\Service\File\UploaderInterface;
 use App\Service\Shipment\ShipmentEventLogger;
 use App\Service\Shipment\ShipmentNotificationManager;
 use App\Service\Util\CodeGeneratorInterface;
@@ -22,6 +24,8 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -60,8 +64,10 @@ class ShipmentController extends AbstractController
         #[Target('shipment_operation')]
         private WorkflowInterface $workflow,
         private UrlSignerInterface $urlSigner,
-        #[Target('default_filesystem')]
-        private FilesystemOperator $filesystem,
+        // #[Target('default_filesystem')]
+        // private FilesystemOperator $filesystem,
+        private UploaderInterface $uploader,
+        private FormFactoryInterface $formFactory,
     ) {
     }
 
@@ -207,23 +213,52 @@ class ShipmentController extends AbstractController
     public function updateStatus(Shipment $shipment, Request $request): Response
     {
         try {
-            $form = $this->createForm(ShipmentTransitionType::class, $shipment, ['csrf_protection' => false]);
+            // $form = $this->createForm(ShipmentTransitionType::class, $shipment, ['csrf_protection' => false]);
+            $form = $this->formFactory->createNamed('', ShipmentTransitionType::class, $shipment, ['csrf_protection' => false]);
 
-            // $data = json_decode($request->getContent(), true);
-            $data = $request->request->all();
-            $form->submit($data, false);
+            // // $data = json_decode($request->getContent(), true);
+            // $files =  $request->files->all();
+            // $postfields = $request->request->all();
+            // $data = [
+            //     ...$postfields,
+            //     ...$files,
+            // ];
 
-            if ($form->isValid()) {
+            // $form->submit($data, false);
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
 
                 $transition = $form->get('transition')->getData();
-                $attachments = $form->get('attachments') ->getData();
+                $description = $form->get('description')->getData();
+                $attachmentsInput = $form->get('attachments');
 
 
-                return new Response();
-                foreach($attachments as $attachment){
-                    // $file = $att
+                /**
+                 * @var ShipmentAttachment[]
+                 * 
+                 * */
+                $attachments = [];
+                // pfoe
+                // return new Response();
+                $path = sprintf('shipment/%s/documents/attachments', $shipment->getId());
+
+                foreach ($attachmentsInput as $aInput) {
+                    /** @var UploadedFile */
+                    $file = $aInput->get('file')->getData();
+                    $reference = $this->uploader->upload(
+                        $file,
+                        path: $path,
+                    );
+
+                    /** @var ShipmentAttachment */
+                    $attachment = $aInput->getData();
+                    $attachment->setReference($reference);
+                    $attachments[] = $attachment;
+                    $shipment->addAttachment($attachment);
                 }
-                
+
 
                 $this->workflow->apply($shipment, $transition);
 
@@ -231,7 +266,8 @@ class ShipmentController extends AbstractController
                     $this->logger->logTransition(
                         $shipment,
                         $transition,
-                        // attachments: $data['attachments'] ?? []
+                        attachments: $attachments,
+                        subtitle: $description,
                     );
                 }
 

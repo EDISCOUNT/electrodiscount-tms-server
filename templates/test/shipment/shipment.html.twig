@@ -35,13 +35,9 @@
 			<td>{{ (shipment.bookedAt?? shipment.createdAt) | date('h:i A') }}</td>
 		</tr>
 		<tr>
-			<td>Service</td>
+			<td>Order ID</td>
 			<td>
-				{% if shipment.fulfilment and shipment.fulfilment.timeFrameType %}
-					<span>{{shipment.fulfilment.timeFrameType}}</span>
-				{% else %}
-					<span>N/A</span>
-				{% endif %}
+				{{ shipment.channelOrderId }}
 			</td>
 			<td>Net Weight</td>
 			<td>
@@ -55,12 +51,23 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Fragile</td>
+			{# <td>Fragile</td>
+																					<td>
+																						{% if shipment.fragile is defined %}
+																							<span>YES</span>
+																						{% else %}
+																							<span>NO</span>
+																						{% endif %}
+																					</td> #}
+			<td>COD Amount</td>
 			<td>
-				{% if shipment.fragile is defined %}
-					<span>YES</span>
+				{% if shipment.codAmount %}
+					{% if shipment.codCurreny %}
+						<span class="ml-1">{{ shipment.codCurreny}}</span>
+					{% endif %}
+					<span>{{ shipment.codAmount}}</span>
 				{% else %}
-					<span>NO</span>
+					<span>N/A</span>
 				{% endif %}
 			</td>
 			<td>No Pieces</td>
@@ -137,10 +144,18 @@
 		<!-- END -->
 		{% if options is defined %}
 			<tr>
+				<td colspan="4">
+					<div class="d-flex justify-content-center">
+						<strong class="text-center">Status Check</strong>
+					</div>
+				</td>
+				<td colspan="4" rowspan="2"></td>
+			</tr>
+			<tr>
 				<td colspan="2"></td>
 				<td>Yes</td>
 				<td>No</td>
-				<td colspan="4"></td>
+				{# <td colspan="4"></td> #}
 
 			</tr>
 			{% for option in options %}
@@ -161,7 +176,7 @@
 							<strong>Shipper Sign:</strong>
 						</td>
 						<td colspan="2" rowspan="{{ rowSpan}}">
-						
+
 							<strong>Consignee Sign:</strong>
 						</td>
 					{% endif %}

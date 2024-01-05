@@ -21,6 +21,7 @@ framework:
                 - completed
                 - cancelled
                 - onhold
+                - rejected
             transitions:
                 assigned:
                     from: new
@@ -33,7 +34,7 @@ framework:
                     to: ready
 
                 intransit:
-                    from: [processing, ready]
+                    from: [processing, ready, onhold]
                     to: intransit
                 delivered:
                     from: [ready, intransit]
@@ -43,8 +44,12 @@ framework:
                     to: completed
 
                 cancelled:
-                    from: [new, assigned]
+                    from: [new, assigned, onhold, intransit]
                     to: cancelled
+
+                rejected:
+                    from: [onhold, intransit]
+                    to: rejected
 
                 onhold:
                     from: [new, assigned, processing, ready, intransit]

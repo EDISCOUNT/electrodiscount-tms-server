@@ -42,8 +42,8 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         array $options = []
     ) {
 
-      $this->authenticator = new WooCommereAuthenticator($channel, $options);
-      $this->url = $this->authenticator->getURL();
+        $this->authenticator = new WooCommereAuthenticator($channel, $options);
+        $this->url = $this->authenticator->getURL();
     }
 
     /**
@@ -101,10 +101,14 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     }
     private function mapOrder(Order $order, array $data): void
     {
+        $paymentMethodCode = $data['payment_method'] ?? null;
+        $currency = $data['currency'] ?? null;
         $order
+            ->setPaymentMethodCode($paymentMethodCode)
+            ->setCurrency($currency)
             ->setChannelOrderId($data['id'])
             ->setStatus($data['status' ?? 'pending'])
-            ->setChannelOrderCreatedAt(new \DateTimeImmutable($data['date_created'] ?? ''))
+            ->setChannelOrderCreatedAt(new \DateTimeImmutable($data['date_created_gmt'] ?? ''))
             // ->setChannelOrderNumber($data['number'])
         ;
         // 
@@ -131,7 +135,7 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         }
         // additionalServices
 
-        if($fulfilment = $this->buildFulfilment($data)){
+        if ($fulfilment = $this->buildFulfilment($data)) {
             $order->setFulfilment($fulfilment);
         }
     }
@@ -152,7 +156,7 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
             // ->setProductTitle($data['name'] ?? '')
             ->setQuantityShipped($data['quantityShipped'] ?? 0)
             ->setName($data['name'] ?? null)
-            ->setQuantityCancelled($data['quantityCancelled'] ?? 0);       
+            ->setQuantityCancelled($data['quantityCancelled'] ?? 0);
 
 
         $orderItem
@@ -194,15 +198,15 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
     {
         $fulfilment = new ShipmentFulfilment();
 
-        foreach($orderData['meta_data']?? [] as $meta){
-            if($meta['key'] == 'tracking_number'){
+        foreach ($orderData['meta_data'] ?? [] as $meta) {
+            if ($meta['key'] == 'tracking_number') {
                 // $fulfilment->setTrackingNumber($meta['value']);
             }
-            if($meta['key'] == '_billing_delivery_date'){
-                $fulfilment->setExactDeliveryDate($meta['value']? new \DateTimeImmutable($meta['value']): null);
+            if ($meta['key'] == '_billing_delivery_date') {
+                $fulfilment->setExactDeliveryDate($meta['value'] ? new \DateTimeImmutable($meta['value']) : null);
             }
         }
-       
+
         return $fulfilment;
     }
 
@@ -353,6 +357,4 @@ class WooCommerceChannelHttpOrderRepository implements RepositoryInterface
         }
         return null;
     }
-
-
 }

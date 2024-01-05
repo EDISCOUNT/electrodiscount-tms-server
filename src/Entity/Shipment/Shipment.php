@@ -129,7 +129,7 @@ class Shipment
     private ShipmentFulfilmentType $fulfilmentType = ShipmentFulfilmentType::PICKUP_AND_DELIVER;
 
     #[Groups(['shipment:with_attachments', 'shipment:write'])]
-    #[ORM\ManyToMany(targetEntity: ShipmentAttachment::class)]
+    #[ORM\ManyToMany(targetEntity: ShipmentAttachment::class, cascade: ['persist','remove'])]
     private Collection $attachments;
 
     public function __construct()

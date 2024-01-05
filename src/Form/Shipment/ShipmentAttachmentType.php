@@ -3,8 +3,10 @@
 namespace App\Form\Shipment;
 
 use App\Entity\Shipment\ShipmentAttachment;
+use App\Form\DataTransformer\JsonToArrayTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,7 +35,26 @@ class ShipmentAttachmentType extends AbstractType
             ])
             ->add('type')
             // ->add('size')
-            ->add('caption');
+            ->add('caption')
+            ->add('meta', TextType::class
+            /** Actual Type is JSON */
+            , [
+                'mapped' => true,
+            ]);
+        $builder->get('meta')->addModelTransformer(new JsonToArrayTransformer());
+
+
+
+
+
+
+
+        // $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        //     $form = $event->getForm();
+        //     $meta = $form->get('meta');
+        //     $input = $meta->getData();
+        // });
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

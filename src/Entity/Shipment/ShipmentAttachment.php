@@ -4,27 +4,34 @@ namespace App\Entity\Shipment;
 
 use App\Repository\Shipment\ShipmentAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ShipmentAttachmentRepository::class)]
 class ShipmentAttachment
 {
+    #[Groups(['shipment_attachment:list', 'shipment_attachment:read', 'shipment_event:write'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['shipment_attachment:list', 'shipment_attachment:read', 'shipment_event:write'])]
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $reference = null;
 
+    #[Groups(['shipment_attachment:list', 'shipment_attachment:read', 'shipment_event:write'])]
     #[ORM\Column(nullable: true)]
     private ?int $size = null;
 
+    #[Groups(['shipment_attachment:list', 'shipment_attachment:read', 'shipment_event:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $caption = null;
 
+    #[Groups(['shipment_attachment:list', 'shipment_attachment:read', 'shipment_event:write'])]
     #[ORM\Column(length: 64)]
     private ?string $type = null;
 
+    #[Groups(['shipment_attachment:list', 'shipment_attachment:read', 'shipment_event:write'])]
     #[ORM\Column(nullable: true)]
     private ?array $meta = null;
 

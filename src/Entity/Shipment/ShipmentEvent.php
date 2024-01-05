@@ -29,7 +29,7 @@ class ShipmentEvent
     #[ORM\Column(length: 128)]
     private ?string $title = null;
 
-    #[Groups(['shipment_event:list','shipment_event:read', 'shipment_event:write'])]
+    #[Groups(['shipment_event:list', 'shipment_event:read', 'shipment_event:write'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $subtitle = null;
 
@@ -49,7 +49,8 @@ class ShipmentEvent
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToMany(targetEntity: ShipmentAttachment::class)]
+    #[Groups(['shipment_event:with_attachments', 'shipment_event:write'])]
+    #[ORM\ManyToMany(targetEntity: ShipmentAttachment::class, cascade: ['persist',])]
     private Collection $attachments;
 
     public function __construct()

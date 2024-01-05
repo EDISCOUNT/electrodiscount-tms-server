@@ -9,6 +9,7 @@ use App\Form\Shipment\BulkUpdateShipmentStatusType;
 use App\Form\Shipment\ShipmentPacklistRequestType;
 use App\Form\Shipment\ShipmentTransitionType;
 use App\Repository\Shipment\ShipmentRepository;
+use App\Service\File\UploaderInterface;
 use App\Service\Shipment\ShipmentEventLogger;
 use App\Service\Util\CodeGeneratorInterface;
 use CoopTilleuls\UrlSignerBundle\UrlSigner\UrlSignerInterface;
@@ -27,6 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 use App\Util\Doctrine\QueryBuilderHelper;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Shipment\ShipmentAttachment;
 
 #[Route('/api/carrier/shipment/shipments', name: 'app_api_carrier_shipment_shipment')]
 class ShipmentController extends AbstractController
@@ -53,6 +57,12 @@ class ShipmentController extends AbstractController
         #[Target('shipment_operation')]
         private WorkflowInterface $workflow,
         private UrlSignerInterface $urlSigner,
+        //
+        
+        // #[Target('default_filesystem')]
+        // private FilesystemOperator $filesystem,
+        private UploaderInterface $uploader,
+        private FormFactoryInterface $formFactory,
     ) {
     }
 
@@ -69,7 +79,7 @@ class ShipmentController extends AbstractController
             if (($statuses != null) && !is_array($statuses)) {
                 $statuses = [$statuses];
             }
-    
+
             if ($page < 1) {
                 $page = 1;
             }
@@ -77,22 +87,22 @@ class ShipmentController extends AbstractController
                 $limit = 100;
             }
 
-            
+
 
             $carrier = $this->getCarrier();
-    
+
             $qb = $this->shipmentRepository->createQueryBuilder('shipment');
             $qb
-            ->innerJoin('shipment.carrier', 'carrier')
-            ->andWhere('carrier.id = :carrier')
-            ->setParameter('carrier', $carrier);
-            
+                ->innerJoin('shipment.carrier', 'carrier')
+                ->andWhere('carrier.id = :carrier')
+                ->setParameter('carrier', $carrier);
+
             if ($statuses) {
                 $qb->andWhere($qb->expr()->in('shipment.status', $statuses))
                     // ->setParameter('statuses', $statuses)
                 ;
             }
-    
+
             if ($filter) {
                 QueryBuilderHelper::applyCriteria($qb, $filter, 'shipment');
             }
@@ -140,26 +150,65 @@ class ShipmentController extends AbstractController
     }
 
 
-    #[Route('/{shipment}/apply-transition', name: 'app_api_carrier_shipment_shipment_apply_transition', methods: ['POST'])]
+    #[Route('/{shipment}/apply-transition', name: 'app_api_admin_shipment_shipment_apply_transition', methods: ['POST'])]
     public function updateStatus(Shipment $shipment, Request $request): Response
     {
         try {
-            $form = $this->createForm(ShipmentTransitionType::class, $shipment, ['csrf_protection' => false]);
+            // $form = $this->createForm(ShipmentTransitionType::class, $shipment, ['csrf_protection' => false]);
+            $form = $this->formFactory->createNamed('', ShipmentTransitionType::class, $shipment, ['csrf_protection' => false]);
 
-            // $data = json_decode($request->getContent(), true);
-            $data = $request->request->all();
-            $form->submit($data, false);
+            // // $data = json_decode($request->getContent(), true);
+            // $files =  $request->files->all();
+            // $postfields = $request->request->all();
+            // $data = [
+            //     ...$postfields,
+            //     ...$files,
+            // ];
 
-            if ($form->isValid()) {
+            // $form->submit($data, false);
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
 
                 $transition = $form->get('transition')->getData();
+                $description = $form->get('description')->getData();
+                $attachmentsInput = $form->get('attachments');
+
+
+                /**
+                 * @var ShipmentAttachment[]
+                 * 
+                 * */
+                $attachments = [];
+                // pfoe
+                // return new Response();
+                $path = sprintf('shipment/%s/documents/attachments', $shipment->getId());
+
+                foreach ($attachmentsInput as $aInput) {
+                    /** @var UploadedFile */
+                    $file = $aInput->get('file')->getData();
+                    $reference = $this->uploader->upload(
+                        $file,
+                        path: $path,
+                    );
+
+                    /** @var ShipmentAttachment */
+                    $attachment = $aInput->getData();
+                    $attachment->setReference($reference);
+                    $attachments[] = $attachment;
+                    $shipment->addAttachment($attachment);
+                }
+
 
                 $this->workflow->apply($shipment, $transition);
+
                 if (true) {
                     $this->logger->logTransition(
                         $shipment,
                         $transition,
-                        // attachments: $data['attachments'] ?? []
+                        attachments: $attachments,
+                        subtitle: $description,
                     );
                 }
 
@@ -188,9 +237,7 @@ class ShipmentController extends AbstractController
     }
 
 
-    
-    
-    #[Route('/apply-transition', name: 'app_api_carrier_shipment_shipment_bulk_apply_transition', methods: ['POST'])]
+    #[Route('/apply-transition', name: 'app_api_admin_shipment_shipment_bulk_apply_transition', methods: ['POST'])]
     public function bulkUpdateStatus(Request $request): Response
     {
         try {
@@ -246,6 +293,7 @@ class ShipmentController extends AbstractController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
 

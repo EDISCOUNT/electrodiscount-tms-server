@@ -96,10 +96,12 @@ class ShipmentEventLogger
 
         $carrier ??= $shipment->getCarrier();
         $carrierName = $carrier?->getName();
+        $subtitle = sprintf("Shipment Assigned to carrier, %s", $carrierName);
 
         $event = new ShipmentEvent();
         $event
-            ->setTitle(sprintf("Shipment Assigned to carrier, %s", $carrierName))
+            ->setTitle('Shipment Assigned')
+            ->setSubtitle($subtitle)
             ->setType(self::EVENT_SHIPMENT_ASSIGNED);
         $shipment->addEvent($event);
 
