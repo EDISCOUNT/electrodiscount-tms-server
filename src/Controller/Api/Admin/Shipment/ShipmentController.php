@@ -90,6 +90,24 @@ class ShipmentController extends AbstractController
         }
 
         $qb = $this->shipmentRepository->createQueryBuilder('shipment');
+
+        $qb
+            ->addOrderBy(
+                "
+        CASE 
+            WHEN shipment.status = 'new'  THEN 0 
+            WHEN shipment.status = 'assigned'  THEN 1 
+            WHEN shipment.status = 'intransit' THEN 2 
+            WHEN shipment.status = 'delivered' THEN 3 
+        ELSE 9999 
+        END
+        ",
+                'ASC'
+            )
+            // ->setParameter('priority1', 'assigned')
+            // ->setParameter('priority2', 'intransit')
+            // ->setParameter('priority3', 'delivered')
+        ;
         if ($statuses) {
             $qb->andWhere($qb->expr()->in('shipment.status', $statuses))
                 // ->setParameter('statuses', $statuses)

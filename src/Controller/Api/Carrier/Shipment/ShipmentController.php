@@ -46,6 +46,11 @@ class ShipmentController extends AbstractController
         'carrier:list',
         'shipment_item:read',
         'shipment_item:with_product',
+        // 
+        'shipment:with_fulfilment',
+        'shipment_item:with_fulfilment',
+        'shipment_fulfilment:list',
+        // 
         'product:list'
     ];
 
@@ -58,7 +63,7 @@ class ShipmentController extends AbstractController
         private WorkflowInterface $workflow,
         private UrlSignerInterface $urlSigner,
         //
-        
+
         // #[Target('default_filesystem')]
         // private FilesystemOperator $filesystem,
         private UploaderInterface $uploader,
@@ -92,6 +97,25 @@ class ShipmentController extends AbstractController
             $carrier = $this->getCarrier();
 
             $qb = $this->shipmentRepository->createQueryBuilder('shipment');
+
+            $qb
+                ->addOrderBy(
+                    "
+                CASE 
+                    WHEN shipment.status = 'new'  THEN 0 
+                    WHEN shipment.status = 'assigned'  THEN 1 
+                    WHEN shipment.status = 'intransit' THEN 2 
+                    WHEN shipment.status = 'delivered' THEN 3 
+                ELSE 9999 
+                END
+                ",
+                    'ASC'
+                )
+                // ->setParameter('priority1', 'assigned')
+                // ->setParameter('priority2', 'intransit')
+                // ->setParameter('priority3', 'delivered')
+                ;
+
             $qb
                 ->innerJoin('shipment.carrier', 'carrier')
                 ->andWhere('carrier.id = :carrier')
