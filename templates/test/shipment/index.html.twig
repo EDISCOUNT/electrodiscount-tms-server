@@ -29,7 +29,7 @@
 		{% set options= options?? [] %}
 		{% block body %}
 			{% for shipment in shipments %}
-				<div class="container my-5">
+				<div r-class="container my-5">
 					{{ shipmentPacklist(shipment, options, "SHIPPER'S COPY") }}
 					{# <hr class="broken-line"/>
 					                    {{ shipmentPacklist(shipment, "CONSIGNEE'S COPY") }} #}
