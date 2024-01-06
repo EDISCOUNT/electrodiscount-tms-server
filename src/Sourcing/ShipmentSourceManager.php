@@ -7,6 +7,7 @@ use App\Entity\Order\Order;
 use App\Entity\Shipment\Shipment;
 use App\Repository\Shipment\ShipmentRepository;
 use App\Sourcing\Channel\ChannelSourceManager;
+use App\Sourcing\Exception\DouplicateOrderShipmentImportation;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Pagerfanta;
 
@@ -51,7 +52,23 @@ class ShipmentSourceManager
 
     public function importShipmentForOrder(Order $order, bool $commit = false, bool $save = false): Shipment
     {
-        $source = $this->getSourceManager($order->getChannel());
+        $channel = $order->getChannel();
+
+        $existing = $this->shipmentRepository->findOneBy([
+            'channel' => $channel,
+            'channelOrderId' => $order->getChannelOrderId(),
+        ]);
+
+        if($existing){
+            // $message = sprintf("Order [%s] from channel \"%s\" is already imported as shipment.", $order->getChannelOrderId(), $channel->getName());
+            throw new DouplicateOrderShipmentImportation(
+                channel: $channel,
+                shipment: $existing,
+                channelOrderId: $order->getChannelOrderId(),
+            );
+        }
+
+        $source = $this->getSourceManager($channel);
         $shipment = $source->mapOrderToShipment($order);
 
         if ($commit) {
