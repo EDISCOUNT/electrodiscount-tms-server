@@ -1,199 +1,200 @@
 {% macro  shipmentPacklist(shipment, options, label) %}
 	{% import 'test/shipment/address.html.twig' as address %}
 	{% from 'test/shipment/shipment_item.html.twig' import showShipmentItems %}
-	<table
-		class="table table-bordered r-table-sm" style="min-height:350mm;">
-		{# <tbody> #}
-		<tr>
-			<td colspan="4" rowspan="4" class="p-3">
-				{% set barcode = shipment_barcode(shipment) %}
-				{% set image = 'data:image/svg+xml;base64,' ~ (barcode | base64_encode) %}
-				<div class="container py-3 px-3 d-flex justify-content-between">
-					<div>
-						<img src="{{ 'assets/images/logo.png' | embed_image }}" class="rounded float-left" height="50" width="100" alt="Logo">
+	<div style="min-height:400mm;">
+		<table
+			class="table table-bordered r-table-sm">
+			{# <tbody> #}
+			<tr>
+				<td colspan="4" rowspan="4" class="p-3">
+					{% set barcode = shipment_barcode(shipment) %}
+					{% set image = 'data:image/svg+xml;base64,' ~ (barcode | base64_encode) %}
+					<div class="container py-3 px-3 d-flex justify-content-between">
+						<div>
+							<img src="{{ 'assets/images/logo.png' | embed_image }}" class="rounded float-left" height="50" width="100" alt="Logo">
+						</div>
+
+						<div class="">
+							{% if label %}
+								<span>{{label}}</span>
+							{% endif %}
+						</div>
+					</div>
+					<div
+						class="container d-flex justify-content-center">
+						{# {{barcode | raw}} #}
+						<img src="{{image}}"/>
 					</div>
 
-					<div class="">
-						{% if label %}
-							<span>{{label}}</span>
-						{% endif %}
+					<div class="container d-flex justify-content-center">
+						<strong>{{shipment.code}}</strong>
 					</div>
-				</div>
-				<div
-					class="container d-flex justify-content-center">
-					{# {{barcode | raw}} #}
-					<img src="{{image}}"/>
-				</div>
-
-				<div class="container d-flex justify-content-center">
-					<strong>{{shipment.code}}</strong>
-				</div>
-			</td>
-			<td>Date</td>
-			<td>{{ (shipment.bookedAt?? shipment.createdAt) | date('Y-M-d') }}</td>
-			<td>Time</td>
-			<td>{{ (shipment.bookedAt?? shipment.createdAt) | date('h:i A') }}</td>
-		</tr>
-		<tr>
-			<td>Order ID</td>
-			<td>
-				{{ shipment.channelOrderId }}
-			</td>
-			<td>Net Weight</td>
-			<td>
-				{% if shipment.netWeight is not null %}
-					<span>{{shipment.netWeight}}
-						KG</span>
-				{% else %}
-					<span>N/A</span>
-				{% endif %}
-
-			</td>
-		</tr>
-		<tr>
-			{# <td>Fragile</td>
-																								<td>
-																									{% if shipment.fragile is defined %}
-																										<span>YES</span>
-																									{% else %}
-																										<span>NO</span>
-																									{% endif %}
-																								</td> #}
-			<td>COD Amount</td>
-			<td>
-				{% if shipment.codAmount %}
-					{% if shipment.codCurrency %}
-						<span class="ml-1">{{ shipment.codCurrency}}</span>
+				</td>
+				<td>Date</td>
+				<td>{{ (shipment.bookedAt?? shipment.createdAt) | date('Y-M-d') }}</td>
+				<td>Time</td>
+				<td>{{ (shipment.bookedAt?? shipment.createdAt) | date('h:i A') }}</td>
+			</tr>
+			<tr>
+				<td>Order ID</td>
+				<td>
+					{{ shipment.channelOrderId }}
+				</td>
+				<td>Net Weight</td>
+				<td>
+					{% if shipment.netWeight is not null %}
+						<span>{{shipment.netWeight}}
+							KG</span>
+					{% else %}
+						<span>N/A</span>
 					{% endif %}
-					<span>{{ shipment.codAmount}}</span>
-				{% else %}
-					<span>N/A</span>
-				{% endif %}
-			</td>
-			<td>No Pieces</td>
-			<td>
-				{% if (shipment.items | length) > 0 %}
-					{% set total = 0 %}
-					{% for item in shipment.items %}
-						{% set total = total + (item.quantity) %}
-					{% endfor %}
-					<span>
-						{{total}}
-					</span>
-				{% else %}
-					<span>N/A</span>
-				{% endif %}
 
-			</td>
-		</tr>
-		<tr>
-			<td>Origin</td>
-			<td>
-				{% if shipment.originAddress %}
-					<span>{{address.addressMinLabel(shipment.originAddress)}}</span>
-				{% else %}
-					<span>N/A</span>
-				{% endif %}
-			</td>
-			<td>Destination</td>
-			<td>
-				{% if shipment.destinationAddress %}
-					<span>{{address.addressMinLabel(shipment.destinationAddress)}}</span>
-				{% else %}
-					<span>N/A</span>
-				{% endif %}
-			</td>
-
-		</tr>
-		<tr>
-			<td colspan="4">
-				<div class="r-card">
-					<div class="card-header-r p-3 pb-0 mb-0">
-						<h5 class="card-title">
-							Shipper</h5>
-					</div>
-					<div class="card-body pt-0">
-						{% if shipment.originAddress %}
-							{{address.addressDetails(shipment.originAddress)}}
-						{% else %}
-							<span>N/A</span>
+				</td>
+			</tr>
+			<tr>
+				{# <td>Fragile</td>
+																												<td>
+																													{% if shipment.fragile is defined %}
+																														<span>YES</span>
+																													{% else %}
+																														<span>NO</span>
+																													{% endif %}
+																												</td> #}
+				<td>COD Amount</td>
+				<td>
+					{% if shipment.codAmount %}
+						{% if shipment.codCurrency %}
+							<span class="ml-1">{{ shipment.codCurrency}}</span>
 						{% endif %}
-					</div>
-				</div>
-			</td>
+						<span>{{ shipment.codAmount}}</span>
+					{% else %}
+						<span>N/A</span>
+					{% endif %}
+				</td>
+				<td>No Pieces</td>
+				<td>
+					{% if (shipment.items | length) > 0 %}
+						{% set total = 0 %}
+						{% for item in shipment.items %}
+							{% set total = total + (item.quantity) %}
+						{% endfor %}
+						<span>
+							{{total}}
+						</span>
+					{% else %}
+						<span>N/A</span>
+					{% endif %}
 
-			<td colspan="4">
-				<div class="r-card">
-					<div class="card-header-r p-3 pb-0">
-						<h5 class="card-title">
-							Consignee</h5>
-					</div>
-					<div class="card-body pt-0">
-						{% if shipment.destinationAddress %}
-							{{address.addressDetails(shipment.destinationAddress)}}
-						{% else %}
-							<span>N/A</span>
-						{% endif %}
-					</div>
-				</div>
-			</td>
-		</tr>
-		{# </tbody> #}
-		<!-- HERE -->
-		{{ showShipmentItems(shipment) }}
-		<!-- END -->
-		{% if options is defined %}
+				</td>
+			</tr>
+			<tr>
+				<td>Origin</td>
+				<td>
+					{% if shipment.originAddress %}
+						<span>{{address.addressMinLabel(shipment.originAddress)}}</span>
+					{% else %}
+						<span>N/A</span>
+					{% endif %}
+				</td>
+				<td>Destination</td>
+				<td>
+					{% if shipment.destinationAddress %}
+						<span>{{address.addressMinLabel(shipment.destinationAddress)}}</span>
+					{% else %}
+						<span>N/A</span>
+					{% endif %}
+				</td>
+
+			</tr>
 			<tr>
 				<td colspan="4">
-					<div class="d-flex justify-content-center">
-						<strong class="text-center">Status Check</strong>
+					<div class="r-card">
+						<div class="card-header-r p-3 pb-0 mb-0">
+							<h5 class="card-title">
+								Shipper</h5>
+						</div>
+						<div class="card-body pt-0">
+							{% if shipment.originAddress %}
+								{{address.addressDetails(shipment.originAddress)}}
+							{% else %}
+								<span>N/A</span>
+							{% endif %}
+						</div>
 					</div>
 				</td>
-				<td colspan="4" rowspan="2"></td>
-			</tr>
-			<tr>
-				<td colspan="2"></td>
-				<td>Yes</td>
-				<td>No</td>
-				{# <td colspan="4"></td> #}
 
+				<td colspan="4">
+					<div class="r-card">
+						<div class="card-header-r p-3 pb-0">
+							<h5 class="card-title">
+								Consignee</h5>
+						</div>
+						<div class="card-body pt-0">
+							{% if shipment.destinationAddress %}
+								{{address.addressDetails(shipment.destinationAddress)}}
+							{% else %}
+								<span>N/A</span>
+							{% endif %}
+						</div>
+					</div>
+				</td>
 			</tr>
-			{% for option in options %}
+			{# </tbody> #}
+			<!-- HERE -->
+			{{ showShipmentItems(shipment) }}
+			<!-- END -->
+			{% if options is defined %}
 				<tr>
-					<td colspan="2">{{option.text}}</td>
-					<td></td>
-					<td></td>
-					{% if loop.index == 1 %}
-						<td colspan="4" rowspan="3">
-							<strong>Carrier Sign:</strong>
-						</td>
-					{% elseif loop.index <= 3 %}
-						{# NOT TABLE DATA HERE #}
-					{% elseif loop.index == 4 %}
-						{% set optSize = options|length %}
-						{% set rowSpan = optSize - 3 %}
-						<td colspan="2" rowspan="{{ rowSpan}}">
-							<strong>Shipper Sign:</strong>
-						</td>
-						<td colspan="2" rowspan="{{ rowSpan}}">
-
-							<strong>Consignee Sign:</strong>
-						</td>
-					{% endif %}
+					<td colspan="4">
+						<div class="d-flex justify-content-center">
+							<strong class="text-center">Status Check</strong>
+						</div>
+					</td>
+					<td colspan="4" rowspan="2"></td>
 				</tr>
-			{% endfor %}
-			{% else %}
-		{% endif %}
-		{% if shipment.deliveryNote %}
-			<tr>
-				<td>
-					<strong>Delivery Note:</strong>
-				</td>
-				<td colspan="7">
-					{{shipment.deliveryNote}}
-				</td>
-			</tr>
-		{% endif %}
-	</table>
+				<tr>
+					<td colspan="2"></td>
+					<td>Yes</td>
+					<td>No</td>
+					{# <td colspan="4"></td> #}
 
+				</tr>
+				{% for option in options %}
+					<tr>
+						<td colspan="2">{{option.text}}</td>
+						<td></td>
+						<td></td>
+						{% if loop.index == 1 %}
+							<td colspan="4" rowspan="3">
+								<strong>Carrier Sign:</strong>
+							</td>
+						{% elseif loop.index <= 3 %}
+							{# NOT TABLE DATA HERE #}
+						{% elseif loop.index == 4 %}
+							{% set optSize = options|length %}
+							{% set rowSpan = optSize - 3 %}
+							<td colspan="2" rowspan="{{ rowSpan}}">
+								<strong>Shipper Sign:</strong>
+							</td>
+							<td colspan="2" rowspan="{{ rowSpan}}">
+
+								<strong>Consignee Sign:</strong>
+							</td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+				{% else %}
+			{% endif %}
+			{% if shipment.deliveryNote %}
+				<tr>
+					<td>
+						<strong>Delivery Note:</strong>
+					</td>
+					<td colspan="7">
+						{{shipment.deliveryNote}}
+					</td>
+				</tr>
+			{% endif %}
+		</table>
+	</div>
 {% endmacro %}
