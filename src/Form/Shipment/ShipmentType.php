@@ -2,14 +2,16 @@
 
 namespace App\Form\Shipment;
 
-use App\Entity\Addressing\Address;
 use App\Entity\Carrier\Carrier;
 use App\Entity\Inventory\Storage;
 use App\Entity\Order\AdditionalService;
 use App\Entity\Shipment\Shipment;
+use App\Entity\Shipment\ShipmentFulfilmentType as ShipmentFulfilmentTypeEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,6 +27,7 @@ class ShipmentType extends AbstractType
                     new Assert\Length(max: 32, min: 6)
                 ],
             ])
+            ->add('fulfilmentType', EnumType::class, ['class' => ShipmentFulfilmentTypeEnum::class])
             ->add('bookedAt',)
             ->add('netWeight')
             ->add('volumetricWeight')
@@ -60,6 +63,9 @@ class ShipmentType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+            ])
+            ->add('deliveryNote', TextareaType::class, [
+                'required' => false,
             ]);
     }
 

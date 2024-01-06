@@ -132,6 +132,10 @@ class Shipment
     #[ORM\ManyToMany(targetEntity: ShipmentAttachment::class, cascade: ['persist','remove'])]
     private Collection $attachments;
 
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $deliveryNote = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -502,6 +506,18 @@ class Shipment
     public function removeAttachment(ShipmentAttachment $attachment): static
     {
         $this->attachments->removeElement($attachment);
+
+        return $this;
+    }
+
+    public function getDeliveryNote(): ?string
+    {
+        return $this->deliveryNote;
+    }
+
+    public function setDeliveryNote(?string $deliveryNote): static
+    {
+        $this->deliveryNote = $deliveryNote;
 
         return $this;
     }

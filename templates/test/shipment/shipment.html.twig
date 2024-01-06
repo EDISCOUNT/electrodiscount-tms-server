@@ -2,7 +2,7 @@
 	{% import 'test/shipment/address.html.twig' as address %}
 	{% from 'test/shipment/shipment_item.html.twig' import showShipmentItems %}
 	<table
-		class="table table-bordered r-table-sm">
+		class="table table-bordered r-table-sm" style="min-height:3508px;">
 		{# <tbody> #}
 		<tr>
 			<td colspan="4" rowspan="4" class="p-3">
@@ -52,18 +52,18 @@
 		</tr>
 		<tr>
 			{# <td>Fragile</td>
-																					<td>
-																						{% if shipment.fragile is defined %}
-																							<span>YES</span>
-																						{% else %}
-																							<span>NO</span>
-																						{% endif %}
-																					</td> #}
+																								<td>
+																									{% if shipment.fragile is defined %}
+																										<span>YES</span>
+																									{% else %}
+																										<span>NO</span>
+																									{% endif %}
+																								</td> #}
 			<td>COD Amount</td>
 			<td>
 				{% if shipment.codAmount %}
-					{% if shipment.codCurreny %}
-						<span class="ml-1">{{ shipment.codCurreny}}</span>
+					{% if shipment.codCurrency %}
+						<span class="ml-1">{{ shipment.codCurrency}}</span>
 					{% endif %}
 					<span>{{ shipment.codAmount}}</span>
 				{% else %}
@@ -183,6 +183,16 @@
 				</tr>
 			{% endfor %}
 			{% else %}
+		{% endif %}
+		{% if shipment.deliveryNote %}
+			<tr>
+				<td>
+					<strong>Delivery Note:</strong>
+				</td>
+				<td colspan="7">
+					{{shipment.deliveryNote}}
+				</td>
+			</tr>
 		{% endif %}
 	</table>
 
