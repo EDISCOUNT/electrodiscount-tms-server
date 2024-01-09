@@ -4,10 +4,12 @@ namespace App\Service\Shipment;
 
 use App\Entity\Carrier\Carrier;
 use App\Entity\Channel\Channel;
+use App\Entity\Mailing\Message;
 use App\Entity\Order\Order;
 use App\Entity\Shipment\Shipment;
 use App\Entity\Shipment\ShipmentEvent;
 use App\Service\Util\CodeGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ShipmentEventLogger
 {
@@ -22,13 +24,16 @@ class ShipmentEventLogger
     public const EVENT_SHIPMENT_DELIVERED = 'shipment.delivered';
     public const EVENT_SHIPMENT_COMPLETED = 'shipment.completed';
     public const EVENT_SHIPMENT_CANCELLED = 'shipment.cancelled';
+
+    public const EVENT_SHIPMENT_MAIL_SENT = 'shipment.mail.sent';
     public const EVENT_SHIPMENT_UPDATED = 'shipment.updated';
 
     public const SHIPMENT_TRANSITION_TEMPLATE = 'shipment.%s';
 
 
     public function __construct(
-        private CodeGeneratorInterface $codeGenerator
+        private CodeGeneratorInterface $codeGenerator,
+        private NormalizerInterface $normalizer,
     ) {
     }
 
@@ -82,6 +87,34 @@ class ShipmentEventLogger
             ->setType(self::EVENT_SHIPMENT_UPDATED)
             ->setMetadata([
                 'data' => $data,
+            ]);
+        $shipment->addEvent($event);
+
+        $this->finalize(
+            event: $event,
+            shipment: $shipment,
+        );
+    }
+
+    public function logMail(Shipment $shipment, Message $mail,  array $data = []): void
+    {
+        $recipients = $this->normalizer->normalize($mail->getRecipients());
+        $ccRecipients = $this->normalizer->normalize($mail->getCcRecipients());
+        $bccRecipients = $this->normalizer->normalize($mail->getBccRecipients());
+
+        $recipientsCount = count($recipients);
+
+        $event = new ShipmentEvent();
+        $event
+            ->setTitle("E-Mail Was sent {$recipientsCount} recipients")
+            ->setSubtitle($mail->getSubject())
+            ->setType(self::EVENT_SHIPMENT_MAIL_SENT)
+            ->setMetadata([
+                'recipients' => $recipients,
+                'ccRecipients' => $ccRecipients,
+                'bccReceipients' => $bccRecipients,
+                'subject' => $mail->getSubject(),
+                'body' => $mail->getMessage(),
             ]);
         $shipment->addEvent($event);
 

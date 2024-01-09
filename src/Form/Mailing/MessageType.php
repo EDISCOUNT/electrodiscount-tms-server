@@ -4,6 +4,7 @@ namespace App\Form\Mailing;
 
 use App\Entity\Mailing\EmailAddress;
 use App\Entity\Mailing\Message;
+use App\Entity\Shipment\Shipment;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -48,7 +49,13 @@ class MessageType extends AbstractType
             ->add('label', TextType::class, [
                 'required' => false,
                 'mapped'   => false,
-            ]);
+            ])
+            ->add('shipment', EntityType::class, [
+                'class' => Shipment::class,
+                'required' => false,
+                'mapped' => false,
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

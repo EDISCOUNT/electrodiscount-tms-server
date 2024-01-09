@@ -6,6 +6,7 @@ use App\Entity\Mailing\Message;
 use App\Entity\Mailing\Template\EmailMessageTemplate;
 use App\Form\Mailing\MessageType;
 use App\Repository\Mailing\MessageRepository;
+use App\Service\Shipment\ShipmentEventLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -25,6 +26,7 @@ class MessageController extends AbstractController
         private EntityManagerInterface $entityManager,
         private MessageRepository $messageRepository,
         private MailerInterface $mailer,
+        private ShipmentEventLogger $logger,
     ) {
     }
 
@@ -68,19 +70,26 @@ class MessageController extends AbstractController
         $form->submit($data, false);
 
         if ($form->isValid()) {
-            $entityManager->persist($message);
 
-            $saveAsTemplate = $form->get('saveAsTemplate')->getData()?? false;
-            $label = $form->get('label')->getData()?? $message->getSubject();
+            $shipment = $form->get('shipment')->getData();
+            if ($shipment) {
+                $this->logger->logMail($shipment, mail: $message);
+                $entityManager->persist($shipment);
+            }
+
+            $saveAsTemplate = $form->get('saveAsTemplate')->getData() ?? false;
+            $label = $form->get('label')->getData() ?? $message->getSubject();
 
             if ($saveAsTemplate) {
                 $template = $this->saveMesaageAsTemplate($message);
                 $template->setLabel($label);
                 $entityManager->persist($template);
             }
+            
+            $entityManager->persist($message);
             $entityManager->flush();
 
-            
+
             $this->sendEmail($message);
 
             return $this->json(
@@ -146,7 +155,8 @@ class MessageController extends AbstractController
 
 
 
-    private function saveMesaageAsTemplate(Message $message): EmailMessageTemplate{
+    private function saveMesaageAsTemplate(Message $message): EmailMessageTemplate
+    {
         $template = new EmailMessageTemplate();
         $template->setSubject($message->getSubject());
         $template->setMessage($message->getMessage());
@@ -159,13 +169,13 @@ class MessageController extends AbstractController
     {
         $email = (new Email());
         foreach ($message->getRecipients()  as $address) {
-            $email->addTo(new Address($address->getEmailAddress(), $address->getFullName()?? ''));
+            $email->addTo(new Address($address->getEmailAddress(), $address->getFullName() ?? ''));
         }
         foreach ($message->getCcRecipients()  as $address) {
-            $email->addCC(new Address($address->getEmailAddress(), $address->getFullName()?? ''));
+            $email->addCC(new Address($address->getEmailAddress(), $address->getFullName() ?? ''));
         }
         foreach ($message->getBccRecipients()  as $address) {
-            $email->addBcc(new Address($address->getEmailAddress(), $address->getFullName()?? ''));
+            $email->addBcc(new Address($address->getEmailAddress(), $address->getFullName() ?? ''));
         }
 
         $email
