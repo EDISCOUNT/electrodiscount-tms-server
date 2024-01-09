@@ -35,7 +35,7 @@ class Uploader implements UploaderInterface
         HttpFoundationExtension $httpHelper,
         SluggerInterface $slugger,
         // private Filesystem $filesystem,
-        private Filesystem $defaultStorage,
+        // private Filesystem $defaultStorage,
         #[Target('default_filesystem')]
         private FilesystemOperator $filesystem,
         // private MountManager $mountManager,

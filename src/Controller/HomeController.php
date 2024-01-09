@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/{segment?}', name: 'app_home', requirements:['segment' => '.+'], priority: -10)]
+    #[Route('/{segment?}', name: 'app_home', requirements:['segment' => '.+'], priority: -10, methods:['GET'])]
     public function index(): Response
     {
         return $this->render('home/index.html.twig', [

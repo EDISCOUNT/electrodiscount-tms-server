@@ -2,6 +2,8 @@
 
 namespace App\Twig\Runtime\Core;
 
+use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -9,10 +11,22 @@ class ImageRuntime implements RuntimeExtensionInterface
 {
     public function __construct(
         private ParameterBagInterface $parameters,
+        #[Target('default_filesystem')]
+        private FilesystemOperator $filesystem,
     ) {
         // Inject dependencies if needed
     }
 
+
+    
+    public function flySystemBase64Filter($image){
+        $mime = $this->filesystem->mimeType($image);
+        $data = $this->filesystem->read($image);
+        // 
+        
+        $base64 = base64_encode($data);
+        return 'data:' . $mime . ';base64,' . $base64;
+    }
     public function base64Filter($image)
     {
         $appPath = $this->parameters->get('kernel.project_dir');

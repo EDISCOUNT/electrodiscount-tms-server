@@ -40,6 +40,10 @@ class Carrier
     #[ORM\OneToOne(inversedBy: 'carrier', cascade: ['persist', 'remove'])]
     private ?User $operatorUser = null;
 
+    #[Groups(['carrier:list', 'carrier:read', 'carrier:write'])]
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $logoImage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -113,6 +117,18 @@ class Carrier
     public function setOperatorUser(?User $operatorUser): static
     {
         $this->operatorUser = $operatorUser;
+
+        return $this;
+    }
+
+    public function getLogoImage(): ?string
+    {
+        return $this->logoImage;
+    }
+
+    public function setLogoImage(?string $logoImage): static
+    {
+        $this->logoImage = $logoImage;
 
         return $this;
     }

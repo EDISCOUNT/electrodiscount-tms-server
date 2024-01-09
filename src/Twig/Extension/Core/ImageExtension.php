@@ -16,6 +16,7 @@ class ImageExtension extends AbstractExtension
             // parameter: ['is_safe' => ['html']]
             // Reference: https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping
             new TwigFilter('embed_image', [ImageRuntime::class, 'base64Filter']),
+            new TwigFilter('embed_flysystem_image', [ImageRuntime::class, 'flySystemBase64Filter']),
         ];
     }
 
@@ -23,6 +24,7 @@ class ImageExtension extends AbstractExtension
     {
         return [
             new TwigFunction('embed_image', [ImageRuntime::class, 'base64Filter']),
+            new TwigFunction('embed_flysystem_image', [ImageRuntime::class, 'flySystemBase64Filter']),
         ];
     }
 }
