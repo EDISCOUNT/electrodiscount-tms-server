@@ -26,6 +26,7 @@ class ShipmentPacklistRequestController extends AbstractController
         $json = base64_decode($code);
         $shipmentIds = json_decode($json, true);
 
+        /** @var Shipment[] */
         $shipments = [];
 
         foreach ($shipmentIds as $id) {
@@ -45,6 +46,7 @@ class ShipmentPacklistRequestController extends AbstractController
     }
 
 
+    /** @param Shipment[] $shipments */
     private function generatePDF(array $shipments): string
     {
         return $this->notifier->generatePDF($shipments);

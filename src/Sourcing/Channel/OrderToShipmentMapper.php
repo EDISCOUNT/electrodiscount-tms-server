@@ -62,6 +62,7 @@ class OrderToShipmentMapper
 
         $shipmentItem
             ->setName($orderItem->getName())
+            ->setChannelOrderItemId($orderItem->getChannelOrderItemId())
             ->setProduct($orderItem->getProduct())
             ->setQuantity($orderItem->getQuantity())
             ->setInternalOrderItemId($orderItem->getId())

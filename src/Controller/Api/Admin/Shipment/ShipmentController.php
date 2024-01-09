@@ -2,9 +2,11 @@
 
 namespace App\Controller\Api\Admin\Shipment;
 
+use App\Entity\Account\User;
 use App\Entity\Shipment\Shipment;
 use App\Entity\Shipment\ShipmentAttachment;
 use App\Form\Shipment\BulkUpdateShipmentStatusType;
+use App\Form\Shipment\ShipmentExportRequestType;
 use App\Form\Shipment\ShipmentPacklistRequestType;
 use App\Form\Shipment\ShipmentTransitionType;
 use App\Form\Shipment\ShipmentType;
@@ -17,6 +19,7 @@ use App\Util\Doctrine\QueryBuilderHelper;
 use CoopTilleuls\UrlSignerBundle\UrlSigner\UrlSignerInterface;
 use DateInterval;
 use DateTime;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemOperator;
 use LogicException;
@@ -76,47 +79,12 @@ class ShipmentController extends AbstractController
     {
         $page = (int)$request->query->get('page', 1);
         $limit = (int)$request->query->get('limit', 10);
-        $statuses = $request->query->get('status',);
-        $filter = $request->query->get('filter',);
-        if (($statuses != null) && !is_array($statuses)) {
-            $statuses = [$statuses];
-        }
 
-        if ($page < 1) {
-            $page = 1;
-        }
-        if ($limit > 100) {
-            $limit = 100;
-        }
+
 
         $qb = $this->shipmentRepository->createQueryBuilder('shipment');
 
-        $qb
-            ->addOrderBy(
-                "
-        CASE 
-            WHEN shipment.status = 'new'  THEN 0 
-            WHEN shipment.status = 'assigned'  THEN 1 
-            WHEN shipment.status = 'intransit' THEN 2 
-            WHEN shipment.status = 'delivered' THEN 3 
-        ELSE 9999 
-        END
-        ",
-                'ASC'
-            )
-            // ->setParameter('priority1', 'assigned')
-            // ->setParameter('priority2', 'intransit')
-            // ->setParameter('priority3', 'delivered')
-        ;
-        if ($statuses) {
-            $qb->andWhere($qb->expr()->in('shipment.status', $statuses))
-                // ->setParameter('statuses', $statuses)
-            ;
-        }
-
-        if ($filter) {
-            QueryBuilderHelper::applyCriteria($qb, $filter, 'shipment');
-        }
+        $this->filterResponse($qb, $request);
 
         $adapter = new QueryAdapter($qb);
         $pagination = new Pagerfanta($adapter);
@@ -125,6 +93,23 @@ class ShipmentController extends AbstractController
         $pagination->setCurrentPage($page);
 
         return $this->json($pagination, context: [
+            'groups' => [
+                'shipment:list',
+                ...self::SERIALIZER_GROUPS
+            ],
+        ]);
+    }
+
+    #[Route('/count', name: 'app_api_admin_shipment_shipment_count', methods: ['GET'])]
+    public function count(Request  $request): Response
+    {
+        $qb = $this->shipmentRepository->createQueryBuilder('shipment');
+        $this->filterResponse($qb, $request);
+        $qb->orderBy('shipment.status');
+        $count = (int)$qb->select('count(shipment.id)')->getQuery()->getSingleScalarResult();
+        return $this->json([
+            'count' => $count,
+        ], context: [
             'groups' => [
                 'shipment:list',
                 ...self::SERIALIZER_GROUPS
@@ -372,6 +357,7 @@ class ShipmentController extends AbstractController
     }
 
 
+
     #[Route('/operation/generate-packlist', name: 'app_api_admin_shipment_shipment_generate_packlist', methods: ['POST'])]
     public function generatePacklist(Request $request): Response
     {
@@ -386,7 +372,36 @@ class ShipmentController extends AbstractController
             $idJson = json_encode($shipmentIds);
             $idEncoded = base64_encode($idJson);
 
-            $url = $this->generateSignedUrl(code: $idEncoded);
+            $url = $this->generateSignedUrl(route: 'app_shipment_shipment_packlist_request', params: ['code' => $idEncoded]);
+
+            return $this->json([
+                'url' => $url,
+            ]);
+        }
+        return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
+    }
+
+
+    #[Route('/operation/export', name: 'app_api_admin_shipment_shipment_export', methods: ['POST'])]
+    public function exportExcel(Request $request): Response
+    {
+        $form = $this->createForm(ShipmentExportRequestType::class, null, ['csrf_protection' => false]);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data, false);
+
+        if ($form->isValid()) {
+            $shipments = $form->get('shipments')->getData();
+
+            /** @var User */
+            $user = $this->getUser();
+
+            $shipmentIds = array_map(fn (Shipment $shipment) => $shipment->getId(), $shipments->toArray());
+            // $idJson = json_encode($shipmentIds);
+            $userID = $user->getId();
+            $json = json_encode(['user_id' => $userID, 'shipment_ids' => $shipmentIds]);
+            $idEncoded = base64_encode($json);
+
+            $url = $this->generateSignedUrl(route: 'app_shipment_shipment_export_request', params: ['code' => $idEncoded]);
 
             return $this->json([
                 'url' => $url,
@@ -397,15 +412,63 @@ class ShipmentController extends AbstractController
 
 
 
-    private function generateSignedUrl(string $code): string
+    private function filterResponse(QueryBuilder $qb, Request $request): void
+    {
+
+        $page = (int)$request->query->get('page', 1);
+        $limit = (int)$request->query->get('limit', 10);
+        $statuses = $request->query->get('status',);
+        $filter = $request->query->get('filter',);
+        if (($statuses != null) && !is_array($statuses)) {
+            $statuses = [$statuses];
+        }
+
+        if ($page < 1) {
+            $page = 1;
+        }
+        if ($limit > 100) {
+            $limit = 100;
+        }
+
+        // $qb = $this->shipmentRepository->createQueryBuilder('shipment');
+
+        $qb
+            ->addOrderBy(
+                "
+        CASE 
+            WHEN shipment.status = 'new'  THEN 0 
+            WHEN shipment.status = 'assigned'  THEN 1 
+            WHEN shipment.status = 'intransit' THEN 2 
+            WHEN shipment.status = 'delivered' THEN 3 
+        ELSE 9999 
+        END
+        ",
+                'ASC'
+            )
+            // ->setParameter('priority1', 'assigned')
+            // ->setParameter('priority2', 'intransit')
+            // ->setParameter('priority3', 'delivered')
+        ;
+        if ($statuses) {
+            $qb->andWhere($qb->expr()->in('shipment.status', $statuses))
+                // ->setParameter('statuses', $statuses)
+            ;
+        }
+
+        if ($filter) {
+            QueryBuilderHelper::applyCriteria($qb, $filter, 'shipment');
+        }
+    }
+
+    private function generateSignedUrl(string $route, array $params = [], string $duration = 'PT60S'): string
     {
         $url = $this->generateUrl(
-            'app_shipment_shipment_packlist_request',
-            ['code' => $code],
+            $route,
+            $params,
             referenceType: UrlGeneratorInterface::ABSOLUTE_URL,
         );
         // Will expire after 10 seconds.
-        $expiration = (new DateTime('now'))->add(new DateInterval('PT60S'));
+        $expiration = (new DateTime('now'))->add(new DateInterval($duration));
         return $this->urlSigner->sign($url, $expiration);
     }
 

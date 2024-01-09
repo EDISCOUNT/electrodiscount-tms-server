@@ -136,6 +136,11 @@ class Shipment
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $deliveryNote = null;
 
+
+    #[Groups(['shipment:list', 'shipment:read', 'shipment:write'])]
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deliveredAt = null;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -218,6 +223,10 @@ class Shipment
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        if($status === self::STATUS_DELIVERED){
+            $this->setDeliveredAt(new \DateTimeImmutable());
+        }
 
         return $this;
     }
@@ -518,6 +527,18 @@ class Shipment
     public function setDeliveryNote(?string $deliveryNote): static
     {
         $this->deliveryNote = $deliveryNote;
+
+        return $this;
+    }
+
+    public function getDeliveredAt(): ?\DateTimeImmutable
+    {
+        return $this->deliveredAt;
+    }
+
+    public function setDeliveredAt(?\DateTimeImmutable $deliveredAt): static
+    {
+        $this->deliveredAt = $deliveredAt;
 
         return $this;
     }

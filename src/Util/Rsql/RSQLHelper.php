@@ -10,6 +10,8 @@ use App\Util\Rsql\Operator\LessThanOrEqualTo;
 use App\Util\Rsql\Operator\NotLike;
 use App\Util\Rsql\Operator\SameWeek;
 use App\Util\Rsql\Operator\SameDay;
+use App\Util\Rsql\Operator\SameMonth;
+use App\Util\Rsql\Operator\SameYear;
 use DateTimeInterface;
 use Doctrine\ORM\QueryBuilder;
 // use Prettus\FIQLParser\Parser;
@@ -26,8 +28,10 @@ Operators::custom(NotLike::class);
 Operators::custom(EqualTo::class);
 Operators::custom(LessThan::class);
 Operators::custom(GreaterThan::class);
-Operators::custom(SameWeek::class);
 Operators::custom(SameDay::class);
+Operators::custom(SameWeek::class);
+Operators::custom(SameMonth::class);
+Operators::custom(SameYear::class);
 
 
 class ExceptionH extends \Exception
@@ -232,12 +236,12 @@ class DoctrineQueryBuilder
         }
 
 
-        if (in_array($type, ['date', 'time', 'datetime'])) {
+        if (in_array($type, ['date', 'time', 'datetime', 'datetime_immutable', 'date_immutable', 'time_immutable'])) {
             /** @var \DateTime|null */
             $dateTime = null;
             $systemTimezone = new \DateTimeZone(date_default_timezone_get());
 
-            if(!($dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s.u\Z', $value, timezone: $systemTimezone))){
+            if (!($dateTime = \DateTime::createFromFormat('Y-m-d\TH:i:s.u\Z', $value, timezone: $systemTimezone))) {
                 $dateTime = new \DateTime($value);
             }
             return $dateTime;
@@ -349,28 +353,28 @@ class DoctrineQueryBuilder
             return $qb->expr()->eq("{$rootName}{$alias}", ":{$param}");
         };
 
-        $lessThan = function (QueryBuilder $qb, string $rootName, string $alias, string $type, string $value) {
+        $lessThan = function (QueryBuilder $qb, string $rootName, string $alias, string $type, mixed $value) {
             // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
             $param = $this->getUniqueParamName();
             $qb->setParameter($param, $value, $type);
             return $qb->expr()->lt("{$rootName}{$alias}", ":{$param}");
         };
 
-        $lessThanOrEqual = function (QueryBuilder $qb, string $rootName, string $alias, string $type, string $value) {
+        $lessThanOrEqual = function (QueryBuilder $qb, string $rootName, string $alias, string $type, mixed $value) {
             // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
             $param = $this->getUniqueParamName();
             $qb->setParameter($param, $value, $type);
             return $qb->expr()->lte("{$rootName}{$alias}", ":{$param}");
         };
 
-        $greaterThan = function (QueryBuilder $qb, string $rootName, string $alias, string $type, string $value) {
+        $greaterThan = function (QueryBuilder $qb, string $rootName, string $alias, string $type, mixed $value) {
             // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
             $param = $this->getUniqueParamName();
             $qb->setParameter($param, $value, $type);
             return $qb->expr()->gt("{$rootName}{$alias}", ":{$param}");
         };
 
-        $greaterOrEqual = function (QueryBuilder $qb, string $rootName, string $alias, string $type, string $value) {
+        $greaterOrEqual = function (QueryBuilder $qb, string $rootName, string $alias, string $type, mixed $value) {
             // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
             $param = $this->getUniqueParamName();
             $qb->setParameter($param, $value, $type);
@@ -462,7 +466,28 @@ class DoctrineQueryBuilder
         });
 
 
-        $this->addOperator('=sameweek=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, DateTimeInterface $value) {
+        $this->addOperator('=sameyear=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, ?DateTimeInterface $value) {
+            // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
+
+            $param = uniqid(':param_');
+            $qb->setParameter($param, $value);
+            //
+            $field = "{$rootName}{$alias}";
+            return " YEAR($field) = YEAR($param)"; //
+        });
+
+
+        $this->addOperator('=samemonth=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, ?DateTimeInterface $value) {
+            // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
+
+            $param = uniqid(':param_');
+            $qb->setParameter($param, $value);
+            //
+            $field = "{$rootName}{$alias}";
+            return "MONTH($field) = MONTH($param) AND YEAR($field) = YEAR($param)"; //
+        });
+
+        $this->addOperator('=sameweek=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, ?DateTimeInterface $value) {
             // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
 
             $param = uniqid(':param_');
@@ -472,7 +497,7 @@ class DoctrineQueryBuilder
             return "WEEK($field) = WEEK($param) AND YEAR($field) = YEAR($param)"; //
         });
 
-        $this->addOperator('=sameday=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, DateTimeInterface $value) {
+        $this->addOperator('=sameday=', function (QueryBuilder $qb, string $rootName, string $alias, ?string $type, ?DateTimeInterface $value) {
             // list($rootName, $alias, $type) = $this->getOrJoinField($qb, $attrName);
 
             $param = uniqid(':param_');

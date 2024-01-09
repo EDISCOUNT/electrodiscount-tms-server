@@ -55,6 +55,9 @@ class ShipmentItem
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $channelOrderItemId = null;
+
 
     public function getId(): ?int
     {
@@ -165,6 +168,18 @@ class ShipmentItem
     public function setName(?string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getChannelOrderItemId(): ?string
+    {
+        return $this->channelOrderItemId;
+    }
+
+    public function setChannelOrderItemId(?string $channelOrderItemId): static
+    {
+        $this->channelOrderItemId = $channelOrderItemId;
 
         return $this;
     }

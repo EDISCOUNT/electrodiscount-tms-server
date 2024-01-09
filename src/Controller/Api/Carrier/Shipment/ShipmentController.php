@@ -31,6 +31,7 @@ use App\Util\Doctrine\QueryBuilderHelper;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\Shipment\ShipmentAttachment;
+use App\Form\Shipment\ShipmentExportRequestType;
 
 #[Route('/api/carrier/shipment/shipments', name: 'app_api_carrier_shipment_shipment')]
 class ShipmentController extends AbstractController
@@ -174,7 +175,7 @@ class ShipmentController extends AbstractController
     }
 
 
-    #[Route('/{shipment}/apply-transition', name: 'app_api_admin_shipment_shipment_apply_transition', methods: ['POST'])]
+    #[Route('/{shipment}/apply-transition', name: 'app_api_carrier_shipment_shipment_apply_transition', methods: ['POST'])]
     public function updateStatus(Shipment $shipment, Request $request): Response
     {
         try {
@@ -261,7 +262,7 @@ class ShipmentController extends AbstractController
     }
 
 
-    #[Route('/apply-transition', name: 'app_api_admin_shipment_shipment_bulk_apply_transition', methods: ['POST'])]
+    #[Route('/apply-transition', name: 'app_api_carrier_shipment_shipment_bulk_apply_transition', methods: ['POST'])]
     public function bulkUpdateStatus(Request $request): Response
     {
         try {
@@ -335,7 +336,7 @@ class ShipmentController extends AbstractController
             $idJson = json_encode($shipmentIds);
             $idEncoded = base64_encode($idJson);
 
-            $url = $this->generateSignedUrl(code: $idEncoded);
+            $url = $this->generateSignedUrl(route: 'app_shipment_shipment_packlist_request', params: ['code' => $idEncoded]);
 
             return $this->json([
                 'url' => $url,
@@ -345,17 +346,44 @@ class ShipmentController extends AbstractController
     }
 
 
-    private function generateSignedUrl(string $code): string
+    
+    #[Route('/operation/export', name: 'app_api_carrier_shipment_shipment_export', methods: ['POST'])]
+    public function exportExcel(Request $request): Response
+    {
+        $form = $this->createForm(ShipmentExportRequestType::class, null, ['csrf_protection' => false]);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data, false);
+
+        if ($form->isValid()) {
+            $shipments = $form->get('shipments')->getData();
+
+            $shipmentIds = array_map(fn (Shipment $shipment) => $shipment->getId(), $shipments->toArray());
+            $idJson = json_encode($shipmentIds);
+            $idEncoded = base64_encode($idJson);
+
+            $url = $this->generateSignedUrl(route: 'app_shipment_shipment_export_request', params: ['code' => $idEncoded]);
+
+            return $this->json([
+                'url' => $url,
+            ]);
+        }
+        return $this->json(['errors' => $this->getFormErrors($form)], Response::HTTP_BAD_REQUEST);
+    }
+
+    
+    private function generateSignedUrl(string $route, array $params = [], string $duration = 'PT60S'): string
     {
         $url = $this->generateUrl(
-            'app_shipment_shipment_packlist_request',
-            ['code' => $code],
+            $route,
+            $params,
             referenceType: UrlGeneratorInterface::ABSOLUTE_URL,
         );
         // Will expire after 10 seconds.
-        $expiration = (new DateTime('now'))->add(new DateInterval('PT60S'));
+        $expiration = (new DateTime('now'))->add(new DateInterval($duration));
         return $this->urlSigner->sign($url, $expiration);
     }
+
+
 
     private function getCarrier(): Carrier
     {
